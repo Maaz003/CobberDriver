@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@navigation/*": ["./src/navigation/*"],
+      "@components/*": ["./src/components/*"],
+      "@containers/*": ["./src/containers/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@config/*": ["./src/config"],
+      "@store/*": ["./src/store"],
+      "@axios/*": ["./src/axios"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
