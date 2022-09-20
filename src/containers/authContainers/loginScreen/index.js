@@ -99,34 +99,31 @@ function LoginScreen(props) {
       }}>
       <View style={styles.formView}>
         <Text
-          variant={'h5'}
+          variant={'h1'}
           font={'bold'}
           gutterBottom={R.unit.scale(5)}
           color={R.color.white}
           style={{width: '100%'}}
           align={'left'}
           transform={'none'}>
-          Welcome to
+          Welcome to{' '}
+          <Text color={R.color.mainColor} transform={'none'}>
+            {'\n'}Cobber{' '}
+          </Text>
+          {'\n'}Driver App
         </Text>
         <Text
-          variant={'extraLargeTitle'}
-          font={'bold'}
-          gutterBottom={R.unit.scale(10)}
-          color={R.color.white}
-          align={'left'}
-          style={{width: '100%'}}
-          transform={'none'}>
-          Cobber
-        </Text>
-        <Text
-          variant={'h5'}
+          variant={'body3'}
           font={'bold'}
           gutterBottom={R.unit.scale(25)}
           color={R.color.white}
           align={'left'}
           style={{width: '100%'}}
           transform={'none'}>
-          Login into your existing account{' '}
+          Signup as a Driver and{' '}
+          <Text color={R.color.mainColor} transform={'none'}>
+            Get Started
+          </Text>
         </Text>
 
         <TextInput

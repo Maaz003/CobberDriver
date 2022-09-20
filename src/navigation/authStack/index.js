@@ -18,7 +18,7 @@ const AuthStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={common?.isStep1 ? 'Login' : 'OnBoardStep1'}>
+        initialRouteName={common?.isStep1 ? 'OnBoardStep1' : 'OnBoardStep1'}>
         <Stack.Screen name="OnBoardStep1" component={OnBoardingStep1} />
         <Stack.Screen name="OnBoardStep2" component={OnBoardingStep2} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />

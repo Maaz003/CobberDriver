@@ -43,18 +43,18 @@ function OnBoardingStep1(props) {
       }}>
       <View style={styles.textView}>
         <Text
-          variant={'largeTitle'}
+          variant={'h1'}
           font={'bold'}
-          gutterTop={50}
-          gutterBottom={30}
+          gutterTop={80}
+          gutterBottom={50}
           color={R.color.white}
           align={'left'}
           transform={'none'}>
-          Book a{' '}
+          Make{' '}
           <Text color={R.color.mainColor} transform={'none'}>
-            delivery{' '}
+            extra money{' '}
           </Text>
-          anytime,{'\n'}anywhere
+          driving on your own time
         </Text>
 
         <TouchableOpacity
@@ -62,17 +62,18 @@ function OnBoardingStep1(props) {
           activeOpacity={0.7}
           style={{
             width: '20%',
-            marginBottom: R.unit.scale(60),
           }}>
           <NextArrow />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={onSkip} style={{width: '20%'}}>
+        <TouchableOpacity
+          onPress={onSkip}
+          style={{width: '20%', paddingVertical: R.unit.scale(10)}}>
           <Text
             variant={'body1'}
             font={'bold'}
-            // gutterTop={80}
-            // gutterBottom={20}
+            gutterTop={30}
+            gutterBottom={20}
             color={R.color.mainColor}
             align={'left'}
             style={{
@@ -86,11 +87,13 @@ function OnBoardingStep1(props) {
       </View>
 
       <View style={styles.pictureView}>
-        <OnBoardStep1
-          width="100%"
-          height="100%"
-          viewBox={`0 0 ${originalWidth} ${originalHeight}`}
-        />
+        <View style={styles.bigEllipse}>
+          <View style={styles.smallEllipse}>
+            <View style={styles.svgView}>
+              <OnBoardStep1 />
+            </View>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -104,8 +107,8 @@ const styles = StyleSheet.create({
   },
   textView: {
     width: '100%',
-    height: '40%',
-    paddingHorizontal: R.unit.scale(20),
+    height: R.unit.height(0.5),
+    paddingHorizontal: R.unit.scale(16),
   },
   pictureView: {
     height: '50%',
@@ -116,5 +119,35 @@ const styles = StyleSheet.create({
   },
   imageStyles: {
     width: '100%',
+  },
+  pictureView: {
+    height: R.unit.height(0.5),
+  },
+  svgView: {
+    height: R.unit.height(0.5),
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: R.unit.scale(30),
+  },
+  imageStyles: {
+    width: '100%',
+  },
+  bigEllipse: {
+    backgroundColor: 'rgba(70,70,70,0.3)',
+    height: '100%',
+    width: R.unit.width(1.5),
+    overflow: 'hidden',
+    borderTopRightRadius: R.unit.scale(380),
+    borderTopLeftRadius: R.unit.scale(330),
+  },
+  smallEllipse: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(55,55,55,0.5)',
+    borderTopRightRadius: R.unit.scale(430),
+    borderTopLeftRadius: R.unit.scale(380),
+    overflow: 'hidden',
+    marginTop: R.unit.scale(20),
   },
 });
