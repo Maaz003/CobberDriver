@@ -11,6 +11,7 @@ import R from '@components/utils/R';
 import {useDispatch, useSelector} from 'react-redux';
 import {onBoardPresent} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
+import {firstTimePop} from '@store/auth/authSlice';
 
 const originalWidth = 428;
 const originalHeight = 407;
@@ -24,10 +25,12 @@ function OnBoardingStep1(props) {
 
   const onNext = () => {
     navigation.navigate('OnBoardStep2');
+    dispatch(firstTimePop(true));
   };
 
   const onSkip = () => {
     navigation.navigate('Login');
+    dispatch(firstTimePop(true));
   };
 
   useEffect(() => {

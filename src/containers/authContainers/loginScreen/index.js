@@ -12,6 +12,7 @@ import TextInput from '@components/common/TextInput';
 import Button from '@components/common/Button';
 import R from '@components/utils/R';
 import FormValidation from '@components/utils/FormValidation';
+import PopUp from '@components/common/PopUp';
 
 const originalWidth = 460;
 const originalHeight = 175;
@@ -63,8 +64,11 @@ function LoginScreen(props) {
         let roleArray = user?.data?.user?.role;
         let role = roleArray?.includes('customer');
         if (role) {
-          Toast.show({
-            title: 'Logged In Successfully',
+          PopUp({
+            heading: 'Logged In Successfully',
+            bottomOffset: 0.7,
+            visibilityTime: 3000,
+            position: 'top',
           });
           dispatch(getUserData(user));
           dispatch(login(user));
@@ -210,7 +214,7 @@ function LoginScreen(props) {
               paddingVertical: R.unit.scale(10),
               marginLeft: R.unit.scale(5),
             }}
-            onPress={() => navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('Step1')}
             transform={'none'}>
             Signup{' '}
           </Text>

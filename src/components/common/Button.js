@@ -1,9 +1,10 @@
 import React from 'react';
 import {
   StyleSheet,
-  TouchableOpacity,
   I18nManager,
   ActivityIndicator,
+  View,
+  TouchableNativeFeedback,
 } from 'react-native';
 import {Icon} from 'native-base';
 import Text from './Text';
@@ -126,11 +127,13 @@ const Button = props => {
     variant,
     disabled,
   } = props;
+
+  const buttonPress = () => {
+    props.onPress();
+  };
+
   return (
-    <TouchableOpacity
-      activeOpacity={props.activeOpacity ? props.activeOpacity : 0.9}
-      disabled={disabled}
-      onPress={props.onPress}
+    <View
       style={[
         styles.mainBtn,
         {
@@ -150,45 +153,73 @@ const Button = props => {
           borderRadius: R.unit.scale(borderRadius),
         },
       ]}>
-      <Text
-        style={[
-          styles.buttonText,
-          {
-            fontSize: fontSize,
-            color: disabled ? R.color.gray4 : color,
-          },
-          variant && FONTVARIANTS[variant],
-          font && FONTSSTYLE[font],
-          textStyles,
-        ]}>
-        {!loader && props.value}
-      </Text>
-      {loader && (
-        <ActivityIndicator
-          style={styles.indicatorStyle}
-          size="small"
-          color={loaderColor}
-        />
-      )}
-
-      {props.iconName && (
-        <Icon
-          name={props.iconName}
-          type={props.iconType}
-          style={[styles.iconCustom, props.iconStyle && props.iconStyle]}
-        />
-      )}
-      <Text
-        style={[
-          styles.text,
-          {color: props.textColor, fontSize: R.unit.scale(15)},
-          props.textTransform && {
-            textTransform: props.textTransform,
-          },
-        ]}>
-        {props.text}
-      </Text>
-    </TouchableOpacity>
+      <TouchableNativeFeedback
+        delayPressIn={0.1}
+        delayPressOut={0.1}
+        delayLongPress={0.1}
+        disabled={disabled}
+        background={TouchableNativeFeedback.Ripple('#42700b', true, 300)}
+        onPress={buttonPress}>
+        <View
+          style={[
+            styles.mainBtn,
+            {
+              width: props.width,
+              height: sizes[size],
+              // backgroundColor: disabled ? R.color.disabledButtonColor : bgColor,
+              // borderColor: disabled ? R.color.disabledButtonColor : borderColor,
+              // marginTop: R.unit.scale(gutterTop),
+              // marginBottom: R.unit.scale(gutterBottom),
+              // borderWidth: R.unit.scale(borderWidth),
+            },
+            // btnWrapperStyles,
+            // props.justifyContent && {
+            //   justifyContent: props.justifyContent,
+            // },
+            // borderRadius && {
+            //   borderRadius: R.unit.scale(borderRadius),
+            // },
+          ]}>
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                fontSize: fontSize,
+                color: disabled ? R.color.gray4 : color,
+              },
+              variant && FONTVARIANTS[variant],
+              font && FONTSSTYLE[font],
+              textStyles,
+            ]}>
+            {!loader && props.value}
+          </Text>
+          {loader && (
+            <ActivityIndicator
+              style={styles.indicatorStyle}
+              size="small"
+              color={loaderColor}
+            />
+          )}
+          {props.iconName && (
+            <Icon
+              name={props.iconName}
+              type={props.iconType}
+              style={[styles.iconCustom, props.iconStyle && props.iconStyle]}
+            />
+          )}
+          <Text
+            style={[
+              styles.text,
+              {color: props.textColor, fontSize: R.unit.scale(15)},
+              props.textTransform && {
+                textTransform: props.textTransform,
+              },
+            ]}>
+            {props.text}
+          </Text>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
   );
 };
 

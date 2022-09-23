@@ -15,14 +15,18 @@ import {persistStore} from 'redux-persist';
 import SplashScreen from 'react-native-splash-screen';
 import FlashMessage from 'react-native-flash-message';
 import {enableLatestRenderer} from 'react-native-maps';
+import Toast from 'react-native-toast-message';
 
-import {Provider, useDispatch} from 'react-redux';
-import {AppState, LogBox, Platform} from 'react-native';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import {AppState, LogBox, Platform, TouchableOpacity, View} from 'react-native';
 import {
   requestLocationPermission,
   requestLocationPermissionIOS,
 } from '@components/utils/Validators';
 import CurrentLocation from '@components/utils/CurrentLocation';
+import Icon from '@components/common/Icon';
+import R from '@components/utils/R';
+import Text from '@components/common/Text';
 // import {fcmSerice} from './src/store/notificationService/fcmService';
 // import {localNotificationService} from './src/store/notificationService/localNotificationService';
 
@@ -57,46 +61,71 @@ const App = () => {
 
   enableLatestRenderer();
 
-  // useEffect(() => {
-  //   fcmSerice.registerAppWithFCM();
-  //   fcmSerice.register(onRegister, onNotification, onOpenNotification);
-  //   localNotificationService.configure(onOpenNotification);
-  //   function onRegister(token) {
-  //     // console.log('first App Register : ', token);
-  //   }
-  //   function onNotification(notify) {
-  //     // console.log('second onNotification : ', notify);
-  //     const options = {
-  //       soundName: 'default',
-  //       playSound: true,
-  //     };
-  //     localNotificationService.showNotification(
-  //       0,
-  //       notify.title,
-  //       notify.body,
-  //       notify,
-  //       options,
-  //     );
-  //   }
-  //   function onOpenNotification(notify) {
-  //     // console.log('OPEN NOTIFICA', notify);
-  //   }
+  const toastConfig = {
+    customToast: props => {
+      const hideToast = () => {
+        props.onPress();
+      };
+      return (
+        <View
+          style={{
+            ...R.styles.popUpContainer,
+            backgroundColor: props.props.bgColor,
+            // width: '100%',
+          }}>
+          <View
+            style={{
+              ...R.styles.twoItemsRow,
+              flex: 1,
+            }}>
+            <View>{props.props.leftIcon}</View>
+            <Text
+              variant={'body2'}
+              font={'bold'}
+              color={props.props.textColor}
+              align={'left'}
+              numberOfLines={3}
+              style={{marginLeft: R.unit.scale(8), width: '80%'}}
+              transform={'none'}>
+              {props.text1}
+            </Text>
+          </View>
 
-  //   return () => {
-  //     // console.log('App unRegister');
-  //     fcmSerice.unRegister();
-  //     localNotificationService.unregister();
-  //   };
-  // }, []);
+          <TouchableOpacity
+            onPress={hideToast}
+            style={{padding: R.unit.scale(5)}}>
+            {props.props.rightIcon ? (
+              props.props.rightIcon
+            ) : (
+              <Icon
+                type={'Ionicons'}
+                name={'close'}
+                color={R.color.mainColor}
+                size={20}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+      );
+    },
+  };
 
   const AppWrapper = () => {
+    const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     useEffect(() => {
       CurrentLocation({actionCall: dispatch});
     }, []);
 
-    return <AppNavigator />;
+    console.log('auth?.firstTimePop', auth?.firstTimePop);
+
+    return (
+      <>
+        <AppNavigator />
+        {auth?.firstTimePop ? <Toast config={toastConfig} /> : null}
+      </>
+    );
   };
 
   return (

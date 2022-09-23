@@ -78,6 +78,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
   },
+  popUpContainer: {
+    width: '85%',
+    borderRadius: unit.scale(10),
+    shadowColor: color.blackShade3,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+    elevation: 11,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: unit.scale(16),
+    paddingHorizontal: unit.scale(16),
+  },
 });
 
 export default styles;

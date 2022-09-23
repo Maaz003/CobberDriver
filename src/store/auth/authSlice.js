@@ -30,6 +30,29 @@ export const login = createAsyncThunk('auth/login', async data => {
   }
 });
 
+export const firstTimePop = createAsyncThunk(
+  'auth/firstTimePop',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success! You are logged in!',
+        data: true,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        userAuth: false,
+        userData: undefined,
+        userToken: undefined,
+      };
+    }
+  },
+);
+
 export const logOut = createAsyncThunk('auth/logOut', async () => {
   try {
     AsyncStorage.getAllKeys().then(keys => AsyncStorage.multiRemove(keys));
@@ -58,6 +81,7 @@ const initialState = {
   isAuth: false,
   user: undefined,
   userToken: '',
+  firstTimePop: false,
 };
 
 const authSlice = createSlice({
@@ -85,6 +109,12 @@ const authSlice = createSlice({
       state.isAuth = action.payload.userAuth;
       state.user = action.payload.userData;
       state.userToken = action.payload.userToken;
+    },
+    [firstTimePop.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.isLoadingRequest = false;
+      state.error = false;
+      state.firstTimePop = action.payload.data;
     },
 
     //LOGOUT

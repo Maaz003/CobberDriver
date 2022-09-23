@@ -35,6 +35,20 @@
 			</dict>
 		</dict>
 	</dict>
+
+	<key>NSAppleMusicUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSCameraUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App uses for perfomance</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>UILaunchStoryboardName</key>
