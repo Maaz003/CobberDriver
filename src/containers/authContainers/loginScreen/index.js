@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView, Platform, PixelRatio} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch} from 'react-redux';
 import {login} from '@store/auth/authSlice';
 import {getUserData} from '@store/user/userSlice';
@@ -31,6 +32,14 @@ function LoginScreen(props) {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    xyz();
+  }, []);
+
+  const xyz = () => {
+    console.log('SS');
+  };
 
   const onSubmit = async () => {
     setIsLoading(true);
@@ -88,18 +97,13 @@ function LoginScreen(props) {
   };
 
   return (
-    <ScrollView
-      style={{
-        ...R.styles.container,
-        ...styles.mainLayout,
-      }}
+    <KeyboardAwareScrollView
+      style={[R.styles.container, styles.mainLayout]}
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
-        // paddingBottom: 0,
       }}>
       <View style={styles.formView}>
         <Text
@@ -227,7 +231,7 @@ function LoginScreen(props) {
           />
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 export default LoginScreen;

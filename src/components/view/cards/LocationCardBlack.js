@@ -54,7 +54,7 @@ function LocationCardBlack(props) {
           <Text
             variant={'body3'}
             font={'thin'}
-            color={R.color.white}
+            color={R.color.black}
             align={'left'}
             gutterTop={5}
             gutterBottom={user?.scheduledTime?.pickUpSlot ? 0 : 15}
@@ -66,7 +66,7 @@ function LocationCardBlack(props) {
             <Text
               variant={'body4'}
               font={'thin'}
-              color={R.color.white}
+              color={R.color.black}
               align={'left'}
               gutterTop={10}
               gutterBottom={10}
@@ -91,7 +91,7 @@ function LocationCardBlack(props) {
           <Text
             variant={'body3'}
             font={'thin'}
-            color={R.color.white}
+            color={R.color.black}
             align={'left'}
             gutterTop={5}
             numberOfLines={2}
@@ -102,7 +102,7 @@ function LocationCardBlack(props) {
             <Text
               variant={'body4'}
               font={'thin'}
-              color={R.color.white}
+              color={R.color.black}
               align={'left'}
               gutterTop={10}
               numberOfLines={2}
@@ -120,20 +120,10 @@ export default LocationCardBlack;
 
 const styles = StyleSheet.create({
   historyCard: {
-    width: R.unit.width(0.92),
+    width: '100%',
     marginTop: R.unit.scale(20),
-    borderRadius: R.unit.scale(20),
-    paddingHorizontal: R.unit.scale(10),
     paddingVertical: R.unit.scale(20),
-    backgroundColor: R.color.black,
-    shadowColor: R.color.black,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
+    backgroundColor: R.color.white,
   },
   header: {
     paddingHorizontal: 0,
@@ -160,7 +150,7 @@ const styles = StyleSheet.create({
     width: '87%',
   },
   divider: {
-    backgroundColor: R.color.mainColor,
+    backgroundColor: R.color.gray,
     height: R.unit.scale(0.5),
     marginVertical: R.unit.scale(10),
     width: '100%',
