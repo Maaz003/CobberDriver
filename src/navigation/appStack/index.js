@@ -3,11 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import navigationService from '../../navigationService';
-import HomeScreen from '@containers/appContainers/homeModule/Home';
 import Contact from '@containers/appContainers/contactScreen/Contactus';
 import CustomDrawer from '@components/layout/customDrawer';
 import Profile from '@containers/appContainers/profileModule/profile';
-import MarkerMap from '@containers/appContainers/homeModule/MarkerMap';
 import History from '@containers/appContainers/historyModule/historyScreen';
 import {ChatScreen} from '@components/common/Chats';
 import LocationTracking from '@containers/appContainers/homeModule/LocationTracking';
@@ -15,9 +13,10 @@ import AddProductDetails from '@containers/appContainers/homeModule/AddProductDe
 import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
 import PaymentScreen from '@containers/appContainers/paymentScreen';
-import PickUpLocation from '@containers/appContainers/homeModule/PickUpLocation';
 import PrivacyPolicyScreen from '@containers/appContainers/PrivacyPolicyScreen';
 import SelectVehicleScreen from '@containers/appContainers/homeModule/SelectVehicleScreen';
+import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
+import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
@@ -57,10 +56,15 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'PickUpLocation'}>
-        <Stack.Screen name="PickUpLocation" component={PickUpLocation} />
-        <Stack.Screen name="DropOffLocation" component={HomeScreen} />
-        <Stack.Screen name="MarkerMap" component={MarkerMap} />
+        initialRouteName={'Home'}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="OnGoingRide"
+          options={{
+            animation: 'slide_from_right',
+          }}
+          component={OnGoingRideScreen}
+        />
         <Stack.Screen name="LocationTracking" component={LocationTracking} />
         <Stack.Screen name="AddProductDetails" component={AddProductDetails} />
         <Stack.Screen name="SelectVehicle" component={SelectVehicleScreen} />

@@ -15,7 +15,7 @@ import Button from '@components/common/Button';
 import TextInput from '@components/common/TextInput';
 import Toast from '@components/utils/Toast';
 import R from '@components/utils/R';
-import LocationCardBlack from '@components/view/cards/LocationCardBlack';
+import LocationCardBlack from '@components/view/cards/LocationPoint';
 import Icon from '@components/common/Icon';
 import ItemPictureModal from '@components/view/modal/ItemPictureModal';
 import FormValidation from '@components/utils/FormValidation';

@@ -10,7 +10,7 @@ import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 
 function ItemPictureModal(props) {
-  const {modalPic, deleteParent} = props;
+  const {modalPic, deleteParent, showControls = true} = props;
   const [modalVisible, setModalVisible] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
 
@@ -55,37 +55,41 @@ function ItemPictureModal(props) {
             <ImageBackground
               style={styles.backgroundImage}
               imageStyle={{borderRadius: R.unit.scale(20)}}
-              source={{uri: modalPic?.path}}>
-              <View style={styles.cancelButtonView}>
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => setIsBlur(false)}
-                  style={styles.closeButton}>
-                  <Icon
-                    type={'Entypo'}
-                    name={'cross'}
-                    iconStyles={{
-                      backgroundColor: R.color.lightSilver,
-                      borderRadius: R.unit.scale(100),
-                    }}
-                    color={R.color.blackShade2}
-                    size={30}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.editButtonView}>
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={deletePic}
-                  style={styles.saveButton}>
-                  <Icon
-                    name={'trash'}
-                    size={25}
-                    type={'FontAwesome5'}
-                    color={R.color.black}
-                  />
-                </TouchableOpacity>
-              </View>
+              source={modalPic ? {uri: modalPic?.path} : R.image.userPin()}>
+              {showControls && (
+                <View style={styles.cancelButtonView}>
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => setIsBlur(false)}
+                    style={styles.closeButton}>
+                    <Icon
+                      type={'Entypo'}
+                      name={'cross'}
+                      iconStyles={{
+                        backgroundColor: R.color.lightSilver,
+                        borderRadius: R.unit.scale(100),
+                      }}
+                      color={R.color.blackShade2}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+              {showControls && (
+                <View style={styles.editButtonView}>
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={deletePic}
+                    style={styles.saveButton}>
+                    <Icon
+                      name={'trash'}
+                      size={25}
+                      type={'FontAwesome5'}
+                      color={R.color.black}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
             </ImageBackground>
           </View>
         </>

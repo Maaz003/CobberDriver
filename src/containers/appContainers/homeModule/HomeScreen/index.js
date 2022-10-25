@@ -9,13 +9,12 @@ import {
 import R from '@components/utils/R';
 import {useFocusEffect} from '@react-navigation/native';
 import {getAddressFromCoordinates} from '@components/utils/CurrentLocation';
-import PickUpLocationCard from '@components/view/screen/Home/PickUp/PickUpLocationCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import PickUpMap from '@components/view/screen/Home/PickUp/PickUpMap';
 import HomeHeader from '@components/view/screen/Home/HomeHeader';
-import LiveLocation from '@components/view/screen/Home/PickUp/LiveLocation';
+import RidesList from '@components/view/screen/Home/PickUp/RidesList';
 
-function PickUpLocation(props) {
+function HomeScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -74,7 +73,6 @@ function PickUpLocation(props) {
       <View style={R.styles.mainLayout}>
         <HomeHeader onPress={onPress} iconName={'menu'} />
         <PickUpMap />
-        {/* <LiveLocation /> */}
         {user?.locationLoader && (
           <View style={R.styles.loaderView}>
             <ActivityIndicator
@@ -84,10 +82,10 @@ function PickUpLocation(props) {
             />
           </View>
         )}
-        <PickUpLocationCard navigation={props.navigation} />
+        <RidesList navigation={props.navigation} />
       </View>
     </ScreenBoiler>
   );
 }
 
-export default PickUpLocation;
+export default HomeScreen;

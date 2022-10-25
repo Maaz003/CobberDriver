@@ -123,6 +123,7 @@ const Button = props => {
     fontSize = 15,
     textStyles,
     font = 'light',
+    rippleColor = '#42700b',
     borderRadius,
     variant,
     disabled,
@@ -158,28 +159,9 @@ const Button = props => {
         delayPressOut={0.1}
         delayLongPress={0.1}
         disabled={disabled}
-        background={TouchableNativeFeedback.Ripple('#42700b', true, 300)}
+        background={TouchableNativeFeedback.Ripple(rippleColor, true, 300)}
         onPress={buttonPress}>
-        <View
-          style={[
-            styles.mainBtn,
-            {
-              width: props.width,
-              height: sizes[size],
-              // backgroundColor: disabled ? R.color.disabledButtonColor : bgColor,
-              // borderColor: disabled ? R.color.disabledButtonColor : borderColor,
-              // marginTop: R.unit.scale(gutterTop),
-              // marginBottom: R.unit.scale(gutterBottom),
-              // borderWidth: R.unit.scale(borderWidth),
-            },
-            // btnWrapperStyles,
-            // props.justifyContent && {
-            //   justifyContent: props.justifyContent,
-            // },
-            // borderRadius && {
-            //   borderRadius: R.unit.scale(borderRadius),
-            // },
-          ]}>
+        <View style={{flex: 1}}>
           <Text
             style={[
               styles.buttonText,
@@ -207,16 +189,6 @@ const Button = props => {
               style={[styles.iconCustom, props.iconStyle && props.iconStyle]}
             />
           )}
-          <Text
-            style={[
-              styles.text,
-              {color: props.textColor, fontSize: R.unit.scale(15)},
-              props.textTransform && {
-                textTransform: props.textTransform,
-              },
-            ]}>
-            {props.text}
-          </Text>
         </View>
       </TouchableNativeFeedback>
     </View>

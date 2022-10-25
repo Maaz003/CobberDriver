@@ -1,32 +1,34 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import {itemPictures} from '@components/constants';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import LocationCardBlack from '@components/view/cards/LocationCardBlack';
+import LocationPoint from '@components/view/cards/LocationPoint';
 import Button from '@components/common/Button';
+import RideDetailsModal from '@components/view/modal/RideDetailsModal';
+import navigationService from '../../../../../navigationService';
 
 function CustomerCard(props) {
-  const [itemPics, setItemPics] = useState([
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-    {image: R.image.VanPerson()},
-  ]);
+  const [isModal, setIsModal] = useState(false);
+
+  const navigateToDetails = () => {
+    setIsModal(!isModal);
+    // navigationService.navigate('RideDetails');
+  };
 
   return (
-    <View style={styles.mainLayout}>
+    <TouchableOpacity
+      style={styles.mainLayout}
+      activeOpacity={0.9}
+      onPress={navigateToDetails}>
       <View style={R.styles.twoItemsRow}>
         <Image
           source={R.image.userPin()}
           resizeMode={'cover'}
           style={{
-            height: R.unit.scale(50),
-            width: R.unit.scale(50),
-            borderRadius: R.unit.scale(50),
+            height: R.unit.scale(70),
+            width: R.unit.scale(70),
+            borderRadius: R.unit.scale(70),
             marginRight: R.unit.scale(12),
             borderColor: R.color.black,
             borderWidth: R.unit.scale(1),
@@ -41,9 +43,9 @@ function CustomerCard(props) {
           John Denly
         </Text>
       </View>
-      <LocationCardBlack />
+      <LocationPoint />
       <View style={styles.picturesRow}>
-        {itemPics?.map(item => {
+        {itemPictures?.map(item => {
           return (
             <Image
               source={R.image.userPin()}
@@ -53,31 +55,39 @@ function CustomerCard(props) {
           );
         })}
       </View>
-      <View style={{...R.styles.rowView, marginTop: R.unit.scale(12)}}>
+      <View
+        style={{...R.styles.rowView, marginTop: R.unit.scale(12)}}
+        onStartShouldSetResponder={() => true}>
+        <Button
+          value="Reject Ride"
+          bgColor={R.color.white}
+          width={'47%'}
+          size={'lg'}
+          variant={'body2'}
+          font={'semiBold'}
+          color={R.color.blackShade2}
+          borderRadius={10}
+          borderWidth={R.unit.scale(0.5)}
+          borderColor={R.color.gray6}
+          onPress={() => null}
+          rippleColor={R.color.gray5}
+        />
         <Button
           value="Accept Ride"
           bgColor={R.color.black}
-          width={'49%'}
-          size={'xxmd'}
+          width={'47%'}
+          size={'lg'}
           variant={'body2'}
           font={'semiBold'}
           color={R.color.white}
           borderRadius={10}
           borderColor={R.color.mainColor}
-        />
-        <Button
-          value="Reject Ride"
-          bgColor={R.color.red}
-          width={'49%'}
-          size={'xxmd'}
-          variant={'body2'}
-          font={'semiBold'}
-          color={R.color.white}
-          borderRadius={10}
-          borderColor={R.color.mainColor}
+          onPress={() => navigationService.navigate('OnGoingRide')}
+          rippleColor={R.color.gray5}
         />
       </View>
-    </View>
+      <RideDetailsModal isVisibleModal={isModal} />
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({

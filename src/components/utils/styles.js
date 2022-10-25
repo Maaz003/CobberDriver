@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   twoItemsRow: {
     display: 'flex',
     flexDirection: 'row',
-    paddingHorizontal: unit.scale(10),
     alignItems: 'center',
   },
   twoItemsColumns: {
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     width: unit.width(1),
     height: '100%',
     position: 'absolute',
-    bottom: unit.width(1) - unit.scale(250),
+    // bottom: unit.width(1) - unit.scale(250),
     right: 0,
     left: 0,
     display: 'flex',

@@ -25,3 +25,7 @@ export {default as CardChip} from '@assets/Images/Svgs/cardChip.svg';
 export {default as VisaIcon} from '@assets/Images/Svgs/visaIcon.svg';
 export {default as CarIcon} from '@assets/Images/Svgs/carIcon.svg';
 export {default as CarIcon2} from '@assets/Images/Svgs/carIcon2.svg';
+export {default as ClockIcon} from '@assets/Images/Svgs/ClockIcon.svg';
+export {default as LocationPin} from '@assets/Images/Svgs/locationPin.svg';
+export {default as PinLocation} from '@assets/Images/Svgs/PinLocation.svg';
+export {default as CalendarIcon} from '@assets/Images/Svgs/CalendarIcon.svg';

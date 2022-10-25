@@ -16,6 +16,8 @@ const color = {
   gray2: '#DADADA',
   gray3: '#F1F1F1',
   gray4: '#767680',
+  gray5: '#b5b5b5',
+  gray6: '#717171',
   blackLightShade: '#1A1A1A',
   disabledButtonColor: '#DADADA',
   charcoalShade: '#2E2E2E',

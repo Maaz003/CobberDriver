@@ -49,13 +49,13 @@ function PickUpMap() {
           latitudeDelta: 0.922,
           longitudeDelta: 0.922,
         }}>
-        <PickUpMarker
+        {/* <PickUpMarker
           pickUpLat={pickUpLat}
           pickUpLong={pickUpLong}
           addressRawPickup={addressRawPickup}
           initialLat={initialLat}
           initialLong={initialLong}
-        />
+        /> */}
       </MapView>
     </SafeAreaView>
   );

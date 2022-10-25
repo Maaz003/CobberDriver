@@ -12,7 +12,7 @@ import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
 
-function PickUpLocationCard(props) {
+function RidesList(props) {
   const [height, setHeight] = useState(new Animated.Value(R.unit.height(0.07)));
   const [show, setShow] = useState(false);
 
@@ -28,7 +28,7 @@ function PickUpLocationCard(props) {
   const showContent = () => {
     Animated.timing(height, {
       toValue: R.unit.height(0.6),
-      duration: 400,
+      duration: 800,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
@@ -86,23 +86,13 @@ function PickUpLocationCard(props) {
           {show && (
             <ScrollView
               style={styles.fullContentView}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 justifyContent: 'flex-start',
                 flexGrow: 1,
                 paddingBottom: R.unit.scale(50),
               }}>
               <View onStartShouldSetResponder={() => true}>
-                <Text
-                  variant={'body3'}
-                  font={'bold'}
-                  gutterBottom={R.unit.scale(25)}
-                  color={R.color.white}
-                  align={'left'}
-                  transform={'none'}>
-                  Customers
-                </Text>
-                <CustomerCard />
-                <CustomerCard />
                 <CustomerCard />
               </View>
             </ScrollView>
@@ -133,7 +123,6 @@ const styles = StyleSheet.create({
   },
   fullContentView: {
     // height: '100%',
-    paddingHorizontal: R.unit.scale(16),
     paddingVertical:
       Platform.OS === 'ios' && R.unit.height(1) > 800
         ? R.unit.scale(40)
@@ -141,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PickUpLocationCard;
+export default RidesList;

@@ -9,6 +9,7 @@ const unit = {
   scale: (value, factor = 0.3) => moderateScale(value, factor),
   height: value => containerHeight * value,
   width: value => containerWidth * value,
+  pdBottomList: value => (Platform.OS === 'ios' ? value : value / 2),
   responsive: (value, scaleFactor) => {
     if (Platform.OS === 'ios') {
       if (containerHeight > 800) {

@@ -7,7 +7,7 @@ import DashLine from '@components/common/DashLine';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 
-function LocationCardBlack(props) {
+function LocationPoint(props) {
   const user = useSelector(state => state.user);
   const addressRawPickup = user?.pickupLoc?.address;
   const addressRawDropOff = user?.dropOffLoc?.address;
@@ -60,7 +60,8 @@ function LocationCardBlack(props) {
             gutterBottom={user?.scheduledTime?.pickUpSlot ? 0 : 15}
             numberOfLines={2}
             transform={'none'}>
-            {addressRawPickup}
+            {/* {addressRawPickup} */}
+            PICKUP
           </Text>
           {user?.scheduledTime && (
             <Text
@@ -72,8 +73,9 @@ function LocationCardBlack(props) {
               gutterBottom={10}
               numberOfLines={2}
               transform={'none'}>
-              {moment(pickUpTime).format('Do MMM')}
-              {`  ${user?.scheduledTime?.pickUpSlot}`}
+              HELLO
+              {/* {moment(pickUpTime).format('Do MMM')}
+              {`  ${user?.scheduledTime?.pickUpSlot}`} */}
             </Text>
           )}
 
@@ -96,7 +98,8 @@ function LocationCardBlack(props) {
             gutterTop={5}
             numberOfLines={2}
             transform={'none'}>
-            {addressRawDropOff}
+            {/* {addressRawDropOff} */}
+            DROP OFF
           </Text>
           {user?.scheduledTime && (
             <Text
@@ -107,8 +110,9 @@ function LocationCardBlack(props) {
               gutterTop={10}
               numberOfLines={2}
               transform={'none'}>
-              {moment(dropOffTime).format('Do MMM')}
-              {`  ${user?.scheduledTime?.dropOffSlot}`}
+              HEY
+              {/* {moment(dropOffTime).format('Do MMM')}
+              {`  ${user?.scheduledTime?.dropOffSlot}`} */}
             </Text>
           )}
         </View>
@@ -116,14 +120,13 @@ function LocationCardBlack(props) {
     </View>
   );
 }
-export default LocationCardBlack;
+export default LocationPoint;
 
 const styles = StyleSheet.create({
   historyCard: {
     width: '100%',
     marginTop: R.unit.scale(20),
     paddingVertical: R.unit.scale(20),
-    backgroundColor: R.color.white,
   },
   header: {
     paddingHorizontal: 0,
