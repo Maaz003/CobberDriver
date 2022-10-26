@@ -1,18 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
-import {ActivityIndicator, BackHandler, View} from 'react-native';
+import {ActivityIndicator, Alert, BackHandler, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  scheduledRideTime,
-  confirmPickUp,
-  confirmDropOff,
-} from '@store/user/userSlice';
+import {confirmDropOff} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import {useFocusEffect} from '@react-navigation/native';
-import {getAddressFromCoordinates} from '@components/utils/CurrentLocation';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
-import PickUpMap from '@components/view/screen/Home/PickUp/PickUpMap';
+import HomeMap from '@components/view/screen/Home/PickUp/HomeMap';
 import HomeHeader from '@components/view/screen/Home/HomeHeader';
 import RidesList from '@components/view/screen/Home/PickUp/RidesList';
+import CurrentLocation from '@components/utils/CurrentLocation';
 
 function HomeScreen(props) {
   const {navigation} = props;
@@ -23,6 +19,12 @@ function HomeScreen(props) {
     isHeader: true,
     isSubHeader: false,
   };
+
+  useEffect(() => {
+    if (!user?.pickupLoc) {
+      CurrentLocation({actionCall: dispatch, flag: true});
+    }
+  }, []);
 
   const onPress = () => {
     navigation.toggleDrawer();
@@ -36,11 +38,7 @@ function HomeScreen(props) {
           {
             text: 'Yes',
             onPress: () => {
-              let reqData = undefined;
-              dispatch(scheduledRideTime(reqData));
-              let CooOrdiantes = undefined;
-              dispatch(confirmDropOff(CooOrdiantes));
-
+              dispatch(confirmDropOff(undefined));
               BackHandler.exitApp();
             },
           },
@@ -57,29 +55,14 @@ function HomeScreen(props) {
     }, []),
   );
 
-  useEffect(() => {
-    if (user?.pickupLoc === undefined) {
-      getAddress();
-    }
-  }, []);
-
-  const getAddress = async () => {
-    let response = await getAddressFromCoordinates(initialLat, initialLong);
-    dispatch(confirmPickUp(response));
-  };
-
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>
         <HomeHeader onPress={onPress} iconName={'menu'} />
-        <PickUpMap />
+        <HomeMap />
         {user?.locationLoader && (
           <View style={R.styles.loaderView}>
-            <ActivityIndicator
-              size="large"
-              color={R.color.mainColor}
-              style={{marginTop: R.unit.scale(280)}}
-            />
+            <ActivityIndicator size="large" color={R.color.mainColor} />
           </View>
         )}
         <RidesList navigation={props.navigation} />

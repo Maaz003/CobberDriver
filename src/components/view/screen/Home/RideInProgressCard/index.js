@@ -1,14 +1,31 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
+import {useDispatch, useSelector} from 'react-redux';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
+import navigationService from '../../../../../navigationService';
+import {useNavigation} from '@react-navigation/native';
 
 function RideInProgressCard(props) {
-  let inRide = true;
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  let rideCompleted = true;
+  const navigation = useNavigation();
+
+  const onSubmit = () => {
+    if (rideCompleted) {
+      if (user?.inRide) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'RideCompleted'}],
+        });
+      }
+    }
+  };
 
   return (
     <View style={styles.mainLayout}>
@@ -56,7 +73,7 @@ function RideInProgressCard(props) {
           }}
         />
         <View style={{...R.styles.rowView}}>
-          {!inRide ? (
+          {!rideCompleted ? (
             <View style={styles.pickupEllipse} />
           ) : (
             <View style={styles.svgView}>
@@ -76,7 +93,7 @@ function RideInProgressCard(props) {
               style={{top: 2}}
               gutterBottom={5}
               transform={'none'}>
-              User's {!inRide ? 'Pickup' : 'DropOff'} Location
+              User's {!rideCompleted ? 'Pickup' : 'DropOff'} Location
             </Text>
             <Text
               variant={'body2'}
@@ -101,19 +118,17 @@ function RideInProgressCard(props) {
         </View>
 
         <Button
-          value={!inRide ? 'Start Ride' : 'End Ride'}
+          value={rideCompleted ? 'Start Ride' : 'End Ride'}
           bgColor={R.color.mainColor}
           width={'90%'}
           size={'lg'}
           variant={'body1'}
           font={'semiBold'}
           gutterTop={32}
-          color={R.color.white}
+          color={R.color.black}
           borderRadius={10}
           borderColor={R.color.mainColor}
-          onPress={() => {
-            return null;
-          }}
+          onPress={onSubmit}
         />
       </View>
     </View>
@@ -159,11 +174,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    // width: R.unit.scale(20),
   },
   iconContainer: {
     width: '24%',
-    // backgroundColor: 'red',
   },
   iconView: {
     height: R.unit.scale(40),

@@ -115,10 +115,10 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      CurrentLocation({actionCall: dispatch});
+      if (auth?.isAuth) {
+        CurrentLocation({actionCall: dispatch});
+      }
     }, []);
-
-    console.log('auth?.firstTimePop', auth?.firstTimePop);
 
     return (
       <>

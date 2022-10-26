@@ -8,24 +8,26 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 
 function LocationPoint(props) {
+  const {
+    dottedLineColor = R.color.gray,
+    horizontalLineColor = R.color.gray,
+    pickUpTextColor = R.color.black,
+    dropOffTextColor = R.color.black,
+    ellipseColor = R.color.white,
+    containerStyles,
+  } = props;
   const user = useSelector(state => state.user);
-  const addressRawPickup = user?.pickupLoc?.address;
-  const addressRawDropOff = user?.dropOffLoc?.address;
-  const dropOffTime = user?.scheduledTime
-    ? user?.scheduledTime?.dropOffTime
-    : '';
-  const pickUpTime = user?.scheduledTime ? user?.scheduledTime?.pickUpTime : '';
 
   return (
-    <View style={styles.historyCard}>
+    <View style={[styles.mainLayout, containerStyles]}>
       <View style={[R.styles.twoItemsRow, styles.content]}>
         <View style={styles.iconsColumn}>
           <View
-            style={[R.styles.pickupEllipse, {backgroundColor: R.color.black}]}
+            style={[R.styles.pickupEllipse, {backgroundColor: ellipseColor}]}
           />
           <DashLine
             dashGap={1}
-            dashColor={R.color.gray}
+            dashColor={dottedLineColor}
             style={{
               width: 5,
               height: user?.scheduledTime ? 90 : 60,
@@ -54,32 +56,35 @@ function LocationPoint(props) {
           <Text
             variant={'body3'}
             font={'thin'}
-            color={R.color.black}
+            color={pickUpTextColor}
             align={'left'}
             gutterTop={5}
             gutterBottom={user?.scheduledTime?.pickUpSlot ? 0 : 15}
             numberOfLines={2}
             transform={'none'}>
-            {/* {addressRawPickup} */}
             PICKUP
           </Text>
           {user?.scheduledTime && (
             <Text
               variant={'body4'}
               font={'thin'}
-              color={R.color.black}
+              color={pickUpTextColor}
               align={'left'}
               gutterTop={10}
               gutterBottom={10}
               numberOfLines={2}
               transform={'none'}>
               HELLO
-              {/* {moment(pickUpTime).format('Do MMM')}
-              {`  ${user?.scheduledTime?.pickUpSlot}`} */}
             </Text>
           )}
 
-          <View style={[R.styles.divider, styles.divider]} />
+          <View
+            style={[
+              R.styles.divider,
+              styles.divider,
+              {backgroundColor: horizontalLineColor},
+            ]}
+          />
           <Text
             variant={'body4'}
             font={'semiBold'}
@@ -93,26 +98,23 @@ function LocationPoint(props) {
           <Text
             variant={'body3'}
             font={'thin'}
-            color={R.color.black}
+            color={dropOffTextColor}
             align={'left'}
             gutterTop={5}
             numberOfLines={2}
             transform={'none'}>
-            {/* {addressRawDropOff} */}
             DROP OFF
           </Text>
           {user?.scheduledTime && (
             <Text
               variant={'body4'}
               font={'thin'}
-              color={R.color.black}
+              color={dropOffTextColor}
               align={'left'}
               gutterTop={10}
               numberOfLines={2}
               transform={'none'}>
               HEY
-              {/* {moment(dropOffTime).format('Do MMM')}
-              {`  ${user?.scheduledTime?.dropOffSlot}`} */}
             </Text>
           )}
         </View>
@@ -123,14 +125,10 @@ function LocationPoint(props) {
 export default LocationPoint;
 
 const styles = StyleSheet.create({
-  historyCard: {
+  mainLayout: {
     width: '100%',
     marginTop: R.unit.scale(20),
     paddingVertical: R.unit.scale(20),
-  },
-  header: {
-    paddingHorizontal: 0,
-    marginBottom: R.unit.scale(10),
   },
   content: {
     alignContent: 'space-between',

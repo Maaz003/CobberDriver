@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import navigationService from '../../navigationService';
+import {useSelector} from 'react-redux';
 import Contact from '@containers/appContainers/contactScreen/Contactus';
 import CustomDrawer from '@components/layout/customDrawer';
 import Profile from '@containers/appContainers/profileModule/profile';
@@ -12,15 +13,17 @@ import LocationTracking from '@containers/appContainers/homeModule/LocationTrack
 import AddProductDetails from '@containers/appContainers/homeModule/AddProductDetails';
 import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
-import PaymentScreen from '@containers/appContainers/paymentScreen';
+import PaymentScreen from '@containers/appContainers/PaymentScreen';
 import PrivacyPolicyScreen from '@containers/appContainers/PrivacyPolicyScreen';
-import SelectVehicleScreen from '@containers/appContainers/homeModule/SelectVehicleScreen';
 import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
 import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
+import RideCompletedScreen from '@containers/appContainers/homeModule/RideCompletedScreen';
+import EarningsScreen from '@containers/appContainers/EarningsScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createNativeStackNavigator();
+  const user = useSelector(state => state.user);
 
   const DrawerNavigator = () => {
     return (
@@ -45,6 +48,7 @@ const AppStack = () => {
           <Drawer.Screen name="FAQ" component={FAQScreen} />
           <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
           <Drawer.Screen name="Payment" component={PaymentScreen} />
+          <Drawer.Screen name="Earnings" component={EarningsScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     );
@@ -56,7 +60,7 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'Home'}>
+        initialRouteName={user?.inRide ? 'OnGoingRide' : 'Home'}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="OnGoingRide"
@@ -65,9 +69,9 @@ const AppStack = () => {
           }}
           component={OnGoingRideScreen}
         />
+        <Stack.Screen name="RideCompleted" component={RideCompletedScreen} />
         <Stack.Screen name="LocationTracking" component={LocationTracking} />
         <Stack.Screen name="AddProductDetails" component={AddProductDetails} />
-        <Stack.Screen name="SelectVehicle" component={SelectVehicleScreen} />
         <Stack.Screen
           name="EditField"
           options={{

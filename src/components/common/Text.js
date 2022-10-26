@@ -59,13 +59,13 @@ export const FONTSSTYLE = {
     fontFamily: 'Nunito-BlackItalic',
   },
   bold: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'Nunito-Bold', //700
   },
   boldItalic: {
     fontFamily: 'Nunito-BoldItalic',
   },
   extraBold: {
-    fontFamily: 'Nunito-ExtraBold',
+    fontFamily: 'Nunito-ExtraBold', //900
   },
   extraBoldItalic: {
     fontFamily: 'Nunito-ExtraBoldItalic',
@@ -77,13 +77,13 @@ export const FONTSSTYLE = {
     fontFamily: 'Roboto-LightItalic',
   },
   medium: {
-    fontFamily: 'Nunito-Medium',
+    fontFamily: 'Nunito-Medium', //500
   },
   mediumItalic: {
     fontFamily: 'Nunito-MediumItalic',
   },
   regular: {
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'Nunito-Regular', //400
   },
   semiBold: {
     fontFamily: 'Nunito-SemiBold',

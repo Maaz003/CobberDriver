@@ -13,7 +13,7 @@ import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
 
 function RidesList(props) {
-  const [height, setHeight] = useState(new Animated.Value(R.unit.height(0.07)));
+  const [height, setHeight] = useState(new Animated.Value(R.unit.height(0.08)));
   const [show, setShow] = useState(false);
 
   const triggerAnimation = () => {
@@ -28,7 +28,7 @@ function RidesList(props) {
   const showContent = () => {
     Animated.timing(height, {
       toValue: R.unit.height(0.6),
-      duration: 800,
+      duration: 400,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
@@ -54,12 +54,13 @@ function RidesList(props) {
         style={{
           height: maxHeight,
           ...styles.animatedView,
+          paddingHorizontal: R.unit.scale(!show ? 8 : 0),
         }}>
         <TouchableOpacity onPress={triggerAnimation} activeOpacity={0.8}>
           {!show && (
             <View style={R.styles.rowView}>
               <Text
-                variant={'body1'}
+                variant={'body2'}
                 font={'bold'}
                 color={R.color.white}
                 align={'center'}
@@ -68,12 +69,12 @@ function RidesList(props) {
                 You have a New Ride
               </Text>
               <Text
-                variant={'body2'}
+                variant={'body4'}
                 font={'bold'}
                 color={R.color.black}
                 align={'center'}
                 style={{
-                  padding: R.unit.scale(10),
+                  padding: R.unit.scale(7),
                   borderRadius: R.unit.scale(20),
                   backgroundColor: R.color.mainColor,
                 }}
@@ -84,18 +85,21 @@ function RidesList(props) {
           )}
 
           {show && (
-            <ScrollView
-              style={styles.fullContentView}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                justifyContent: 'flex-start',
-                flexGrow: 1,
-                paddingBottom: R.unit.scale(50),
-              }}>
-              <View onStartShouldSetResponder={() => true}>
-                <CustomerCard />
-              </View>
-            </ScrollView>
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <View style={styles.notch} />
+              <ScrollView
+                style={styles.fullContentView}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  justifyContent: 'flex-start',
+                  flexGrow: 1,
+                  paddingBottom: R.unit.pdBottomList(140),
+                }}>
+                <View onStartShouldSetResponder={() => true}>
+                  <CustomerCard />
+                </View>
+              </ScrollView>
+            </View>
           )}
         </TouchableOpacity>
       </Animated.View>
@@ -109,24 +113,28 @@ const styles = StyleSheet.create({
     width: R.unit.width(1),
     flexDirection: 'row',
     position: 'absolute',
-    bottom: Platform.OS === 'ios' && R.unit.height(1) > 800 ? -40 : 20,
+    bottom: Platform.OS === 'ios' && R.unit.height(1) > 800 ? -40 : 0,
     zIndex: 99999,
   },
   animatedView: {
-    width: '95%',
+    width: '100%',
     display: 'flex',
     alignContent: 'center',
     justifyContent: 'center',
-    paddingHorizontal: R.unit.scale(8),
     backgroundColor: R.color.charcoalShade2,
-    borderRadius: R.unit.scale(10),
+    borderTopRightRadius: R.unit.scale(10),
+    borderTopLeftRadius: R.unit.scale(10),
   },
   fullContentView: {
-    // height: '100%',
-    paddingVertical:
-      Platform.OS === 'ios' && R.unit.height(1) > 800
-        ? R.unit.scale(40)
-        : R.unit.scale(50),
+    marginTop: R.unit.scale(10),
+    paddingBottom: R.unit.scale(40),
+  },
+  notch: {
+    height: R.unit.scale(5),
+    width: R.unit.scale(70),
+    backgroundColor: R.color.gray5,
+    borderRadius: R.unit.scale(20),
+    marginTop: R.unit.scale(32),
   },
 });
 

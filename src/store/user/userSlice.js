@@ -214,6 +214,24 @@ export const scheduledRideTime = createAsyncThunk(
   },
 );
 
+export const isInRide = createAsyncThunk('user/isInRide', async data => {
+  try {
+    return {
+      status: 'success',
+      error: false,
+      message: 'Success!',
+      isData: data,
+    };
+  } catch (error) {
+    return {
+      status: 'failed',
+      error: true,
+      message: 'Oops! Something went wrong!',
+      isData: undefined,
+    };
+  }
+});
+
 export const clearUser = createAsyncThunk('user/clearUser', async data => {
   try {
     return {
@@ -247,6 +265,7 @@ const initialState = {
   locationLoader: true,
   scheduledTime: undefined,
   pinLoc: false,
+  inRide: false,
 };
 
 const userSlice = createSlice({
@@ -338,6 +357,12 @@ const userSlice = createSlice({
       state.isLoadingRequest = false;
       state.error = false;
       state.locationLoader = action.payload.isData;
+    },
+    [isInRide.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.isLoadingRequest = false;
+      state.error = false;
+      state.inRide = action.payload.isData;
     },
     [clearUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';

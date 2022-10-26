@@ -18,11 +18,11 @@ import {
   LegalIcon,
   LogOutIcon,
   WalletIcon,
-  ScheduleRide,
   SettingsLogo,
   Footer,
   StarLogo,
   Home,
+  EarningIcon,
 } from '@components/utils/Svg';
 import LogOutModal from '@components/view/modal/LogOutModal';
 
@@ -54,7 +54,7 @@ const CustomDrawer = props => {
         index: 0,
         routes: [{name: 'HomeScreen'}],
       });
-    } else if (data.id === 3) {
+    } else if (data.id === 2) {
       navigation.navigate('Payment', {
         type: 'home',
       });
@@ -75,17 +75,17 @@ const CustomDrawer = props => {
       route: 'HomeScreen',
       svg: <Home height="100%" width="100%" fill={'#85FA00'} />,
     },
-    // {
-    //   name: 'Schedule Ride',
-    //   id: 2,
-    //   route: 'History',
-    //   svg: <ScheduleRide height="100%" width="100%" fill={'#85FA00'} />,
-    // },
     {
-      name: 'Add Payments',
-      id: 3,
+      name: 'Payments',
+      id: 2,
       route: 'Payment',
       svg: <WalletIcon height="100%" width="100%" fill={'#85FA00'} />,
+    },
+    {
+      name: 'Earnings',
+      id: 3,
+      route: 'Earnings',
+      svg: <EarningIcon height="100%" width="100%" fill={'#85FA00'} />,
     },
     {
       name: 'History',

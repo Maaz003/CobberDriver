@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   loaderView: {
     zIndex: 99999,
     width: unit.width(1),
-    height: '100%',
+    height: unit.height(1),
     position: 'absolute',
     // bottom: unit.width(1) - unit.scale(250),
     right: 0,

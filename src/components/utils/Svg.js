@@ -29,3 +29,4 @@ export {default as ClockIcon} from '@assets/Images/Svgs/ClockIcon.svg';
 export {default as LocationPin} from '@assets/Images/Svgs/locationPin.svg';
 export {default as PinLocation} from '@assets/Images/Svgs/PinLocation.svg';
 export {default as CalendarIcon} from '@assets/Images/Svgs/CalendarIcon.svg';
+export {default as EarningIcon} from '@assets/Images/Svgs/EarningIcon.svg';

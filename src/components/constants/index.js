@@ -320,3 +320,361 @@ export const itemPictures = [
   {image: R.image.VanPerson()},
   {image: R.image.VanPerson()},
 ];
+
+export const mapStyles = [
+  {
+    featureType: 'administrative.land_parcel',
+    elementType: 'labels',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.man_made',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f1f1f1',
+      },
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.man_made',
+    elementType: 'geometry.stroke',
+    stylers: [
+      {
+        color: '#c2c2c2',
+      },
+      {
+        visibility: 'on',
+      },
+      {
+        weight: 0.25,
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.man_made',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.man_made',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.natural',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        color: '#3d2424',
+      },
+      {
+        weight: 3,
+      },
+    ],
+  },
+  {
+    featureType: 'poi.attraction',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.attraction',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        color: '#767680',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.business',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.business',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+      {
+        weight: 5,
+      },
+    ],
+  },
+  {
+    featureType: 'poi.government',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.medical',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.medical',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        color: '#929090',
+      },
+      {
+        visibility: 'on',
+      },
+      {
+        weight: 1,
+      },
+    ],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#7dd8a0',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'labels.text',
+    stylers: [
+      {
+        color: '#b5b5b5',
+      },
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        color: '#767680',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.place_of_worship',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.school',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.school',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        color: '#767680',
+      },
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.school',
+    elementType: 'labels.text',
+    stylers: [
+      {
+        color: '#b5b5b5',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.school',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        color: '#767680',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.school',
+    elementType: 'labels.text.stroke',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.sports_complex',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#f9f9f9',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.sports_complex',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        color: '#767680',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.sports_complex',
+    elementType: 'labels.text',
+    stylers: [
+      {
+        color: '#b5b5b5',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.sports_complex',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        color: '#767680',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.sports_complex',
+    elementType: 'labels.text.stroke',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+    ],
+  },
+  {
+    featureType: 'road.arterial',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+    ],
+  },
+  {
+    featureType: 'road.arterial',
+    elementType: 'labels',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+      {
+        weight: 2,
+      },
+    ],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'labels',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'road.local',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'road.local',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+    ],
+  },
+  {
+    featureType: 'road.local',
+    elementType: 'labels',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#66bbf0',
+      },
+    ],
+  },
+  {
+    featureType: 'water',
+    elementType: 'labels.text',
+    stylers: [
+      {
+        color: '#ffffff',
+      },
+    ],
+  },
+];

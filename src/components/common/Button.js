@@ -161,7 +161,13 @@ const Button = props => {
         disabled={disabled}
         background={TouchableNativeFeedback.Ripple(rippleColor, true, 300)}
         onPress={buttonPress}>
-        <View style={{flex: 1}}>
+        <View
+          style={{
+            flex: 1,
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text
             style={[
               styles.buttonText,

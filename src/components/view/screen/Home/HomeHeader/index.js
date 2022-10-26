@@ -5,7 +5,12 @@ import Icon from '@components/common/Icon';
 import LiveLocation from '../PickUp/LiveLocation';
 
 function HomeHeader(props) {
-  const {onPress, iconName} = props;
+  const {
+    onPress,
+    iconName,
+    iconType = 'MaterialIcons',
+    showLive = true,
+  } = props;
 
   return (
     <View style={styles.headerView}>
@@ -13,14 +18,9 @@ function HomeHeader(props) {
         onPress={onPress}
         activeOpacity={0.9}
         style={styles.iconView}>
-        <Icon
-          name={iconName}
-          type={'MaterialIcons'}
-          size={25}
-          color={R.color.white}
-        />
+        <Icon name={iconName} type={iconType} size={20} color={R.color.white} />
       </TouchableOpacity>
-      <LiveLocation />
+      {showLive && <LiveLocation />}
     </View>
   );
 }

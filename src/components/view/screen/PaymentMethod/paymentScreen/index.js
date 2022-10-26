@@ -23,7 +23,7 @@ import Toast from '@components/utils/Toast';
 
 function PaymentScreen(props) {
   const {navigation} = props;
-  const {planId} = props.route.params;
+  // const {planId} = props.route.params;
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -97,7 +97,7 @@ function PaymentScreen(props) {
     setPaymentProcessLoading(true);
     const data = {
       paymentMethodId: paymentId,
-      planId: planId,
+      // planId: planId,
     };
     const purchasePackageUrl = URL('users/package/buy');
     const response = await Post(purchasePackageUrl, data, header);

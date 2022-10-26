@@ -14,8 +14,12 @@ function PickUpMarker(props) {
   return (
     <Marker
       coordinate={{
-        latitude: pickUpLat ? pickUpLat : initialLat,
-        longitude: pickUpLong ? pickUpLong : initialLong,
+        latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : 30.0002,
+        longitude: pickUpLong
+          ? pickUpLong
+          : initialLong
+          ? initialLong
+          : 136.2092,
       }}
       tracksViewChanges={false}
       title={'User'}>
@@ -34,8 +38,8 @@ function PickUpMarker(props) {
           {pickUpAddr ? pickUpAddr : 'PickUp'}
         </Text>
         <Icon
-          name={'user'}
-          type={'FontAwesome'}
+          name={'truck-moving'}
+          type={'FontAwesome5'}
           size={25}
           color={R.color.black}
         />

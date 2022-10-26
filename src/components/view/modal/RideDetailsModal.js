@@ -46,7 +46,7 @@ function RideDetailsModal(props) {
             style={{
               height: '100%',
               width: '100%',
-              backgroundColor: 'rgba(0,0,0,0)',
+              backgroundColor: 'rgba(0,0,0,0.5)',
             }}></TouchableOpacity>
         </View>
         <>
@@ -181,7 +181,7 @@ function RideDetailsModal(props) {
                 width={'80%'}
                 size={'lg'}
                 variant={'body2'}
-                font={'semiBold'}
+                font={'bold'}
                 color={R.color.white}
                 borderRadius={10}
                 borderColor={R.color.mainColor}
@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
   rejectButton: {
     padding: R.unit.scale(15),
     borderRadius: R.unit.scale(10),
-    borderColor: R.color.gray3,
-    borderWidth: R.unit.scale(1),
+    borderColor: R.color.gray5,
+    borderWidth: R.unit.scale(0.75),
   },
 });
 

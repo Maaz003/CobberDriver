@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {isInRide} from '@store/user/userSlice';
 import {itemPictures} from '@components/constants';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
@@ -10,10 +12,15 @@ import navigationService from '../../../../../navigationService';
 
 function CustomerCard(props) {
   const [isModal, setIsModal] = useState(false);
+  const dispatch = useDispatch();
 
   const navigateToDetails = () => {
     setIsModal(!isModal);
-    // navigationService.navigate('RideDetails');
+  };
+
+  const acceptRide = () => {
+    navigationService.navigate('OnGoingRide');
+    dispatch(isInRide(true));
   };
 
   return (
@@ -74,7 +81,7 @@ function CustomerCard(props) {
         />
         <Button
           value="Accept Ride"
-          bgColor={R.color.black}
+          bgColor={R.color.mainColor}
           width={'47%'}
           size={'lg'}
           variant={'body2'}
@@ -82,7 +89,7 @@ function CustomerCard(props) {
           color={R.color.white}
           borderRadius={10}
           borderColor={R.color.mainColor}
-          onPress={() => navigationService.navigate('OnGoingRide')}
+          onPress={acceptRide}
           rippleColor={R.color.gray5}
         />
       </View>
@@ -97,6 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: R.unit.scale(12),
     paddingHorizontal: R.unit.scale(12),
     marginBottom: R.unit.scale(16),
+    width: '100%',
   },
   picturesRow: {
     justifyContent: 'flex-start',

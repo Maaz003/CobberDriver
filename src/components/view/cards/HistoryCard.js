@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   image: {
-    width: R.unit.scale(60),
-    height: R.unit.scale(60),
+    width: R.unit.scale(45),
+    height: R.unit.scale(45),
     borderRadius: R.unit.scale(100),
     borderWidth: R.unit.scale(2),
     borderColor: R.color.mainColor,
