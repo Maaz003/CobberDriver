@@ -19,6 +19,7 @@ import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
 import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
 import RideCompletedScreen from '@containers/appContainers/homeModule/RideCompletedScreen';
 import EarningsScreen from '@containers/appContainers/EarningsScreen';
+import ScheduleOnGoingRideScreen from '@containers/appContainers/homeModule/ScheduleOnGoingRideScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
@@ -60,7 +61,7 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={user?.inRide ? 'OnGoingRide' : 'Home'}>
+        initialRouteName={user?.inRide ? 'ScheduleOnGoingRide' : 'Home'}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="OnGoingRide"
@@ -72,6 +73,10 @@ const AppStack = () => {
         <Stack.Screen name="RideCompleted" component={RideCompletedScreen} />
         <Stack.Screen name="LocationTracking" component={LocationTracking} />
         <Stack.Screen name="AddProductDetails" component={AddProductDetails} />
+        <Stack.Screen
+          name="ScheduleOnGoingRide"
+          component={ScheduleOnGoingRideScreen}
+        />
         <Stack.Screen
           name="EditField"
           options={{

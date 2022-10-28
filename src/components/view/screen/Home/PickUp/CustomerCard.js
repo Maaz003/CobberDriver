@@ -19,7 +19,12 @@ function CustomerCard(props) {
   };
 
   const acceptRide = () => {
-    navigationService.navigate('OnGoingRide');
+    let isSchedule = false;
+    if (isSchedule) {
+      navigationService.navigate('OnGoingRide');
+    } else {
+      navigationService.navigate('ScheduleOnGoingRide');
+    }
     dispatch(isInRide(true));
   };
 

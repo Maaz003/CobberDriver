@@ -1,5 +1,12 @@
-import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Animated,
+  Easing,
+} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
 import R from '@components/utils/R';
@@ -141,8 +148,8 @@ const styles = StyleSheet.create({
     width: R.unit.width(1),
     position: 'absolute',
     bottom: 0,
-    zIndex: 99999,
-    minHeight: 300,
+    zIndex: 99999999,
+    height: 300,
     backgroundColor: R.color.charcoalShade2,
     borderTopRightRadius: R.unit.scale(10),
     borderTopLeftRadius: R.unit.scale(10),
