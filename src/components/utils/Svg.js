@@ -30,3 +30,9 @@ export {default as LocationPin} from '@assets/Images/Svgs/locationPin.svg';
 export {default as PinLocation} from '@assets/Images/Svgs/PinLocation.svg';
 export {default as CalendarIcon} from '@assets/Images/Svgs/CalendarIcon.svg';
 export {default as EarningIcon} from '@assets/Images/Svgs/EarningIcon.svg';
+
+export {default as CalendarReqIcon} from '@assets/Images/Svgs/CalendarReqIcon.svg';
+export {default as ClockReqIcon} from '@assets/Images/Svgs/ClockReqIcon.svg';
+export {default as WalletReqIcon} from '@assets/Images/Svgs/WalletReqIcon.svg';
+export {default as LocationReqIcon} from '@assets/Images/Svgs/LocationReqIcon.svg';
+export {default as PickUpCircle} from '@assets/Images/Svgs/pickUpCircle.svg';

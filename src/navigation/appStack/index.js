@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import navigationService from '../../navigationService';
+import navigationService from '../navigationService';
 import {useSelector} from 'react-redux';
 import Contact from '@containers/appContainers/contactScreen/Contactus';
 import CustomDrawer from '@components/layout/customDrawer';
@@ -10,7 +10,6 @@ import Profile from '@containers/appContainers/profileModule/profile';
 import History from '@containers/appContainers/historyModule/historyScreen';
 import {ChatScreen} from '@components/common/Chats';
 import LocationTracking from '@containers/appContainers/homeModule/LocationTracking';
-import AddProductDetails from '@containers/appContainers/homeModule/AddProductDetails';
 import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
 import PaymentScreen from '@containers/appContainers/PaymentScreen';
@@ -19,7 +18,9 @@ import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
 import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
 import RideCompletedScreen from '@containers/appContainers/homeModule/RideCompletedScreen';
 import EarningsScreen from '@containers/appContainers/EarningsScreen';
-import ScheduleOnGoingRideScreen from '@containers/appContainers/homeModule/ScheduleOnGoingRideScreen';
+import ScheduleOnGoingRideScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/ScheduleOnGoingRideScreen';
+import RideRequestsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesRequests';
+import RideDetailsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesDetails';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
@@ -61,7 +62,7 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={user?.inRide ? 'ScheduleOnGoingRide' : 'Home'}>
+        initialRouteName={'Home'}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="OnGoingRide"
@@ -72,7 +73,8 @@ const AppStack = () => {
         />
         <Stack.Screen name="RideCompleted" component={RideCompletedScreen} />
         <Stack.Screen name="LocationTracking" component={LocationTracking} />
-        <Stack.Screen name="AddProductDetails" component={AddProductDetails} />
+        <Stack.Screen name="RideRequests" component={RideRequestsScreen} />
+        <Stack.Screen name="RideDetails" component={RideDetailsScreen} />
         <Stack.Screen
           name="ScheduleOnGoingRide"
           component={ScheduleOnGoingRideScreen}

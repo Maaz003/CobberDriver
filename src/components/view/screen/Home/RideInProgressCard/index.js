@@ -14,7 +14,7 @@ import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
-import navigationService from '../../../../../navigationService';
+import navigationService from '../../../../../navigation/navigationService';
 import {useNavigation} from '@react-navigation/native';
 
 function RideInProgressCard(props) {

@@ -12,7 +12,7 @@ import {
   confirmPickUp,
   pinLocation,
 } from '@store/user/userSlice';
-import navigationService from '../../../navigationService';
+import navigationService from '../../../navigation/navigationService';
 
 function LocationModal(props) {
   const {locType} = props;

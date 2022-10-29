@@ -8,7 +8,7 @@ import Text from '@components/common/Text';
 import LocationPoint from '@components/view/cards/LocationPoint';
 import Button from '@components/common/Button';
 import RideDetailsModal from '@components/view/modal/RideDetailsModal';
-import navigationService from '../../../../../navigationService';
+import navigationService from '../../../../../navigation/navigationService';
 
 function CustomerCard(props) {
   const [isModal, setIsModal] = useState(false);
@@ -23,7 +23,7 @@ function CustomerCard(props) {
     if (isSchedule) {
       navigationService.navigate('OnGoingRide');
     } else {
-      navigationService.navigate('ScheduleOnGoingRide');
+      navigationService.navigate('RideRequests');
     }
     dispatch(isInRide(true));
   };

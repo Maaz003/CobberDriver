@@ -4,7 +4,7 @@ const color = {
   //primary
   mainColor: '#85FA00',
   disabledMainColor: '#d9fcb1',
-
+  blueShade1: '#4D55E5',
   //secondary
   red: 'red',
   black: '#000000',

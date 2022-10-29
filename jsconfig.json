@@ -8,7 +8,7 @@
       "@assets/*": ["./src/assets/*"],
       "@config/*": ["./src/config"],
       "@store/*": ["./src/store"],
-      "@axios/*": ["./src/axios"]
+      "@axios/*": ["./src/axios"],
     }
   },
   "exclude": ["node_modules", "dist"]

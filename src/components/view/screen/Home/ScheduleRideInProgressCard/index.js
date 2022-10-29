@@ -1,36 +1,22 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Animated,
-  Easing,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
-import navigationService from '../../../../../navigationService';
+// import navigationService from '../../../../../navigationService';
 import StepIndicator from 'react-native-step-indicator';
-import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import BottomSheet from '@components/common/BottomSheet';
+import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 function ScheduleRideInProgressCard(props) {
-  const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
-
-  const sheetRef = useRef();
-  const snapPoints = useMemo(() => ['10%', '90%'], []);
-  const handleSheetChange = useCallback(index => {
-    console.log('handleSheetChange', index);
-  }, []);
-
   const labels = [
     'Cart',
     'Delivery Address',
     'Order Summary',
     'Payment Method',
+    'Track',
     'Track',
   ];
 
@@ -56,13 +42,8 @@ function ScheduleRideInProgressCard(props) {
   };
 
   return (
-    <BottomSheet
-      ref={sheetRef}
-      snapPoints={snapPoints}
-      backgroundStyle={styles.mainLayout}
-      handleIndicatorStyle={styles.notch}
-      onChange={handleSheetChange}>
-      <View style={styles.mainLayout}>
+    <BottomSheet maxHeight={labels.length}>
+      <View style={styles.contentView}>
         <View style={R.styles.rowView}>
           <Text
             variant={'body1'}
@@ -83,57 +64,82 @@ function ScheduleRideInProgressCard(props) {
             NR208N
           </Text>
         </View>
-        <View style={{height: '80%'}}>
-          <StepIndicator
-            currentPosition={3}
-            labels={labels}
-            customStyles={customStyles}
-            direction={'vertical'}
-            renderStepIndicator={props => {
-              return (
-                <View
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name={'check'}
-                    type={'FontAwesome'}
-                    size={20}
-                    color={
-                      props.stepStatus === 'finished'
-                        ? R.color.white
-                        : R.color.charcoalShade2
-                    }
-                  />
-                </View>
-              );
-            }}
-            renderLabel={props => {
-              console.log('P', props);
-              const {stepStatus, label} = props;
-              return (
-                <View
-                  style={{
-                    width: R.unit.width(0.7),
-                    marginLeft: R.unit.scale(8),
-                  }}>
-                  <Text
-                    variant={'body2'}
-                    font={'bold'}
-                    color={
-                      stepStatus === 'finished' ? R.color.gray5 : R.color.gray5
-                    }
-                    align={'left'}
-                    style={{top: 2}}
-                    transform={'none'}>
-                    {label}
-                  </Text>
-                </View>
-              );
-            }}
+        <View style={styles.ScrollViewContainer}>
+          <BottomSheetScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contentContainer}>
+            <StepIndicator
+              currentPosition={4}
+              labels={labels}
+              stepCount={labels.length}
+              customStyles={customStyles}
+              direction={'vertical'}
+              renderStepIndicator={props => {
+                return (
+                  <View style={styles.stepView}>
+                    <Icon
+                      name={'check'}
+                      type={'FontAwesome'}
+                      size={20}
+                      color={
+                        props.stepStatus === 'finished'
+                          ? R.color.white
+                          : R.color.charcoalShade2
+                      }
+                    />
+                  </View>
+                );
+              }}
+              renderLabel={props => {
+                const {stepStatus, label} = props;
+                return (
+                  <View style={styles.labelView}>
+                    <Text
+                      variant={'body2'}
+                      font={'bold'}
+                      color={
+                        stepStatus === 'finished'
+                          ? R.color.gray5
+                          : R.color.gray3
+                      }
+                      align={'left'}
+                      style={{top: 2}}
+                      transform={'none'}>
+                      {label}
+                    </Text>
+                  </View>
+                );
+              }}
+            />
+          </BottomSheetScrollView>
+        </View>
+        <View style={R.styles.rowView}>
+          <Button
+            value={`Ride is Completed`}
+            bgColor={R.color.charcoalShade2}
+            width={'45%'}
+            size={'lg'}
+            variant={'body2'}
+            font={'semiBold'}
+            gutterTop={R.unit.scale(32)}
+            color={R.color.white}
+            borderRadius={10}
+            borderColor={R.color.lightSilverShade2}
+            borderWidth={R.unit.scale(0.75)}
+            loaderColor={'white'}
+          />
+          <Button
+            value={`Start Ride`}
+            bgColor={R.color.mainColor}
+            width={'45%'}
+            size={'lg'}
+            variant={'body2'}
+            font={'semiBold'}
+            gutterTop={R.unit.scale(32)}
+            color={R.color.black}
+            borderRadius={10}
+            borderColor={R.color.mainColor}
+            loaderColor={'white'}
           />
         </View>
       </View>
@@ -141,60 +147,37 @@ function ScheduleRideInProgressCard(props) {
   );
 }
 const styles = StyleSheet.create({
-  mainLayout: {
-    // alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    backgroundColor: R.color.charcoalShade2,
-    paddingHorizontal: R.unit.scale(16),
-  },
-  notch: {
-    width: R.unit.scale(40),
-    height: R.unit.scale(5),
-    borderRadius: R.unit.scale(40),
-    backgroundColor: R.color.gray5,
-    marginTop: R.unit.scale(5),
-  },
   contentView: {
     width: '100%',
-    marginTop: R.unit.scale(24),
+    height: '100%',
+    paddingTop: R.unit.scale(12),
+    backgroundColor: R.color.charcoalShade2,
     paddingHorizontal: R.unit.scale(16),
-  },
-  image: {
-    height: R.unit.scale(60),
-    width: R.unit.scale(60),
-    borderRadius: R.unit.scale(70),
-    marginRight: R.unit.scale(12),
-    borderColor: R.color.black,
-    borderWidth: R.unit.scale(1),
-  },
-  svgView: {
-    aspectRatio: 1,
-    height: R.unit.scale(20),
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    flexDirection: 'column',
   },
-  iconContainer: {
-    width: '24%',
+  ScrollViewContainer: {
+    height: '70%',
+    marginTop: R.unit.scale(24),
+    borderRadius: R.unit.scale(12),
   },
-  iconView: {
-    height: R.unit.scale(40),
-    width: R.unit.scale(40),
-    flexDirection: 'row',
+  contentContainer: {
+    paddingHorizontal: R.unit.scale(12),
+    flexGrow: 1,
+    backgroundColor: R.color.blackLightShade,
+    paddingVertical: R.unit.scale(24),
+    borderRadius: R.unit.scale(12),
+    paddingBottom: 32,
+  },
+  stepView: {
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(134, 242, 10,0.7)',
-    borderRadius: R.unit.scale(40),
   },
-  pickupEllipse: {
-    height: R.unit.scale(20),
-    width: R.unit.scale(20),
-    backgroundColor: R.color.white,
-    borderWidth: R.unit.scale(5),
-    borderColor: R.color.mainColor,
-    borderRadius: R.unit.scale(20),
+  labelView: {
+    width: R.unit.width(0.7),
+    marginLeft: R.unit.scale(8),
   },
 });
 
