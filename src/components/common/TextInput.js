@@ -52,6 +52,7 @@ const TextInput = props => {
     iconColor = R.color.white,
     fontSize,
     eyeColor = R.color.white,
+    returnKeyType,
   } = props;
 
   return (
@@ -199,6 +200,7 @@ const TextInput = props => {
             editable={props.disable ? false : true}
             keyboardShouldPersistTaps="always"
             textAlignVertical={numberOfLines > 1 ? 'top' : 'center'}
+            returnKeyType={returnKeyType}
           />
         )}
       </View>

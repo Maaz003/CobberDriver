@@ -4,6 +4,7 @@ import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import {lessonRequests} from '@components/constants';
 import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
+import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 
 function RideRequestsScreen(props) {
   const {navigation} = props;
@@ -14,40 +15,52 @@ function RideRequestsScreen(props) {
     setFilteredArray(updatedArr);
   };
 
+  const headerProps = {
+    isMainHeader: true,
+    isSubHeader: false,
+    mainHeading: 'Payment',
+  };
+
+  const backPress = () => {
+    navigation.goBack();
+  };
+
   return (
-    <View style={[R.styles.container, styles.mainLayout]}>
-      <Text
-        variant={'h1'}
-        font={'bold'}
-        color={R.color.blackShade3}
-        align={'left'}
-        transform={'none'}>
-        Ride Requests
-      </Text>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always"
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}>
-        <View style={styles.contentView}>
-          {filteredArray?.map((item, index, arr) => {
-            return (
-              <RideRequestsCard
-                item={item}
-                index={index}
-                arr={arr}
-                key={index}
-                onRemove={onRemove}
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
-    </View>
+    <ScreenBoiler props={props} headerProps={headerProps} backPress={backPress}>
+      <View style={[styles.mainLayout, R.styles.container]}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="always"
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}>
+          <View style={styles.contentView}>
+            <Text
+              variant={'h4'}
+              font={'Sequel551'}
+              color={R.color.blackShade3}
+              align={'left'}
+              transform={'none'}>
+              Ride Requests
+            </Text>
+            {filteredArray?.map((item, index, arr) => {
+              return (
+                <RideRequestsCard
+                  item={item}
+                  index={index}
+                  arr={arr}
+                  key={index}
+                  onRemove={onRemove}
+                />
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+    </ScreenBoiler>
   );
 }
 export default RideRequestsScreen;
@@ -57,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: R.color.white,
     paddingHorizontal: R.unit.scale(16),
     flex: 1,
-    paddingTop: R.unit.scale(32),
+    marginTop: R.unit.scale(16),
   },
   contentView: {
     width: '100%',

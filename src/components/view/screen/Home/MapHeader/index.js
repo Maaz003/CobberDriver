@@ -4,7 +4,7 @@ import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import LiveLocation from '../PickUp/LiveLocation';
 
-function HomeHeader(props) {
+function MapHeader(props) {
   const {
     onPress,
     iconName,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeHeader;
+export default MapHeader;

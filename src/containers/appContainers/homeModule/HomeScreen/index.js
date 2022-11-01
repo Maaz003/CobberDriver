@@ -6,7 +6,7 @@ import R from '@components/utils/R';
 import {useFocusEffect} from '@react-navigation/native';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import HomeMap from '@components/view/screen/Home/PickUp/HomeMap';
-import HomeHeader from '@components/view/screen/Home/HomeHeader';
+import MapHeader from '@components/view/screen/Home/MapHeader';
 import RidesList from '@components/view/screen/Home/PickUp/RidesList';
 import CurrentLocation from '@components/utils/CurrentLocation';
 
@@ -58,7 +58,7 @@ function HomeScreen(props) {
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>
-        <HomeHeader onPress={onPress} iconName={'menu'} />
+        <MapHeader onPress={onPress} iconName={'menu'} />
         <HomeMap />
         {user?.locationLoader && (
           <View style={R.styles.loaderView}>

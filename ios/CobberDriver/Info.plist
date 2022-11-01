@@ -35,22 +35,18 @@
 			</dict>
 		</dict>
 	</dict>
-
 	<key>NSAppleMusicUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App uses for perfomance</string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App uses for perfomance</string>
-
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -103,6 +99,42 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Inter-Black.ttf</string>
+		<string>Inter-Bold.ttf</string>
+		<string>Inter-ExtraBold.ttf</string>
+		<string>Inter-ExtraLight.ttf</string>
+		<string>Inter-Light.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+		<string>Inter-Thin.ttf</string>
+		<string>Poppins-Black.ttf</string>
+		<string>Poppins-BlackItalic.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-BoldItalic.ttf</string>
+		<string>Poppins-ExtraBold.ttf</string>
+		<string>Poppins-ExtraBoldItalic.ttf</string>
+		<string>Poppins-ExtraLight.ttf</string>
+		<string>Poppins-ExtraLightItalic.ttf</string>
+		<string>Poppins-Italic.ttf</string>
+		<string>Poppins-Light.ttf</string>
+		<string>Poppins-LightItalic.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-MediumItalic.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
+		<string>Poppins-SemiBoldItalic.ttf</string>
+		<string>Poppins-Thin.ttf</string>
+		<string>Poppins-ThinItalic.ttf</string>
+		<string>Sequel-45file1.ttf</string>
+		<string>Sequel-45file2.ttf</string>
+		<string>Sequel-55file1.ttf</string>
+		<string>Sequel-55file2.ttf</string>
+		<string>Sequel-65file1.ttf</string>
+		<string>Sequel-65file2.ttf</string>
+		<string>Sequel100Wide-45.ttf</string>
+		<string>Sequel100Wide-55.ttf</string>
+		<string>Sequel100Wide-65.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -27,6 +27,7 @@ export const SIZES = {
   body6: R.unit.fontSize(9),
   small: R.unit.fontSize(8),
 };
+
 export const FONTVARIANTS = {
   extraLargeTitle: {
     fontSize: SIZES.extraLargeTitle,
@@ -51,49 +52,167 @@ export const FONTVARIANTS = {
   body6: {fontSize: SIZES.body5, lineHeight: R.unit.fontSize(13, 0.3)},
   small: {fontSize: SIZES.small, lineHeight: R.unit.fontSize(12, 0.3)},
 };
+
+// export const FONTSSTYLE = {
+//   black: {
+//     fontFamily: 'Nunito-Black',
+//   },
+//   blackItalic: {
+//     fontFamily: 'Nunito-BlackItalic',
+//   },
+//   bold: {
+//     fontFamily: 'Nunito-Bold', //700
+//   },
+//   boldItalic: {
+//     fontFamily: 'Nunito-BoldItalic',
+//   },
+//   extraBold: {
+//     fontFamily: 'Nunito-ExtraBold', //900
+//   },
+//   extraBoldItalic: {
+//     fontFamily: 'Nunito-ExtraBoldItalic',
+//   },
+//   italic: {
+//     fontFamily: 'Nunito-Italic',
+//   },
+//   lightItalic: {
+//     fontFamily: 'Roboto-LightItalic',
+//   },
+//   medium: {
+//     fontFamily: 'Nunito-Medium', //500
+//   },
+//   mediumItalic: {
+//     fontFamily: 'Nunito-MediumItalic',
+//   },
+//   regular: {
+//     fontFamily: 'Nunito-Regular', //400
+//   },
+//   semiBold: {
+//     fontFamily: 'Nunito-SemiBold',
+//   },
+//   semiBoldItalic: {
+//     fontFamily: 'Nunito-ThinItalic',
+//   },
+//   underline: {
+//     fontFamily: 'Nunito-Light',
+//     textDecorationLine: 'underline',
+//   },
+// };
+
 export const FONTSSTYLE = {
-  black: {
-    fontFamily: 'Nunito-Black',
+  //IINTER FAMILY
+  InterBlack: {
+    fontFamily: 'Inter-Black', //(900)
   },
-  blackItalic: {
-    fontFamily: 'Nunito-BlackItalic',
+  InterThin: {
+    fontFamily: 'Inter-Thin', //(100)
   },
-  bold: {
-    fontFamily: 'Nunito-Bold', //700
+  Interlight: {
+    fontFamily: 'Inter-Light', //(300)
   },
-  boldItalic: {
-    fontFamily: 'Nunito-BoldItalic',
+  InterExtraLight: {
+    fontFamily: 'Inter-ExtraLight', //(200)
   },
-  extraBold: {
-    fontFamily: 'Nunito-ExtraBold', //900
+  InterBold: {
+    fontFamily: 'Inter-Bold', //(700)
   },
-  extraBoldItalic: {
-    fontFamily: 'Nunito-ExtraBoldItalic',
+  InterSemiBold: {
+    fontFamily: 'Inter-SemiBold', //(600)
   },
-  italic: {
-    fontFamily: 'Nunito-Italic',
+  InterExtraBold: {
+    fontFamily: 'Inter-ExtraBold', //(800)
   },
-  lightItalic: {
-    fontFamily: 'Roboto-LightItalic',
+  InterMedium: {
+    fontFamily: 'Inter-Medium', //(500)
   },
-  medium: {
-    fontFamily: 'Nunito-Medium', //500
+  InterRegular: {
+    fontFamily: 'Inter-Regular', //(400)
   },
-  mediumItalic: {
-    fontFamily: 'Nunito-MediumItalic',
-  },
-  regular: {
-    fontFamily: 'Nunito-Regular', //400
-  },
-  semiBold: {
-    fontFamily: 'Nunito-SemiBold',
-  },
-  semiBoldItalic: {
-    fontFamily: 'Nunito-ThinItalic',
-  },
-  underline: {
-    fontFamily: 'Nunito-Light',
+  InterUnderline: {
+    fontFamily: 'nunito-Light',
     textDecorationLine: 'underline',
+  },
+  //POPPINSS FAMILY
+  PoppinsBlack: {
+    fontFamily: 'Poppins-Black',
+  },
+  PoppinsBlackItalic: {
+    fontFamily: 'Poppins-BlackItalic',
+  },
+  PoppinsThin: {
+    fontFamily: 'Poppins-Thin',
+  },
+  PoppinsThinItalic: {
+    fontFamily: 'Poppins-ThinItalic',
+  },
+  PoppinsLight: {
+    fontFamily: 'Poppins-Light',
+  },
+  PoppinsLightItalic: {
+    fontFamily: 'Poppins-LightItalic',
+  },
+  PoppinsExtraLight: {
+    fontFamily: 'Poppins-ExtraLight',
+  },
+  PoppinsExtraLightItalic: {
+    fontFamily: 'Poppins-ExtraLightItalic',
+  },
+  PoppinsBold: {
+    fontFamily: 'Poppins-Bold',
+  },
+  PoppinsBoldItalic: {
+    fontFamily: 'Poppins-BoldItalic',
+  },
+  PoppinsSemiBold: {
+    fontFamily: 'Poppins-SemiBold',
+  },
+  PoppinsSemiBoldItalic: {
+    fontFamily: 'Poppins-SemiBoldItalic',
+  },
+  PoppinsExtraBold: {
+    fontFamily: 'Poppins-ExtraBold',
+  },
+  PoppinsExtraBoldItalic: {
+    fontFamily: 'Poppins-ExtraBoldItalic',
+  },
+  PoppinsMedium: {
+    fontFamily: 'Poppins-Medium',
+  },
+  PoppinsMediumItalic: {
+    fontFamily: 'Poppins-MediumItalic',
+  },
+  PoppinsRegular: {
+    fontFamily: 'Poppins-Regular',
+  },
+  PoppinsItalic: {
+    fontFamily: 'Poppins-Italic',
+  },
+  //SEQUEL 45
+  Sequel451: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-45file1' : 'Sequel100Wide-45',
+  },
+  Sequel452: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-45file1' : 'Sequel100Wide-45',
+  },
+  //SEQUEL 55
+  Sequel551: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-55file1' : 'Sequel100Wide-55',
+  },
+  Sequel552: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-55file2' : 'Sequel100Wide-55',
+  },
+  //SEQUEL 65
+  Sequel651: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-65file1' : 'Sequel100Wide-65',
+  },
+  Sequel652: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-65file2' : 'Sequel100Wide-65',
   },
 };
 
@@ -112,6 +231,7 @@ const Text = props => {
     letterSpacing = 0,
     top = 0,
     onPress,
+    lineHeight,
   } = props;
   return (
     <Textc
@@ -124,10 +244,14 @@ const Text = props => {
           textTransform: transform,
           letterSpacing: letterSpacing,
           top: top,
+          lineHeight: lineHeight,
         },
         style,
         variant && FONTVARIANTS[variant],
         font && FONTSSTYLE[font],
+        lineHeight && {
+          lineHeight: R.unit.scale(lineHeight),
+        },
       ]}
       onPress={onPress}
       numberOfLines={numberOfLines}>

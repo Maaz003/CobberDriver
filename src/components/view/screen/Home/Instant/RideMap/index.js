@@ -1,11 +1,11 @@
 import React, {useRef, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import R from '@components/utils/R';
-import MapView, {Marker} from 'react-native-maps';
-import {mapStyles} from '@components/constants';
+import {Marker} from 'react-native-maps';
 import Text from '@components/common/Text';
 import Icon from '@components/common/Icon';
 import {calculateDelta} from '@components/utils/ReuseableFunctions';
+import Map from '@components/view/mapView/Map';
 
 function RideMap() {
   const mapRef = useRef(null);
@@ -28,9 +28,7 @@ function RideMap() {
   }, [origin, destination]);
 
   const animatePickup = data => {
-    console.log('DATA', data);
     const {latitude, latitudeDelta, longitude, longitudeDelta} = data;
-
     let region = {
       latitude: Number(latitude),
       longitude: Number(longitude),
@@ -41,27 +39,18 @@ function RideMap() {
   };
 
   const onMapReady = () => {
-    animatePickup();
+    let arr = [];
+    arr.push(origin, destination);
+    let navigationPoints = calculateDelta(arr);
+    animatePickup(navigationPoints);
   };
 
   return (
     <View style={styles.mapWrappper}>
-      <MapView
-        style={styles.mapView}
-        cacheEnabled={false}
-        customMapStyle={mapStyles}
-        ref={mapRef}
-        // onMapReady={onMapReady}
-        loadingEnabled={true}
-        showsCompass={false}
-        loadingIndicatorColor={R.color.mainColor}
-        loadingBackgroundColor={'rgba(0,0,0,0.3)'}
-        initialRegion={{
-          latitude: 24.9162884,
-          longitude: 67.0011,
-          latitudeDelta: 0.922,
-          longitudeDelta: 0.922,
-        }}>
+      <Map
+        mapViewStyles={styles.mapView}
+        mapForwardRef={mapRef}
+        mapReady={onMapReady}>
         <Marker
           coordinate={{
             latitude: 24.9162884,
@@ -120,7 +109,7 @@ function RideMap() {
             />
           </View>
         </Marker>
-      </MapView>
+      </Map>
     </View>
   );
 }
@@ -129,14 +118,13 @@ export default RideMap;
 const styles = StyleSheet.create({
   mapWrappper: {
     borderRadius: 10,
-    height: 180,
     overflow: 'hidden',
   },
   mapView: {
     backgroundColor: R.color.white,
     paddingHorizontal: R.unit.scale(16),
     width: R.unit.width(1),
-    // height: '100%',
+    height: 180,
     flex: 1,
     borderRadius: R.unit.scale(100),
   },

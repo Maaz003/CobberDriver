@@ -17,8 +17,8 @@ const HoverText = props => {
       style={[styles.mainLayout, hoverStyles]}
       onPress={onPress}>
       <Text
-        variant={'body2'}
-        font={'medium'}
+        variant={'body3'}
+        font={'InterRegular'}
         color={textColor}
         align={'left'}
         transform={'none'}>

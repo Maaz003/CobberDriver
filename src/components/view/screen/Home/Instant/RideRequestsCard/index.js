@@ -31,8 +31,8 @@ function RideRequestsCard(props) {
         />
         <View style={[R.styles.twoItemsRow, styles.titleView]}>
           <Text
-            variant={'body1'}
-            font={'bold'}
+            variant={'body2'}
+            font={'InterBold'}
             color={R.color.blackShade3}
             align={'left'}
             gutterTop={5}
@@ -40,8 +40,8 @@ function RideRequestsCard(props) {
             transform={'none'}>
             {item.name}{' '}
             <Text
-              variant={'body2'}
-              font={'regular'}
+              variant={'body3'}
+              font={'InterRegular'}
               color={R.color.blackShade3}
               align={'left'}
               transform={'none'}>
@@ -57,7 +57,7 @@ function RideRequestsCard(props) {
         </View>
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
@@ -72,7 +72,7 @@ function RideRequestsCard(props) {
         </View>
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
@@ -87,7 +87,7 @@ function RideRequestsCard(props) {
         </View>
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
@@ -100,7 +100,7 @@ function RideRequestsCard(props) {
         <View style={styles.pickUpCircle} />
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
@@ -115,7 +115,7 @@ function RideRequestsCard(props) {
         </View>
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
@@ -127,34 +127,38 @@ function RideRequestsCard(props) {
       <View style={[R.styles.rowView, styles.buttonContainer]}>
         <Text
           variant={'body3'}
-          font={'regular'}
+          font={'InterRegular'}
           color={R.color.gray6}
           align={'left'}
           transform={'none'}>
           {item.createdAt}
         </Text>
         <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            activeOpacity={0.5}
+          <Button
+            bgColor={R.color.white}
+            width={'20%'}
+            size={'lg'}
+            color={R.color.white}
+            borderColor={R.color.gray}
+            disabled={false}
+            loaderColor={R.color.white}
+            borderWidth={0.5}
+            borderRadius={10}
+            iconName={'close'}
+            iconType={'Ionicons'}
+            iconColor={R.color.blackShade3}
+            rippleColor={R.color.gray}
             onPress={() => {
               onRemove(item.id);
-            }}>
-            <Icon
-              type={'Ionicons'}
-              name={'close'}
-              color={R.color.blackShade3}
-              size={20}
-            />
-          </TouchableOpacity>
+            }}
+            btnWrapperStyles={{marginRight: R.unit.scale(8)}}
+          />
 
           <Button
             value={'Details'}
             bgColor={R.color.mainColor}
             width={'70%'}
             size={'lg'}
-            font={'bold'}
-            variant={'body2'}
             color={R.color.white}
             borderColor={R.color.mainColor}
             disabled={false}
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
   },
   buttonLayout: {
     justifyContent: 'flex-end',
-    width: '70%',
+    width: '75%',
   },
   pickUpCircle: {
     backgroundColor: R.color.white,
@@ -229,12 +233,5 @@ const styles = StyleSheet.create({
     borderRadius: R.unit.scale(16),
     borderWidth: R.unit.scale(6),
     borderColor: R.color.gray6,
-  },
-  cancelButton: {
-    padding: R.unit.scale(15),
-    borderColor: R.color.gray4,
-    borderWidth: R.unit.scale(0.75),
-    borderRadius: R.unit.scale(10),
-    marginRight: R.unit.scale(8),
   },
 });

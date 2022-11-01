@@ -46,7 +46,7 @@ function LocationPoint(props) {
         <View style={styles.textView}>
           <Text
             variant={'body4'}
-            font={'semiBold'}
+            font={'PoppinsRegular'}
             color={R.color.lightGray}
             align={'left'}
             numberOfLines={2}
@@ -54,8 +54,8 @@ function LocationPoint(props) {
             Pick up point
           </Text>
           <Text
-            variant={'body3'}
-            font={'thin'}
+            variant={'body4'}
+            font={'InterRegular'}
             color={pickUpTextColor}
             align={'left'}
             gutterTop={5}
@@ -67,7 +67,7 @@ function LocationPoint(props) {
           {user?.scheduledTime && (
             <Text
               variant={'body4'}
-              font={'thin'}
+              font={'InterRegular'}
               color={pickUpTextColor}
               align={'left'}
               gutterTop={10}
@@ -87,7 +87,7 @@ function LocationPoint(props) {
           />
           <Text
             variant={'body4'}
-            font={'semiBold'}
+            font={'PoppinsRegular'}
             gutterTop={10}
             color={R.color.lightGray}
             align={'left'}
@@ -96,8 +96,8 @@ function LocationPoint(props) {
             Drop off point
           </Text>
           <Text
-            variant={'body3'}
-            font={'thin'}
+            variant={'body4'}
+            font={'InterRegular'}
             color={dropOffTextColor}
             align={'left'}
             gutterTop={5}
@@ -108,7 +108,7 @@ function LocationPoint(props) {
           {user?.scheduledTime && (
             <Text
               variant={'body4'}
-              font={'thin'}
+              font={'InterRegular'}
               color={dropOffTextColor}
               align={'left'}
               gutterTop={10}

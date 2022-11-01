@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: R.color.blackLightShade,
     paddingVertical: R.unit.scale(24),
     borderRadius: R.unit.scale(12),
-    paddingBottom: 32,
+    paddingBottom: R.unit.scale(32),
   },
   stepView: {
     height: '100%',

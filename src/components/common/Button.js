@@ -6,9 +6,9 @@ import {
   View,
   TouchableNativeFeedback,
 } from 'react-native';
-import {Icon} from 'native-base';
 import Text from './Text';
 import R from '@components/utils/R';
+import Icon from './Icon';
 
 export const SIZES = {
   // global sizes
@@ -55,50 +55,167 @@ export const FONTVARIANTS = {
 };
 
 export const FONTSSTYLE = {
-  black: {
-    fontFamily: 'Nunito-Black',
+  //IINTER FAMILY
+  InterBlack: {
+    fontFamily: 'Inter-Black', //(900)
   },
-  blackItalic: {
-    fontFamily: 'Nunito-BlackItalic',
+  InterThin: {
+    fontFamily: 'Inter-Thin', //(100)
   },
-  bold: {
-    fontFamily: 'Nunito-Bold',
+  Interlight: {
+    fontFamily: 'Inter-Light', //(300)
   },
-  boldItalic: {
-    fontFamily: 'Nunito-BoldItalic',
+  InterExtraLight: {
+    fontFamily: 'Inter-ExtraLight', //(200)
   },
-  extraBold: {
-    fontFamily: 'Nunito-ExtraBold',
+  InterBold: {
+    fontFamily: 'Inter-Bold', //(700)
   },
-  extraBoldItalic: {
-    fontFamily: 'Nunito-ExtraBoldItalic',
+  InterSemiBold: {
+    fontFamily: 'Inter-SemiBold', //(600)
   },
-  italic: {
-    fontFamily: 'Nunito-Italic',
+  InterExtraBold: {
+    fontFamily: 'Inter-ExtraBold', //(800)
   },
-  lightItalic: {
-    fontFamily: 'Roboto-LightItalic',
+  InterMedium: {
+    fontFamily: 'Inter-Medium', //(500)
   },
-  medium: {
-    fontFamily: 'Nunito-Medium',
+  InterRegular: {
+    fontFamily: 'Inter-Regular', //(400)
   },
-  mediumItalic: {
-    fontFamily: 'Nunito-MediumItalic',
-  },
-  regular: {
-    fontFamily: 'Nunito-Regular',
-  },
-  semiBold: {
-    fontFamily: 'Nunito-SemiBold',
-  },
-  semiBoldItalic: {
-    fontFamily: 'Nunito-ThinItalic',
-  },
-  underline: {
-    fontFamily: 'Nunito-Light',
+  InterUnderline: {
+    fontFamily: 'nunito-Light',
     textDecorationLine: 'underline',
   },
+  //POPPINSS FAMILY
+  PoppinsBlack: {
+    fontFamily: 'Poppins-Black',
+  },
+  PoppinsBlackItalic: {
+    fontFamily: 'Poppins-BlackItalic',
+  },
+  PoppinsThin: {
+    fontFamily: 'Poppins-Thin',
+  },
+  PoppinsThinItalic: {
+    fontFamily: 'Poppins-ThinItalic',
+  },
+  PoppinsLight: {
+    fontFamily: 'Poppins-Light',
+  },
+  PoppinsLightItalic: {
+    fontFamily: 'Poppins-LightItalic',
+  },
+  PoppinsExtraLight: {
+    fontFamily: 'Poppins-ExtraLight',
+  },
+  PoppinsExtraLightItalic: {
+    fontFamily: 'Poppins-ExtraLightItalic',
+  },
+  PoppinsBold: {
+    fontFamily: 'Poppins-Bold',
+  },
+  PoppinsBoldItalic: {
+    fontFamily: 'Poppins-BoldItalic',
+  },
+  PoppinsSemiBold: {
+    fontFamily: 'Poppins-SemiBold',
+  },
+  PoppinsSemiBoldItalic: {
+    fontFamily: 'Poppins-SemiBoldItalic',
+  },
+  PoppinsExtraBold: {
+    fontFamily: 'Poppins-ExtraBold',
+  },
+  PoppinsExtraBoldItalic: {
+    fontFamily: 'Poppins-ExtraBoldItalic',
+  },
+  PoppinsMedium: {
+    fontFamily: 'Poppins-Medium',
+  },
+  PoppinsMediumItalic: {
+    fontFamily: 'Poppins-MediumItalic',
+  },
+  PoppinsRegular: {
+    fontFamily: 'Poppins-Regular',
+  },
+  PoppinsItalic: {
+    fontFamily: 'Poppins-Italic',
+  },
+  //SEQUEL 45
+  Sequel451: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-45file1' : 'Sequel100Wide-45',
+  },
+  Sequel452: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-45file1' : 'Sequel100Wide-45',
+  },
+  //SEQUEL 55
+  Sequel551: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-55file1' : 'Sequel100Wide-55',
+  },
+  Sequel552: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-55file2' : 'Sequel100Wide-55',
+  },
+  //SEQUEL 65
+  Sequel651: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-65file1' : 'Sequel100Wide-65',
+  },
+  Sequel652: {
+    fontFamily:
+      Platform.OS === 'android' ? 'Sequel-65file2' : 'Sequel100Wide-65',
+  },
 };
+
+// export const FONTSSTYLE = {
+//   black: {
+//     fontFamily: 'Nunito-Black',
+//   },
+//   blackItalic: {
+//     fontFamily: 'Nunito-BlackItalic',
+//   },
+//   bold: {
+//     fontFamily: 'Nunito-Bold',
+//   },
+//   boldItalic: {
+//     fontFamily: 'Nunito-BoldItalic',
+//   },
+//   extraBold: {
+//     fontFamily: 'Nunito-ExtraBold',
+//   },
+//   extraBoldItalic: {
+//     fontFamily: 'Nunito-ExtraBoldItalic',
+//   },
+//   italic: {
+//     fontFamily: 'Nunito-Italic',
+//   },
+//   lightItalic: {
+//     fontFamily: 'Roboto-LightItalic',
+//   },
+//   medium: {
+//     fontFamily: 'Nunito-Medium',
+//   },
+//   mediumItalic: {
+//     fontFamily: 'Nunito-MediumItalic',
+//   },
+//   regular: {
+//     fontFamily: 'Nunito-Regular',
+//   },
+//   semiBold: {
+//     fontFamily: 'Nunito-SemiBold',
+//   },
+//   semiBoldItalic: {
+//     fontFamily: 'Nunito-ThinItalic',
+//   },
+//   underline: {
+//     fontFamily: 'Nunito-Light',
+//     textDecorationLine: 'underline',
+//   },
+// };
 
 const Button = props => {
   const sizes = {
@@ -122,11 +239,13 @@ const Button = props => {
     borderWidth = 0,
     fontSize = 15,
     textStyles,
-    font = 'light',
+    font = 'InterBold',
     rippleColor = '#42700b',
     borderRadius,
-    variant,
+    variant = 'body2',
     disabled,
+    iconColor = R.color.white,
+    iconSize = R.unit.scale(20),
   } = props;
 
   const buttonPress = () => {
@@ -167,6 +286,7 @@ const Button = props => {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
+            flexDirection: 'row',
           }}>
           <Text
             style={[
@@ -192,7 +312,8 @@ const Button = props => {
             <Icon
               name={props.iconName}
               type={props.iconType}
-              style={[styles.iconCustom, props.iconStyle && props.iconStyle]}
+              color={iconColor}
+              size={iconSize}
             />
           )}
         </View>
@@ -224,9 +345,7 @@ const styles = StyleSheet.create({
     paddingLeft: I18nManager.isRTL ? R.unit.scale(5) : 0,
   },
   iconCustom: {
-    color: '#C0C0C0',
-    paddingRight: R.unit.scale(20),
-    paddingLeft: I18nManager.isRTL ? R.unit.scale(20) : 0,
+    color: R.color.white,
   },
 });
 

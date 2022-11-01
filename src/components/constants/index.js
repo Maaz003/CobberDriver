@@ -1,4 +1,5 @@
 import R from '@components/utils/R';
+import uuid from 'react-native-uuid';
 
 export const genderData = [
   {id: 1, title: 'Male'},
@@ -718,4 +719,19 @@ export const lessonRequests = [
     isAccepted: false,
     createdAt: '2:30:10',
   },
+];
+
+export const reportData = [
+  {
+    id: uuid.v4(),
+    title: 'The student was late for training.',
+    isChecked: false,
+  },
+  {
+    id: uuid.v4(),
+    title: 'The student did not show up for training.',
+    isChecked: false,
+  },
+  {id: uuid.v4(), title: 'Boorish behavior.', isChecked: false},
+  {id: uuid.v4(), title: 'Other (nothing from the above)', isChecked: false},
 ];
