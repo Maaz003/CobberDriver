@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import {lessonRequests} from '@components/constants';
 import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 
 function RideRequestsScreen(props) {
   const {navigation} = props;
-  const [filteredArray, setFilteredArray] = useState(lessonRequests);
+  const {data} = props.route.params;
+  const [filteredArray, setFilteredArray] = useState(data);
 
   const onRemove = id => {
     let updatedArr = filteredArray.filter(item => item.id !== id);

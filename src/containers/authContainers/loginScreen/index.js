@@ -33,14 +33,6 @@ function LoginScreen(props) {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    xyz();
-  }, []);
-
-  const xyz = () => {
-    console.log('SS');
-  };
-
   const onSubmit = async () => {
     setIsLoading(true);
     const reqData = {

@@ -5,13 +5,13 @@ import {persistReducer} from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import authReducer from './auth/authSlice';
-import planReducers from './plans/planSlice';
+import scheduleReducer from './scheduleRides/scheduleSlice';
 import userReducer from './user/userSlice';
 import commonReducer from './common/commonSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  plans: planReducers,
+  schedule: scheduleReducer,
   user: userReducer,
   common: commonReducer,
 });
@@ -20,7 +20,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   // Whitelist (Save Specific Reducers)
-  whitelist: ['auth', 'plans', 'user', 'common'],
+  whitelist: ['auth', 'schedule', 'user', 'common'],
   // Blacklist (Don't Save Specific Reducers)
   // blacklist: ['setting', 'upload']
 };

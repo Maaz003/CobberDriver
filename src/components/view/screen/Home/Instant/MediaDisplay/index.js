@@ -4,43 +4,13 @@ import R from '@components/utils/R';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 function MediaDisplay(props) {
-  const {navigation} = props;
-
-  const slides = [
-    {
-      key: 1,
-      image:
-        'https://lytesnap-demo.web.app/static/media/gallery-img-1.14636f95912c4fb9285b.png',
-    },
-    {
-      key: 2,
-      image:
-        'https://lytesnap-demo.web.app/static/media/gallery-img-1.14636f95912c4fb9285b.png',
-    },
-    {
-      key: 3,
-      image:
-        'https://lytesnap-demo.web.app/static/media/gallery-img-1.14636f95912c4fb9285b.png',
-    },
-    {
-      key: 4,
-      image:
-        'https://lytesnap-demo.web.app/static/media/gallery-img-1.14636f95912c4fb9285b.png',
-    },
-    {
-      key: 5,
-      image:
-        'https://lytesnap-demo.web.app/static/media/gallery-img-1.14636f95912c4fb9285b.png',
-    },
-  ];
+  const {productImages} = props;
 
   const renderItem = ({item}) => {
     return (
       <View style={styles.slide}>
         <Image
-          source={{
-            uri: item.image,
-          }}
+          source={item}
           resizeMode={'cover'}
           style={{width: '100%', height: '100%'}}
         />
@@ -52,7 +22,7 @@ function MediaDisplay(props) {
     <View style={[styles.mainLayout]}>
       <View style={styles.contentView}>
         <AppIntroSlider
-          data={slides}
+          data={productImages}
           renderItem={renderItem}
           showNextButton={false}
           showPrevButton={false}

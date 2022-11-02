@@ -23,6 +23,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export function ChatScreen(props) {
   const {navigation} = props;
+  const {data} = props.route.params;
   const [messages, setMessages] = useState([]);
   const [loader, setLoader] = useState(false);
   const [isLoadMessages, setIsLoadMessages] = useState(false);
@@ -116,9 +117,9 @@ export function ChatScreen(props) {
   const call = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+1234567890}';
+      phoneNumber = `tel:${data.phoneNumber}`;
     } else {
-      phoneNumber = 'telprompt:${+1234567890}';
+      phoneNumber = `telprompt:${data.phoneNumber}`;
     }
     Linking.openURL(phoneNumber);
   };
@@ -145,7 +146,7 @@ export function ChatScreen(props) {
                     padding: 5,
                   }}
                 />
-                <Image source={R.image.userPin()} style={styles.image} />
+                <Image source={data.picture} style={styles.image} />
 
                 <Text
                   variant={'body2'}
@@ -155,7 +156,7 @@ export function ChatScreen(props) {
                   style={{marginLeft: R.unit.scale(10)}}
                   numberOfLines={1}
                   transform={'none'}>
-                  John Denly
+                  {data.name}
                 </Text>
               </View>
               <TouchableOpacity onPress={call} activeOpacity={0.9}>

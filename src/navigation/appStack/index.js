@@ -62,7 +62,13 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'Home'}>
+        initialRouteName={
+          user?.inRide === 'started' || user?.inRide === 'accepted'
+            ? 'OnGoingRide'
+            : user?.inRide === 'ended'
+            ? 'RideCompleted'
+            : 'Home'
+        }>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="OnGoingRide"

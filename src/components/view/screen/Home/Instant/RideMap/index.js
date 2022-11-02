@@ -6,18 +6,20 @@ import Text from '@components/common/Text';
 import Icon from '@components/common/Icon';
 import {calculateDelta} from '@components/utils/ReuseableFunctions';
 import Map from '@components/view/mapView/Map';
+import MapDirections from '@components/view/mapView/MapDirections';
 
-function RideMap() {
+function RideMap(props) {
+  const {location} = props;
   const mapRef = useRef(null);
 
   let origin = {
-    latitude: 24.9456063,
-    longitude: 67.0920345,
+    latitude: location.pickUpLoc.latitude,
+    longitude: location.pickUpLoc.longitude,
   };
 
   let destination = {
-    latitude: 24.9456063,
-    longitude: 67.1441915,
+    latitude: location.dropOffLoc.latitude,
+    longitude: location.dropOffLoc.longitude,
   };
 
   useEffect(() => {
@@ -53,8 +55,8 @@ function RideMap() {
         mapReady={onMapReady}>
         <Marker
           coordinate={{
-            latitude: 24.9162884,
-            longitude: 67.0920345,
+            latitude: location.pickUpLoc.latitude,
+            longitude: location.pickUpLoc.longitude,
           }}
           tracksViewChanges={false}
           title={'User'}>
@@ -70,7 +72,7 @@ function RideMap() {
               }}
               align={'center'}
               transform={'none'}>
-              {'Tech office'}
+              {location.pickUpLocation}
             </Text>
             <Icon
               name={'truck-moving'}
@@ -82,8 +84,8 @@ function RideMap() {
         </Marker>
         <Marker
           coordinate={{
-            latitude: 24.9456063,
-            longitude: 67.1441915,
+            latitude: location.dropOffLoc.latitude,
+            longitude: location.dropOffLoc.longitude,
           }}
           tracksViewChanges={false}
           title={'User'}>
@@ -99,7 +101,7 @@ function RideMap() {
               }}
               align={'center'}
               transform={'none'}>
-              {'Hospital'}
+              {location.dropOffLocation}
             </Text>
             <Icon
               name={'box'}
@@ -109,6 +111,11 @@ function RideMap() {
             />
           </View>
         </Marker>
+        <MapDirections
+          origin={origin}
+          destination={destination}
+          setTime={() => null}
+        />
       </Map>
     </View>
   );

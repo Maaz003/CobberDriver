@@ -1,28 +1,19 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
 import BottomSheet from '@components/common/BottomSheet';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import {useSelector} from 'react-redux';
 
 function RidesList(props) {
-  const [show, setShow] = useState(false);
+  const common = useSelector(state => state.common);
 
-  const onSwipeBottomSheet = index => {
-    if (index === 0) {
-      setShow(false);
-      c;
-    } else {
-      setShow(true);
-    }
-  };
+  console.log(common?.tempRides);
 
   return (
-    <BottomSheet
-      maxHeight={4}
-      onSwipeBottomSheet={onSwipeBottomSheet}
-      initalHeight={0.12}>
+    <BottomSheet onSwipeBottomSheet={() => null} initalHeight={0.11}>
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
           <Text
@@ -37,7 +28,7 @@ function RidesList(props) {
           <View style={styles.numberView}>
             <Text
               variant={'body3'}
-              font={'PoppinsRegular'}
+              font={'PoppinsMedium'}
               color={R.color.black}
               align={'center'}
               transform={'none'}>
@@ -50,9 +41,9 @@ function RidesList(props) {
           <BottomSheetScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainer}>
-            <CustomerCard />
-            <CustomerCard />
-            <CustomerCard />
+            {common?.tempRides?.map((item, index) => {
+              return <CustomerCard item={item} key={index} />;
+            })}
           </BottomSheetScrollView>
         </View>
       </View>
@@ -84,7 +75,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     borderRadius: R.unit.scale(12),
-    paddingBottom: R.unit.scale(32),
+    paddingBottom: R.unit.scale(152),
   },
 });
 

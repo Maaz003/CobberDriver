@@ -6,7 +6,6 @@ function GestureSwiper(props) {
   const {onSwipeUp, onSwipeDown, containerStyles, children} = props;
 
   const swipeUp = gestureState => {
-    console.log('gestureState', gestureState);
     onSwipeUp();
   };
 

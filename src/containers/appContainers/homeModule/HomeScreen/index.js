@@ -3,17 +3,20 @@ import {ActivityIndicator, Alert, BackHandler, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {confirmDropOff} from '@store/user/userSlice';
 import R from '@components/utils/R';
+import {firstTimeReduxSet, tempRidesSet} from '@store/common/commonSlice';
 import {useFocusEffect} from '@react-navigation/native';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import HomeMap from '@components/view/screen/Home/PickUp/HomeMap';
 import MapHeader from '@components/view/screen/Home/MapHeader';
 import RidesList from '@components/view/screen/Home/PickUp/RidesList';
 import CurrentLocation from '@components/utils/CurrentLocation';
+import {rides} from '@components/constants';
 
 function HomeScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const common = useSelector(state => state.common);
 
   const headerProps = {
     isHeader: true,
@@ -25,6 +28,13 @@ function HomeScreen(props) {
       CurrentLocation({actionCall: dispatch, flag: true});
     }
   }, []);
+
+  useEffect(() => {
+    if (common?.firstReduxSet) {
+      dispatch(firstTimeReduxSet(true));
+      dispatch(tempRidesSet(rides));
+    }
+  }, [common?.firstReduxSet]);
 
   const onPress = () => {
     navigation.toggleDrawer();

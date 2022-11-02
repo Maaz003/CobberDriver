@@ -1,38 +1,42 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {isInRide} from '@store/user/userSlice';
-import {itemPictures} from '@components/constants';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import LocationPoint from '@components/view/cards/LocationPoint';
 import Button from '@components/common/Button';
-import RideDetailsModal from '@components/view/modal/RideDetailsModal';
 import navigationService from '../../../../../navigation/navigationService';
 
 function CustomerCard(props) {
-  const [isModal, setIsModal] = useState(false);
-  const dispatch = useDispatch();
+  const {item} = props;
+  const [rideData, setRideData] = useState(undefined);
 
-  const navigateToDetails = () => {
-    setIsModal(!isModal);
-  };
+  useEffect(() => {
+    if (item.requestedRides) {
+      setRideData(item.requestedRides[0]);
+    } else {
+      console.log('false');
+      setRideData(item);
+    }
+  }, [item]);
 
   const acceptRide = () => {
-    let isSchedule = false;
-    if (isSchedule) {
-      navigationService.navigate('OnGoingRide');
+    if (rideData?.isScheduled) {
+      navigationService.navigate('RideRequests', {
+        data: item.requestedRides,
+      });
     } else {
-      navigationService.navigate('RideRequests');
+      navigationService.navigate('RideDetails', {
+        type: 'instant',
+        data: item,
+      });
     }
-    dispatch(isInRide(true));
   };
 
   return (
     <View style={styles.mainLayout}>
       <View style={R.styles.twoItemsRow}>
         <Image
-          source={R.image.userPin()}
+          source={rideData?.picture}
           resizeMode={'cover'}
           style={styles.image}
         />
@@ -42,42 +46,56 @@ function CustomerCard(props) {
             font={'PoppinsMedium'}
             color={R.color.black}
             align={'left'}
-            numberOfLines={2}
+            numberOfLines={1}
             transform={'none'}>
-            John Denlynkfds.lbsdfbljfsdbl
+            {rideData?.name}
           </Text>
-          <View style={styles.tag}>
-            <Text
-              variant={'body4'}
-              font={'PoppinsRegular'}
-              color={R.color.black}
-              align={'left'}
-              transform={'none'}>
-              Scheduled
-            </Text>
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.tag}>
+              <Text
+                variant={'body4'}
+                font={'PoppinsMedium'}
+                color={R.color.black}
+                align={'left'}
+                transform={'none'}>
+                {rideData?.isScheduled ? 'Scheduled' : 'Instant'}
+              </Text>
+            </View>
+            {rideData?.isScheduled && (
+              <View style={styles.tag}>
+                <Text
+                  variant={'body4'}
+                  font={'PoppinsMedium'}
+                  color={R.color.black}
+                  align={'left'}
+                  transform={'none'}>
+                  {'Sharing'}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
-      <LocationPoint />
 
-      <View
-        style={{...R.styles.rowView, marginTop: R.unit.scale(12)}}
-        onStartShouldSetResponder={() => true}>
-        <Button
-          value="Accept Ride"
-          bgColor={R.color.mainColor}
-          width={'100%'}
-          size={'lg'}
-          variant={'body2'}
-          font={'PoppinsMedium'}
-          color={R.color.charcoalShade2}
-          borderRadius={10}
-          borderColor={R.color.mainColor}
-          onPress={acceptRide}
-          rippleColor={R.color.gray5}
-        />
-      </View>
-      <RideDetailsModal isVisibleModal={isModal} />
+      <LocationPoint
+        location={rideData?.location}
+        scheduledTime={rideData?.scheduledTime}
+      />
+
+      <Button
+        value="Details"
+        bgColor={R.color.mainColor}
+        width={'100%'}
+        size={'lg'}
+        variant={'body2'}
+        font={'PoppinsMedium'}
+        color={R.color.charcoalShade2}
+        borderRadius={10}
+        gutterTop={10}
+        borderColor={R.color.mainColor}
+        onPress={acceptRide}
+        rippleColor={R.color.gray5}
+      />
     </View>
   );
 }
@@ -95,8 +113,6 @@ const styles = StyleSheet.create({
     width: R.unit.scale(55),
     borderRadius: R.unit.scale(55),
     marginRight: R.unit.scale(12),
-    borderColor: R.color.black,
-    borderWidth: R.unit.scale(1),
   },
   picturesRow: {
     justifyContent: 'flex-start',
@@ -112,6 +128,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     borderRadius: R.unit.scale(8),
     marginTop: R.unit.scale(10),
+    marginRight: R.unit.scale(6),
   },
 });
 

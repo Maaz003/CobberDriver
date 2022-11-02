@@ -48,7 +48,7 @@ function SubHeaderComponent(props) {
         {mainHeading && (
           <Text
             variant={'h3'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             gutterTop={5}
             color={R.color.black}
             align={'left'}

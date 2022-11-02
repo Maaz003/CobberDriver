@@ -106,6 +106,48 @@ export const firstTimeAnimate = createAsyncThunk(
   },
 );
 
+export const tempRidesSet = createAsyncThunk(
+  'common/tempRidesSet',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success! You are logged out!',
+        location: data,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        location: false,
+      };
+    }
+  },
+);
+
+export const firstTimeReduxSet = createAsyncThunk(
+  'common/firstTimeReduxSet',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success! You are logged out!',
+        location: data,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        location: false,
+      };
+    }
+  },
+);
+
 export const clearCommon = createAsyncThunk(
   'common/clearCommon',
   async data => {
@@ -138,6 +180,8 @@ const initialState = {
   mapRef: undefined,
   slideRef: undefined,
   firstAnimate: true,
+  firstReduxSet: false,
+  tempRides: [],
 };
 
 const commonSlice = createSlice({
@@ -181,7 +225,18 @@ const commonSlice = createSlice({
       state.error = false;
       state.firstAnimate = action.payload.location;
     },
-
+    [firstTimeReduxSet.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.isLoadingRequest = false;
+      state.error = false;
+      state.firstReduxSet = action.payload.location;
+    },
+    [tempRidesSet.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.isLoadingRequest = false;
+      state.error = false;
+      state.tempRides = action.payload.location;
+    },
     [clearCommon.fulfilled]: (state, action) => {
       state.isLoadingRequest = false;
       state.status = 'idle';

@@ -220,7 +220,8 @@ export const isInRide = createAsyncThunk('user/isInRide', async data => {
       status: 'success',
       error: false,
       message: 'Success!',
-      isData: data,
+      isData: data.inRide,
+      rideData: data.data,
     };
   } catch (error) {
     return {
@@ -265,7 +266,8 @@ const initialState = {
   locationLoader: true,
   scheduledTime: undefined,
   pinLoc: false,
-  inRide: false,
+  inRide: 'finished',
+  rideSession: undefined,
 };
 
 const userSlice = createSlice({
@@ -363,7 +365,9 @@ const userSlice = createSlice({
       state.isLoadingRequest = false;
       state.error = false;
       state.inRide = action.payload.isData;
+      state.rideSession = action.payload.rideData;
     },
+
     [clearUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;

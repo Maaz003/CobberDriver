@@ -1,12 +1,9 @@
-import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Linking,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, ScrollView, Image, Linking} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {isInRide} from '@store/user/userSlice';
+import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
+import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import MediaDisplay from '@components/view/screen/Home/Instant/MediaDisplay';
@@ -17,12 +14,31 @@ import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
+import {tempRidesSet} from '@store/common/commonSlice';
+import PopUp from '@components/common/PopUp';
 
 function RideDetailsScreen(props) {
   const {navigation} = props;
-
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const schedule = useSelector(state => state.schedule);
+  const common = useSelector(state => state.common);
+  const {type = undefined, data = undefined} = props.route.params;
+  const {name, picture, productImages, isScheduled, scheduledTime, location} =
+    data;
   const [isModal, setIsModal] = useState(false);
-  const [isAccepted, setIsAccepted] = useState(false);
+  const [isRideAccepted, setIsRideAccepted] = useState(false);
+
+  useEffect(() => {
+    if (schedule?.scheduledRides.length > 0) {
+      let obj = schedule?.scheduledRides.find(item => item.id === data.id);
+      if (obj) {
+        setIsRideAccepted(true);
+      } else {
+        setIsRideAccepted(false);
+      }
+    }
+  }, [isFocused]);
 
   const openDirections = type => {
     let latitude;
@@ -30,13 +46,13 @@ function RideDetailsScreen(props) {
     let label;
 
     if (type === 'Pickup') {
-      latitude = String(24.9162884);
-      longitude = String(67.0920345);
-      label = 'Tech office';
+      latitude = String(location.pickUpLoc.latitude);
+      longitude = String(location.pickUpLoc.longitude);
+      label = location.pickUpLocation;
     } else {
-      latitude = String(24.9456063);
-      longitude = String(67.1441915);
-      label = 'Hospital';
+      latitude = String(location.dropOffLoc.latitude);
+      longitude = String(location.dropOffLoc.latitude);
+      label = location.dropOffLocation;
     }
 
     const url = Platform.select({
@@ -74,8 +90,52 @@ function RideDetailsScreen(props) {
     setIsModal(!isModal);
   };
 
-  const navigateChat = () => {
-    setIsAccepted(!isAccepted);
+  const removeRequest = () => {
+    if (isScheduled) {
+      let objFound = common?.tempRides?.find(item => item.requestedRides);
+      objFound.requestedRides = objFound?.requestedRides?.filter(
+        item => item.id !== data.id,
+      );
+      // dispatch(tempRidesSet([...common?.tempRides]));
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+    } else {
+      let tempArr = common?.tempRides?.filter(item => item.id !== data.id);
+      dispatch(tempRidesSet(tempArr));
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+    }
+  };
+
+  const acceptRide = () => {
+    if (!isScheduled) {
+      const dataRide = {data: {...data, type: type}, inRide: 'accepted'};
+      dispatch(isInRide(dataRide));
+      navigation.navigate('OnGoingRide', {
+        type: 'instant',
+        data: data,
+      });
+    } else {
+      let tempArr =
+        schedule?.scheduledRides.length > 0
+          ? [...schedule?.scheduledRides]
+          : [];
+      tempArr.push(data);
+      console.log('TEMPARR SCHEDULE', tempArr);
+      setIsRideAccepted(true);
+      dispatch(scheduledRides(tempArr));
+      PopUp({
+        heading:
+          'Schedule Ride Accepted. For more details go to schedulees section in drawer',
+        bottomOffset: 0.7,
+        visibilityTime: 7000,
+        position: 'top',
+      });
+    }
   };
 
   return (
@@ -102,14 +162,10 @@ function RideDetailsScreen(props) {
             Ride Details
           </Text>
 
-          <MediaDisplay />
+          <MediaDisplay productImages={productImages} />
 
           <View style={R.styles.twoItemsRow}>
-            <Image
-              source={R.image.dummyUser()}
-              resizeMode={'cover'}
-              style={styles.image}
-            />
+            <Image source={picture} resizeMode={'cover'} style={styles.image} />
             <Text
               variant={'h5'}
               font={'Sequel451'}
@@ -117,7 +173,7 @@ function RideDetailsScreen(props) {
               align={'left'}
               lineHeight={30}
               transform={'none'}>
-              LOREM ISPUM
+              {name}
             </Text>
           </View>
 
@@ -144,7 +200,7 @@ function RideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              Tennis coach
+              New York
             </Text>
 
             <View style={styles.dot} />
@@ -154,7 +210,7 @@ function RideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              New York
+              USA
             </Text>
           </View>
           <Divider
@@ -173,7 +229,7 @@ function RideDetailsScreen(props) {
             Location
           </Text>
 
-          <RideMap />
+          <RideMap location={location} />
 
           <Text
             variant={'body2'}
@@ -193,7 +249,7 @@ function RideDetailsScreen(props) {
             align={'left'}
             numberOfLines={3}
             transform={'none'}>
-            Tech office
+            {location.pickUpLocation}
           </Text>
 
           <HoverText
@@ -219,14 +275,14 @@ function RideDetailsScreen(props) {
             numberOfLines={3}
             align={'left'}
             transform={'none'}>
-            Hospital
+            {location.dropOffLocation}
           </Text>
           <HoverText
             text={'Get directions'}
             onPress={() => openDirections('Dropoff')}
           />
           <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
-            {isAccepted ? (
+            {isRideAccepted ? (
               <>
                 <Button
                   bgColor={R.color.white}
@@ -240,7 +296,7 @@ function RideDetailsScreen(props) {
                   borderRadius={10}
                   iconName={'close'}
                   iconType={'Ionicons'}
-                  iconColor={R.color.blackShade3}
+                  iconColor={R.color.blackShade2}
                   onPress={openModal}
                   rippleColor={R.color.gray}
                 />
@@ -257,7 +313,12 @@ function RideDetailsScreen(props) {
                   borderRadius={10}
                   iconName={'chatbubble-ellipses-outline'}
                   iconType={'Ionicons'}
-                  onPress={() => setIsAccepted(!isAccepted)}
+                  iconColor={R.color.blackShade2}
+                  onPress={() =>
+                    navigation.navigate('Chat', {
+                      data: data,
+                    })
+                  }
                 />
               </>
             ) : (
@@ -276,27 +337,34 @@ function RideDetailsScreen(props) {
                   iconType={'Ionicons'}
                   iconColor={R.color.blackShade3}
                   rippleColor={R.color.gray}
-                  onPress={() => null}
+                  onPress={removeRequest}
                 />
                 <Button
                   value={'Accept'}
                   bgColor={R.color.mainColor}
                   width={'82%'}
                   size={'lg'}
-                  color={R.color.white}
+                  variant={'body2'}
+                  font={'PoppinsMedium'}
+                  color={R.color.charcoalShade2}
                   borderColor={R.color.mainColor}
                   disabled={false}
                   loaderColor={R.color.white}
                   borderWidth={1}
                   borderRadius={10}
-                  onPress={() => setIsAccepted(!isAccepted)}
+                  onPress={acceptRide}
                 />
               </>
             )}
           </View>
         </View>
       </ScrollView>
-      <CancelBookingModal isVisibleModal={isModal} />
+      <CancelBookingModal
+        isVisibleModal={isModal}
+        isScheduled={isScheduled}
+        itemId={data?.id}
+        cancellationComplete={() => setIsRideAccepted(false)}
+      />
     </ScreenBoiler>
   );
 }

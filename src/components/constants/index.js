@@ -1,4 +1,5 @@
 import R from '@components/utils/R';
+import moment from 'moment';
 import uuid from 'react-native-uuid';
 
 export const genderData = [
@@ -724,14 +725,106 @@ export const lessonRequests = [
 export const reportData = [
   {
     id: uuid.v4(),
-    title: 'The student was late for training.',
+    title: 'The customer cancelled the ride',
     isChecked: false,
   },
   {
     id: uuid.v4(),
-    title: 'The student did not show up for training.',
+    title: 'The customer did not show up for ride.',
     isChecked: false,
   },
   {id: uuid.v4(), title: 'Boorish behavior.', isChecked: false},
   {id: uuid.v4(), title: 'Other (nothing from the above)', isChecked: false},
+];
+
+export const rides = [
+  {
+    id: uuid.v4(),
+    name: 'John Doe',
+    picture: R.image.dummyUser(),
+    productImages: [
+      R.image.item(),
+      R.image.item(),
+      R.image.item(),
+      R.image.item(),
+      R.image.VanPerson(),
+      R.image.item(),
+    ],
+    cost: 60,
+    isScheduled: false,
+    isAccepted: false,
+    phoneNumber: '0213232212',
+    location: {
+      pickUpLocation: 'Tafsol Technologies',
+      dropOffLocation: 'Memon Hospital',
+      pickUpLoc: {latitude: 24.9162884, longitude: 67.0920345},
+      dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
+    },
+  },
+  {
+    requestedRides: [
+      {
+        id: uuid.v4(),
+        name: 'Kate Madison',
+        picture: R.image.dummyUser(),
+        productImages: [
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+        ],
+        cost: 60,
+        isScheduled: true,
+        isAccepted: false,
+        phoneNumber: '0213232212',
+        scheduledTime: {
+          pickUpTime: moment(moment().add(1, 'hours').format())
+            .add(1, 'days')
+            .format(),
+          dropOffTime: moment(moment().add(5, 'hours').format())
+            .add(1, 'days')
+            .format(),
+        },
+        location: {
+          pickUpLocation: 'Tafsol Technologies',
+          dropOffLocation: 'Maritime Meuseun',
+          pickUpLoc: {latitude: 24.9162884, longitude: 67.0920345},
+          dropOffLoc: {latitude: 24.9010784, longitude: 67.0677002},
+        },
+      },
+      {
+        id: uuid.v4(),
+        name: 'David Miller',
+        picture: R.image.dummyUser(),
+        productImages: [
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+        ],
+        isScheduled: true,
+        isAccepted: false,
+        cost: 130,
+        phoneNumber: '0213232212',
+        scheduledTime: {
+          pickUpTime: moment(moment().add(1, 'hours').format())
+            .add(1, 'days')
+            .format(),
+          dropOffTime: moment(moment().add(5, 'hours').format())
+            .add(1, 'days')
+            .format(),
+        },
+        location: {
+          pickUpLocation: 'Tafsol Technologies',
+          dropOffLocation: 'Memon Hospital',
+          pickUpLoc: {latitude: 24.9162884, longitude: 67.0920345},
+          dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
+        },
+      },
+    ],
+  },
 ];

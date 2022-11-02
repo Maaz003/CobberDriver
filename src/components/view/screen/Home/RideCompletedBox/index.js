@@ -11,16 +11,17 @@ function RideCompletedBox(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-
+  console.log('USER', user?.rideSession);
   const rideComplete = () => {
-    dispatch(isInRide(false));
+    const dataRide = {data: undefined, inRide: 'finished'};
+    dispatch(isInRide(dataRide));
   };
 
   return (
     <View style={styles.mainLayout}>
       <Text
         variant={'h1'}
-        font={'bold'}
+        font={'Sequel551'}
         color={R.color.white}
         align={'left'}
         numberOfLines={2}
@@ -29,7 +30,7 @@ function RideCompletedBox(props) {
       </Text>
       <Text
         variant={'h6'}
-        font={'bold'}
+        font={'InterRegular'}
         color={R.color.white}
         align={'left'}
         gutterTop={10}
@@ -39,7 +40,7 @@ function RideCompletedBox(props) {
       </Text>
       <View style={R.styles.twoItemsRow}>
         <Image
-          source={R.image.userPin()}
+          source={user?.rideSession?.picture}
           resizeMode={'cover'}
           style={styles.image}
         />
@@ -49,7 +50,7 @@ function RideCompletedBox(props) {
           color={R.color.white}
           align={'left'}
           transform={'none'}>
-          John Denly
+          {user?.rideSession?.name}
         </Text>
       </View>
 
@@ -58,6 +59,7 @@ function RideCompletedBox(props) {
         dropOffTextColor={R.color.white}
         ellipseColor={R.color.black}
         containerStyles={{paddingVertical: 0}}
+        location={user?.rideSession?.location}
       />
 
       <Button
@@ -65,8 +67,6 @@ function RideCompletedBox(props) {
         bgColor={R.color.mainColor}
         width={'95%'}
         size={'lg'}
-        variant={'body2'}
-        font={'semiBold'}
         gutterTop={R.unit.scale(32)}
         color={R.color.black}
         borderRadius={10}

@@ -6,6 +6,7 @@ import Icon from '@components/common/Icon';
 import DashLine from '@components/common/DashLine';
 
 function HistoryCard(props) {
+  const {item} = props;
   return (
     <View style={styles.historyCard}>
       <View style={[R.styles.twoItemsRow, styles.header]}>
@@ -19,7 +20,7 @@ function HistoryCard(props) {
           align={'left'}
           numberOfLines={1}
           transform={'none'}>
-          John Denly
+          {item.name}
         </Text>
       </View>
       <View style={[R.styles.twoItemsRow, styles.content]}>

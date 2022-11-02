@@ -10,11 +10,16 @@ import Text from '@components/common/Text';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import R from '@components/utils/R';
 import HistoryCard from '@components/view/cards/HistoryCard';
+import {useSelector} from 'react-redux';
 
 const width = Dimensions.get('window').width;
 
 function History(props) {
   const {navigation} = props;
+
+  const schedule = useSelector(state => state.schedule);
+  console.log('schedule', schedule?.scheduledRides);
+
   const headerProps = {
     isSubHeader: true,
     mainHeading: 'History',
@@ -58,7 +63,7 @@ function History(props) {
                 ]}>
                 <Text
                   variant={'body3'}
-                  font={'semiBold'}
+                  font={'PoppinsRegular'}
                   gutterTop={2}
                   color={item?.id === tab ? R.color.black : R.color.white}
                   align={'left'}
@@ -70,13 +75,9 @@ function History(props) {
           })}
         </View>
 
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
+        {schedule?.scheduledRides?.map((item, index) => {
+          return <HistoryCard key={index} item={item} />;
+        })}
       </ScrollView>
     </ScreenBoiler>
   );

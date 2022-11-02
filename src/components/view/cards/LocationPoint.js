@@ -15,6 +15,8 @@ function LocationPoint(props) {
     dropOffTextColor = R.color.black,
     ellipseColor = R.color.white,
     containerStyles,
+    location,
+    scheduledTime,
   } = props;
   const user = useSelector(state => state.user);
 
@@ -59,12 +61,12 @@ function LocationPoint(props) {
             color={pickUpTextColor}
             align={'left'}
             gutterTop={5}
-            gutterBottom={user?.scheduledTime?.pickUpSlot ? 0 : 15}
+            gutterBottom={scheduledTime?.pickUpTime ? 0 : 15}
             numberOfLines={2}
             transform={'none'}>
-            PICKUP
+            {location?.pickUpLocation}
           </Text>
-          {user?.scheduledTime && (
+          {scheduledTime && (
             <Text
               variant={'body4'}
               font={'InterRegular'}
@@ -74,7 +76,9 @@ function LocationPoint(props) {
               gutterBottom={10}
               numberOfLines={2}
               transform={'none'}>
-              HELLO
+              {moment(scheduledTime?.pickUpTime).format(
+                'MMMM Do YYYY, h:mm:ss a',
+              )}
             </Text>
           )}
 
@@ -103,9 +107,9 @@ function LocationPoint(props) {
             gutterTop={5}
             numberOfLines={2}
             transform={'none'}>
-            DROP OFF
+            {location?.dropOffLocation}
           </Text>
-          {user?.scheduledTime && (
+          {scheduledTime && (
             <Text
               variant={'body4'}
               font={'InterRegular'}
@@ -114,7 +118,9 @@ function LocationPoint(props) {
               gutterTop={10}
               numberOfLines={2}
               transform={'none'}>
-              HEY
+              {moment(scheduledTime?.dropOffTime).format(
+                'MMMM Do YYYY, h:mm:ss a',
+              )}
             </Text>
           )}
         </View>

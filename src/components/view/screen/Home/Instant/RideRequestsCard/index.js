@@ -2,23 +2,25 @@ import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import Icon from '@components/common/Icon';
 import {
   CalendarReqIcon,
   ClockReqIcon,
   LocationReqIcon,
-  PickUpCircle,
   WalletReqIcon,
 } from '@components/utils/Svg';
 import Button from '@components/common/Button';
 import Divider from '@components/common/Divider';
 import navigationService from '@navigation/navigationService';
+import moment from 'moment';
 
 function RideRequestsCard(props) {
-  const {item, index, arr, onRemove} = props;
+  const {item, index, arr} = props;
 
   const onNavigate = () => {
-    navigationService.navigate('RideDetails');
+    navigationService.navigate('RideDetails', {
+      type: 'schedule',
+      data: item,
+    });
   };
 
   return (
@@ -45,7 +47,7 @@ function RideRequestsCard(props) {
               color={R.color.blackShade3}
               align={'left'}
               transform={'none'}>
-              {item.text}
+              has requested a ride
             </Text>
           </Text>
         </View>
@@ -62,7 +64,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.date}
+          {moment(item.scheduledTime?.pickUpTime).format('Do MMM  YY')}
         </Text>
       </View>
 
@@ -77,7 +79,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.time}
+          {moment(item.scheduledTime?.pickUpTime).format('hh:mm a')}
         </Text>
       </View>
 
@@ -92,7 +94,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.amount}
+          {item.cost}
         </Text>
       </View>
 
@@ -105,7 +107,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.location}
+          {item.location?.pickUpLocation}
         </Text>
       </View>
 
@@ -120,7 +122,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.location}
+          {item.location?.dropOffLocation}
         </Text>
       </View>
 
@@ -131,35 +133,17 @@ function RideRequestsCard(props) {
           color={R.color.gray6}
           align={'left'}
           transform={'none'}>
-          {item.createdAt}
+          14:31
         </Text>
         <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
           <Button
-            bgColor={R.color.white}
-            width={'20%'}
-            size={'lg'}
-            color={R.color.white}
-            borderColor={R.color.gray}
-            disabled={false}
-            loaderColor={R.color.white}
-            borderWidth={0.5}
-            borderRadius={10}
-            iconName={'close'}
-            iconType={'Ionicons'}
-            iconColor={R.color.blackShade3}
-            rippleColor={R.color.gray}
-            onPress={() => {
-              onRemove(item.id);
-            }}
-            btnWrapperStyles={{marginRight: R.unit.scale(8)}}
-          />
-
-          <Button
             value={'Details'}
             bgColor={R.color.mainColor}
-            width={'70%'}
+            width={'90%'}
             size={'lg'}
-            color={R.color.white}
+            variant={'body2'}
+            font={'PoppinsMedium'}
+            color={R.color.charcoalShade2}
             borderColor={R.color.mainColor}
             disabled={false}
             loaderColor={R.color.white}

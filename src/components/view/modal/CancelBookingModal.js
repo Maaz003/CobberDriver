@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Keyboard,
   Modal,
   Platform,
   SafeAreaView,
@@ -9,6 +8,9 @@ import {
   View,
 } from 'react-native';
 import {reportData} from '@components/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {isInRide} from '@store/user/userSlice';
+import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
@@ -18,10 +20,12 @@ import CheckBoxLine from '@components/common/CheckBoxLine';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function CancelBookingModal(props) {
+  const {title = 'Booking', isScheduled, itemId, cancellationComplete} = props;
+  const dispatch = useDispatch();
+  const schedule = useSelector(state => state.schedule);
   const [modalVisible, setModalVisible] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
   const [text, setText] = useState('');
-  const [isInfoModal, setIsInfoModal] = useState(false);
   const [activeIndex, setActiveIndex] = useState();
   const [showInputField, setShowInputField] = useState(false);
 
@@ -43,13 +47,32 @@ function CancelBookingModal(props) {
     }
   };
 
+  const cancelRide = () => {
+    if (isScheduled) {
+      if (itemId) {
+        if (schedule?.scheduledRides?.length > 0) {
+          let tempArr = schedule?.scheduledRides?.filter(
+            item => item.id !== itemId,
+          );
+          console.log('TEMPARR', tempArr);
+          dispatch(scheduledRides(tempArr));
+          setIsBlur(false);
+          setActiveIndex(undefined);
+          cancellationComplete();
+        }
+      }
+    } else {
+      const dataRide = {data: undefined, inRide: 'finished'};
+      dispatch(isInRide(dataRide));
+    }
+  };
+
   return (
     <>
       <Modal
         animationType={'slide'}
         transparent={true}
         visible={modalVisible}
-        // visible={true}
         onRequestClose={() => setIsBlur(false)}
         onShow={() => {
           setIsBlur(true);
@@ -102,7 +125,7 @@ function CancelBookingModal(props) {
                     numberOfLines={2}
                     style={{width: '100%'}}
                     transform={'none'}>
-                    Cancel booking
+                    Cancel {title}
                   </Text>
 
                   {reportData?.map(item => {
@@ -211,9 +234,7 @@ function CancelBookingModal(props) {
                     borderRadius={10}
                     loaderColor={R.color.white}
                     btnWrapperStyles={{marginLeft: R.unit.scale(20)}}
-                    onPress={() => {
-                      setIsBlur(false);
-                    }}
+                    onPress={cancelRide}
                   />
                 </View>
               </KeyboardAwareScrollView>

@@ -10,7 +10,7 @@ function Map(props) {
   const {
     children,
     mapForwardRef,
-    mapReady,
+    mapReady = () => null,
     mapViewStyles,
     loadingIndicatorColor = R.color.mainColor,
     loadingBackgroundColor = 'rgba(0,0,0,0.5)',
