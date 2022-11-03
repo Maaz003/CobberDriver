@@ -1,14 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {isInRide} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
+import Button from '@components/common/Button';
 
-function RideRequestsScreen(props) {
+function ScheduleRideRequestsScreen(props) {
   const {navigation} = props;
-  const {data, screenType = 'Rides'} = props.route.params;
+  const {data} = props.route.params;
+  const dispatch = useDispatch();
   const [filteredArray, setFilteredArray] = useState(data);
+  const [showEndButton, setShowEndButton] = useState(false);
+
+  console.log('PEHLA DATA', data);
 
   useEffect(() => {
     if (data) {
@@ -17,6 +24,12 @@ function RideRequestsScreen(props) {
       } else {
         setFilteredArray([]);
       }
+    }
+
+    if (data.every(item => item.rideStatus === 'ended')) {
+      setShowEndButton(true);
+    } else {
+      setShowEndButton(false);
     }
   }, [data]);
 
@@ -33,6 +46,11 @@ function RideRequestsScreen(props) {
 
   const backPress = () => {
     navigation.goBack();
+  };
+
+  const finishRide = () => {
+    const dataRide = {data: undefined, inRide: 'finished'};
+    dispatch(isInRide(dataRide));
   };
 
   return (
@@ -64,17 +82,34 @@ function RideRequestsScreen(props) {
                   arr={arr}
                   key={index}
                   onRemove={onRemove}
-                  screenType={screenType}
+                  screenType={'History'}
                 />
               );
             })}
+
+            {showEndButton && (
+              <Button
+                value={'Complete Ride'}
+                bgColor={R.color.cancelColor}
+                width={'100%'}
+                size={'lg'}
+                gutterTop={30}
+                color={R.color.white}
+                borderColor={R.color.cancelColor}
+                disabled={false}
+                loaderColor={R.color.white}
+                borderWidth={1}
+                borderRadius={10}
+                onPress={finishRide}
+              />
+            )}
           </View>
         </ScrollView>
       </View>
     </ScreenBoiler>
   );
 }
-export default RideRequestsScreen;
+export default ScheduleRideRequestsScreen;
 
 const styles = StyleSheet.create({
   mainLayout: {

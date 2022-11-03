@@ -25,12 +25,13 @@ function HomeScreen(props) {
 
   useEffect(() => {
     if (!user?.pickupLoc) {
+      console.log('HOME CL');
       CurrentLocation({actionCall: dispatch, flag: true});
     }
   }, []);
 
   useEffect(() => {
-    if (common?.firstReduxSet) {
+    if (!common?.firstReduxSet) {
       dispatch(firstTimeReduxSet(true));
       dispatch(tempRidesSet(rides));
     }

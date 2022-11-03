@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
@@ -9,8 +9,20 @@ import {useSelector} from 'react-redux';
 
 function RidesList(props) {
   const common = useSelector(state => state.common);
+  const [filteredArray, setFilteredArray] = useState([]);
 
-  console.log(common?.tempRides);
+  useEffect(() => {
+    if (common?.tempRides) {
+      let res = common?.tempRides[1].requestedRides.every(
+        item => item.isCompleted,
+      );
+      if (res) {
+        setFilteredArray([common?.tempRides[0]]);
+      } else {
+        setFilteredArray(common.tempRides);
+      }
+    }
+  }, [common?.tempRides]);
 
   return (
     <BottomSheet onSwipeBottomSheet={() => null} initalHeight={0.11}>
@@ -41,7 +53,7 @@ function RidesList(props) {
           <BottomSheetScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainer}>
-            {common?.tempRides?.map((item, index) => {
+            {filteredArray?.map((item, index) => {
               return <CustomerCard item={item} key={index} />;
             })}
           </BottomSheetScrollView>

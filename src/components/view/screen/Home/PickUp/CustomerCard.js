@@ -10,6 +10,8 @@ function CustomerCard(props) {
   const {item} = props;
   const [rideData, setRideData] = useState(undefined);
 
+  console.log('first');
+
   useEffect(() => {
     if (item.requestedRides) {
       setRideData(item.requestedRides[0]);
@@ -31,6 +33,8 @@ function CustomerCard(props) {
       });
     }
   };
+
+  console.log('ITEM', rideData);
 
   return (
     <View style={styles.mainLayout}>

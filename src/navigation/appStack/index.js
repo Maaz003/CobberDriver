@@ -21,6 +21,9 @@ import EarningsScreen from '@containers/appContainers/EarningsScreen';
 import ScheduleOnGoingRideScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/ScheduleOnGoingRideScreen';
 import RideRequestsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesRequests';
 import RideDetailsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesDetails';
+import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
+import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
+import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
@@ -41,11 +44,17 @@ const AppStack = () => {
             backgroundColor: 'black',
             width: '10%',
           }}
-          initialRouteName={'HomeScreen'}
+          initialRouteName={
+            user?.inRide === 'scheduleEnded' ? 'ScheduledRides' : 'HomeScreen'
+          }
           drawerContent={props => <CustomDrawer {...props} />}>
           <Drawer.Screen name="HomeScreen" component={HomeStackNavigator} />
           <Drawer.Screen name="Contact" component={Contact} />
           <Drawer.Screen name="History" component={History} />
+          <Drawer.Screen
+            name="ScheduledRides"
+            component={ScheduleStackNavigator}
+          />
           <Drawer.Screen name="Profile" component={Profile} />
           <Drawer.Screen name="FAQ" component={FAQScreen} />
           <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
@@ -56,19 +65,42 @@ const AppStack = () => {
     );
   };
 
+  const initalRoute = () => {
+    if (user?.rideSession?.isScheduled) {
+      if (user?.inRide === 'started' || user?.inRide === 'accepted') {
+        return 'OnGoingRide';
+      } else if (user?.inRide === 'ended') {
+        return 'RideCompleted';
+      } else {
+        return 'Home';
+      }
+    }
+    //FOR INSTANT RIDES
+    else {
+      if (user?.inRide === 'started' || user?.inRide === 'accepted') {
+        return 'OnGoingRide';
+      } else if (user?.inRide === 'ended') {
+        return 'RideCompleted';
+      } else {
+        return 'Home';
+      }
+    }
+  };
+
   const HomeStackNavigator = props => {
     return (
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={
-          user?.inRide === 'started' || user?.inRide === 'accepted'
-            ? 'OnGoingRide'
-            : user?.inRide === 'ended'
-            ? 'RideCompleted'
-            : 'Home'
-        }>
+        // initialRouteName={
+        //   user?.inRide === 'started' || user?.inRide === 'accepted'
+        //     ? 'OnGoingRide'
+        //     : user?.inRide === 'ended'
+        //     ? 'RideCompleted'
+        //     : 'Home'
+        // }
+        initialRouteName={initalRoute()}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="OnGoingRide"
@@ -95,6 +127,25 @@ const AppStack = () => {
           component={EditProfileField}
         />
         <Stack.Screen name="Chat" component={ChatScreen} />
+      </Stack.Navigator>
+    );
+  };
+
+  const ScheduleStackNavigator = props => {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="ScheduleRides" component={ScheduledRidesScreen} />
+        <Stack.Screen
+          name="ScheduleRideRequests"
+          component={ScheduleRideRequestsScreen}
+        />
+        <Stack.Screen
+          name="ScheduleRideDetails"
+          component={ScheduleRideDetailsScreen}
+        />
       </Stack.Navigator>
     );
   };

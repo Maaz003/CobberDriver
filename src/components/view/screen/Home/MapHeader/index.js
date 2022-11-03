@@ -10,16 +10,25 @@ function MapHeader(props) {
     iconName,
     iconType = 'MaterialIcons',
     showLive = true,
+    showDrawer = true,
   } = props;
 
   return (
     <View style={styles.headerView}>
-      <TouchableOpacity
-        onPress={onPress}
-        activeOpacity={0.9}
-        style={styles.iconView}>
-        <Icon name={iconName} type={iconType} size={20} color={R.color.white} />
-      </TouchableOpacity>
+      {showDrawer && (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.9}
+          style={styles.iconView}>
+          <Icon
+            name={iconName}
+            type={iconType}
+            size={20}
+            color={R.color.white}
+          />
+        </TouchableOpacity>
+      )}
+
       {showLive && <LiveLocation />}
     </View>
   );

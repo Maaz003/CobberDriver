@@ -23,6 +23,7 @@ import {
   StarLogo,
   Home,
   EarningIcon,
+  ClockReqIcon,
 } from '@components/utils/Svg';
 import LogOutModal from '@components/view/modal/LogOutModal';
 
@@ -94,20 +95,26 @@ const CustomDrawer = props => {
       svg: <HistoryIcon height="100%" width="100%" fill={'#85FA00'} />,
     },
     {
-      name: 'Privacy Policy',
+      name: 'Scheduled Rides',
       id: 5,
+      route: 'ScheduledRides',
+      svg: <ClockReqIcon height="100%" width="100%" fill={'#85FA00'} />,
+    },
+    {
+      name: 'Privacy Policy',
+      id: 6,
       route: 'PrivacyPolicy',
       svg: <SettingsLogo height="100%" width="100%" fill={'#85FA00'} />,
     },
     {
       name: 'Help',
-      id: 6,
+      id: 7,
       route: 'FAQ',
       svg: <LegalIcon height="100%" width="100%" fill={'#85FA00'} />,
     },
     {
       name: 'Logout',
-      id: 7,
+      id: 8,
       route: 'History',
       svg: <LogOutIcon height="100%" width="100%" fill={'#85FA00'} />,
     },

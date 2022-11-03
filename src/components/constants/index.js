@@ -752,6 +752,7 @@ export const rides = [
     ],
     cost: 60,
     isScheduled: false,
+    rideStatus: 'notstarted',
     isAccepted: false,
     phoneNumber: '0213232212',
     location: {
@@ -762,6 +763,7 @@ export const rides = [
     },
   },
   {
+    rideCompleted: false,
     requestedRides: [
       {
         id: uuid.v4(),
@@ -778,7 +780,9 @@ export const rides = [
         cost: 60,
         isScheduled: true,
         isAccepted: false,
+        isCompleted: false,
         phoneNumber: '0213232212',
+        rideStatus: 'notstarted',
         scheduledTime: {
           pickUpTime: moment(moment().add(1, 'hours').format())
             .add(1, 'days')
@@ -808,6 +812,8 @@ export const rides = [
         ],
         isScheduled: true,
         isAccepted: false,
+        isCompleted: false,
+        rideStatus: 'notstarted',
         cost: 130,
         phoneNumber: '0213232212',
         scheduledTime: {

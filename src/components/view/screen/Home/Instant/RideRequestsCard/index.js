@@ -14,13 +14,16 @@ import navigationService from '@navigation/navigationService';
 import moment from 'moment';
 
 function RideRequestsCard(props) {
-  const {item, index, arr} = props;
+  const {item, index, arr, screenType} = props;
 
   const onNavigate = () => {
-    navigationService.navigate('RideDetails', {
-      type: 'schedule',
-      data: item,
-    });
+    navigationService.navigate(
+      screenType === 'History' ? 'ScheduleRideDetails' : 'RideDetails',
+      {
+        type: 'schedule',
+        data: item,
+      },
+    );
   };
 
   return (
@@ -70,7 +73,7 @@ function RideRequestsCard(props) {
 
       <View style={[R.styles.twoItemsRow, styles.detailView]}>
         <View style={styles.svgView}>
-          <ClockReqIcon height="100%" width="100%" />
+          <ClockReqIcon height="100%" width="100%" fill={'#717171'} />
         </View>
         <Text
           variant={'body3'}

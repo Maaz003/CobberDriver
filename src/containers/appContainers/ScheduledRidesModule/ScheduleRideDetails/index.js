@@ -14,18 +14,18 @@ import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
-import {tempRidesSet} from '@store/common/commonSlice';
 import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, WalletReqIcon} from '@components/utils/Svg';
 import moment from 'moment';
 
-function RideDetailsScreen(props) {
+function ScheduleRideDetailsScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
-  const {type = undefined, data = undefined} = props.route.params;
+  const user = useSelector(state => state.user);
+  const {type = undefined, data = undefined, screenType} = props.route.params;
   const {
     name,
     picture,
@@ -33,21 +33,33 @@ function RideDetailsScreen(props) {
     isScheduled,
     scheduledTime,
     location,
-    cost,
+    id,
+    rideStatus,
+    isCompleted,
   } = data;
   const [isModal, setIsModal] = useState(false);
-  const [isRideAccepted, setIsRideAccepted] = useState(false);
+  const [buttonText, setButtonText] = useState('');
 
   useEffect(() => {
-    if (schedule?.scheduledRides.length > 0) {
-      let obj = schedule?.scheduledRides.find(item => item.id === data.id);
-      if (obj) {
-        setIsRideAccepted(true);
-      } else {
-        setIsRideAccepted(false);
+    if (!isCompleted) {
+      switch (rideStatus) {
+        case 'notstarted':
+          setButtonText('Start Pickup');
+          break;
+        case 'pickupended':
+          setButtonText('Start DropOff');
+          break;
+        case 'dropoffstarted':
+          setButtonText('Complete DropOff');
+          break;
+        case 'dropoffended':
+          setButtonText('Complete Ride');
+          break;
       }
+    } else {
+      setButtonText('Ride Completed');
     }
-  }, [isFocused]);
+  }, []);
 
   const openDirections = type => {
     let latitude;
@@ -99,68 +111,33 @@ function RideDetailsScreen(props) {
     setIsModal(!isModal);
   };
 
-  const removeRequest = () => {
-    if (isScheduled) {
-      let tempArr = JSON.parse(JSON.stringify(common.tempRides));
-      let index = tempArr.findIndex(item => item.requestedRides);
-      let requestedRides = tempArr[index];
-      let updatedRides = requestedRides?.requestedRides.filter(
-        item => item.id !== data.id,
-      );
+  console.log('========', rideStatus);
 
-      if (updatedRides.length > 0) {
-        tempArr[index].requestedRides = updatedRides;
-        dispatch(tempRidesSet(tempArr));
-        navigation.navigate('RideRequests', {
-          data: updatedRides,
-        });
-      } else {
-        tempArr = [common.tempRides[0]];
-        navigation.navigate('RideRequests', {
-          data: [],
-        });
-        dispatch(tempRidesSet(tempArr));
-      }
-    } else {
-      let tempArr = common?.tempRides?.filter(item => item.id !== data.id);
-      dispatch(tempRidesSet(tempArr));
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Home'}],
-      });
+  const startScheduleRide = () => {
+    let dataRide;
+    if (rideStatus === 'notstarted') {
+      dataRide = {
+        data: {...data, rideStatus: 'pickupstarted', type: type},
+        inRide: 'accepted',
+      };
+    } else if (rideStatus === 'pickupended') {
+      dataRide = {
+        data: {...data, rideStatus: 'dropoffstarted', type: type},
+        inRide: 'accepted',
+      };
+    } else if (rideStatus === 'dropoffstarted') {
+      dataRide = {
+        data: {...data, rideStatus: 'dropoffended', type: type},
+        inRide: 'accepted',
+      };
+    } else if (rideStatus === 'dropoffended') {
+      dataRide = {
+        data: {...data, rideStatus: 'dropoffended', type: type},
+        inRide: 'ended',
+      };
     }
-  };
-
-  const acceptRide = () => {
-    if (isScheduled) {
-      let tempArr =
-        schedule?.scheduledRides.length > 0
-          ? [...schedule?.scheduledRides]
-          : [];
-      tempArr.push(data);
-      setIsRideAccepted(true);
-      dispatch(scheduledRides(tempArr));
-      PopUp({
-        heading:
-          'Schedule Ride Accepted. For more details go to schedulees section in drawer',
-        bottomOffset: 0.7,
-        visibilityTime: 7000,
-        position: 'top',
-      });
-    } else {
-      const dataRide = {data: {...data, type: type}, inRide: 'accepted'};
-      dispatch(isInRide(dataRide));
-      navigation.navigate('OnGoingRide', {
-        type: 'instant',
-        data: data,
-      });
-      PopUp({
-        heading: 'Ride Accepted',
-        bottomOffset: 0.7,
-        visibilityTime: 3000,
-        position: 'top',
-      });
-    }
+    // console.log(':', dataRide);
+    dispatch(isInRide(dataRide));
   };
 
   return (
@@ -186,9 +163,7 @@ function RideDetailsScreen(props) {
             transform={'none'}>
             Ride Details
           </Text>
-
           <MediaDisplay productImages={productImages} />
-
           <View style={R.styles.twoItemsRow}>
             <Image source={picture} resizeMode={'cover'} style={styles.image} />
             <View>
@@ -227,7 +202,6 @@ function RideDetailsScreen(props) {
               </View>
             </View>
           </View>
-
           <View style={[R.styles.twoItemsRow, styles.locationView]}>
             <Icon
               name={'star'}
@@ -266,64 +240,57 @@ function RideDetailsScreen(props) {
           </View>
 
           <Divider lineStyles={styles.lineStyles} />
-          {data?.isScheduled && (
-            <>
-              <Text
-                variant={'body2'}
-                font={'InterMedium'}
-                color={R.color.charcoalShade}
-                gutterTop={12}
-                gutterBottom={4}
-                align={'left'}
-                transform={'none'}>
-                PickUp Time
-              </Text>
-              <View style={[R.styles.twoItemsRow, styles.detailView]}>
-                <View style={styles.svgView}>
-                  <ClockReqIcon height="100%" width="100%" fill={'#717171'} />
-                </View>
-                <Text
-                  variant={'body3'}
-                  font={'InterRegular'}
-                  color={R.color.gray4}
-                  align={'left'}
-                  style={{marginLeft: R.unit.scale(8)}}
-                  transform={'none'}>
-                  {moment(scheduledTime.pickUpTime).format(
-                    'ddd, DD MMM hh:mm a',
-                  )}
-                </Text>
-              </View>
 
-              <Text
-                variant={'body2'}
-                font={'InterMedium'}
-                color={R.color.charcoalShade}
-                gutterTop={12}
-                gutterBottom={4}
-                align={'left'}
-                transform={'none'}>
-                DropOff Time
-              </Text>
+          <Text
+            variant={'body2'}
+            font={'InterMedium'}
+            color={R.color.charcoalShade}
+            gutterTop={12}
+            gutterBottom={4}
+            align={'left'}
+            transform={'none'}>
+            PickUp Time
+          </Text>
+          <View style={[R.styles.twoItemsRow, styles.detailView]}>
+            <View style={styles.svgView}>
+              <ClockReqIcon height="100%" width="100%" fill={'#717171'} />
+            </View>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              {moment(scheduledTime.pickUpTime).format('ddd, DD MMM hh:mm a')}
+            </Text>
+          </View>
 
-              <View style={[R.styles.twoItemsRow, styles.detailView]}>
-                <View style={styles.svgView}>
-                  <ClockReqIcon height="100%" width="100%" fill={'#717171'} />
-                </View>
-                <Text
-                  variant={'body3'}
-                  font={'InterRegular'}
-                  color={R.color.gray4}
-                  align={'left'}
-                  style={{marginLeft: R.unit.scale(8)}}
-                  transform={'none'}>
-                  {moment(scheduledTime.dropOffTime).format(
-                    'ddd, DD MMM hh:mm a',
-                  )}
-                </Text>
-              </View>
-            </>
-          )}
+          <Text
+            variant={'body2'}
+            font={'InterMedium'}
+            color={R.color.charcoalShade}
+            gutterTop={12}
+            gutterBottom={4}
+            align={'left'}
+            transform={'none'}>
+            DropOff Time
+          </Text>
+
+          <View style={[R.styles.twoItemsRow, styles.detailView]}>
+            <View style={styles.svgView}>
+              <ClockReqIcon height="100%" width="100%" fill={'#717171'} />
+            </View>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              {moment(scheduledTime.dropOffTime).format('ddd, DD MMM hh:mm a')}
+            </Text>
+          </View>
 
           <Text
             variant={'body2'}
@@ -338,7 +305,7 @@ function RideDetailsScreen(props) {
 
           <View style={[R.styles.twoItemsRow, styles.detailView]}>
             <View style={{...styles.svgView, height: R.unit.scale(22)}}>
-              <WalletReqIcon height="100%" width="100%" fill={'#717171'} />
+              <WalletReqIcon height="100%" width="100%" />
             </View>
             <Text
               variant={'body3'}
@@ -347,7 +314,7 @@ function RideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              ${cost}
+              ${data.cost}
             </Text>
           </View>
           <Text
@@ -355,14 +322,12 @@ function RideDetailsScreen(props) {
             font={'Sequel551'}
             color={R.color.charcoalShade}
             gutterTop={24}
-            gutterBottom={32}
+            gutterBottom={12}
             align={'left'}
             transform={'none'}>
             Location
           </Text>
-
           <RideMap location={location} />
-
           <Text
             variant={'body2'}
             font={'InterMedium'}
@@ -373,7 +338,6 @@ function RideDetailsScreen(props) {
             transform={'none'}>
             PickUp
           </Text>
-
           <Text
             variant={'body3'}
             font={'semiBold'}
@@ -384,12 +348,10 @@ function RideDetailsScreen(props) {
             transform={'none'}>
             {location.pickUpLocation}
           </Text>
-
           <HoverText
             text={'Get directions'}
             onPress={() => openDirections('Pickup')}
           />
-
           <Text
             variant={'body2'}
             font={'InterMedium'}
@@ -400,7 +362,6 @@ function RideDetailsScreen(props) {
             transform={'none'}>
             DropOff
           </Text>
-
           <Text
             variant={'body3'}
             font={'semiBold'}
@@ -411,87 +372,43 @@ function RideDetailsScreen(props) {
             transform={'none'}>
             {location.dropOffLocation}
           </Text>
-
           <HoverText
             text={'Get directions'}
             onPress={() => openDirections('Dropoff')}
           />
-
           <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
-            {isRideAccepted ? (
-              <>
-                <Button
-                  bgColor={R.color.white}
-                  width={'16%'}
-                  size={'lg'}
-                  color={R.color.white}
-                  borderColor={R.color.gray}
-                  disabled={false}
-                  loaderColor={R.color.white}
-                  borderWidth={0.5}
-                  borderRadius={10}
-                  iconName={'close'}
-                  iconType={'Ionicons'}
-                  iconColor={R.color.blackShade2}
-                  onPress={openModal}
-                  rippleColor={R.color.gray}
-                />
-
-                <Button
-                  bgColor={R.color.mainColor}
-                  width={'82%'}
-                  size={'lg'}
-                  color={R.color.white}
-                  borderColor={R.color.mainColor}
-                  disabled={false}
-                  loaderColor={R.color.white}
-                  borderWidth={1}
-                  borderRadius={10}
-                  iconName={'chatbubble-ellipses-outline'}
-                  iconType={'Ionicons'}
-                  iconColor={R.color.blackShade2}
-                  onPress={() =>
-                    navigation.navigate('Chat', {
-                      data: data,
-                    })
-                  }
-                />
-              </>
-            ) : (
-              <>
-                <Button
-                  bgColor={R.color.white}
-                  width={'16%'}
-                  size={'lg'}
-                  color={R.color.white}
-                  borderColor={R.color.gray}
-                  disabled={false}
-                  loaderColor={R.color.white}
-                  borderWidth={0.5}
-                  borderRadius={10}
-                  iconName={'close'}
-                  iconType={'Ionicons'}
-                  iconColor={R.color.blackShade3}
-                  rippleColor={R.color.gray}
-                  onPress={removeRequest}
-                />
-                <Button
-                  value={'Accept'}
-                  bgColor={R.color.mainColor}
-                  width={'82%'}
-                  size={'lg'}
-                  variant={'body2'}
-                  font={'PoppinsMedium'}
-                  color={R.color.charcoalShade2}
-                  borderColor={R.color.mainColor}
-                  disabled={false}
-                  loaderColor={R.color.white}
-                  borderWidth={1}
-                  borderRadius={10}
-                  onPress={acceptRide}
-                />
-              </>
+            {rideStatus === 'notstarted' && (
+              <Button
+                bgColor={R.color.white}
+                width={'16%'}
+                size={'lg'}
+                color={R.color.white}
+                borderColor={R.color.gray}
+                disabled={false}
+                loaderColor={R.color.white}
+                borderWidth={0.5}
+                borderRadius={10}
+                iconName={'close'}
+                iconType={'Ionicons'}
+                iconColor={R.color.blackShade2}
+                onPress={openModal}
+                rippleColor={R.color.gray}
+              />
             )}
+
+            <Button
+              value={buttonText}
+              bgColor={R.color.mainColor}
+              width={rideStatus !== 'notstarted' ? '100%' : '82%'}
+              size={'lg'}
+              color={R.color.blackShade2}
+              borderColor={R.color.mainColor}
+              disabled={isCompleted ? true : false}
+              loaderColor={R.color.white}
+              borderWidth={1}
+              borderRadius={10}
+              onPress={startScheduleRide}
+            />
           </View>
         </View>
       </ScrollView>
@@ -504,7 +421,7 @@ function RideDetailsScreen(props) {
     </ScreenBoiler>
   );
 }
-export default RideDetailsScreen;
+export default ScheduleRideDetailsScreen;
 
 const styles = StyleSheet.create({
   mainLayout: {
@@ -534,33 +451,17 @@ const styles = StyleSheet.create({
     borderRadius: R.unit.scale(30),
     marginHorizontal: R.unit.scale(8),
   },
+  lineStyles: {
+    height: R.unit.scale(0.5),
+    backgroundColor: R.color.gray2,
+    marginBottom: R.unit.scale(6),
+  },
   buttonLayout: {
     marginTop: R.unit.scale(32),
     width: '100%',
     justifyContent: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: R.unit.scale(2),
-  },
-  cancelButton: {
-    padding: R.unit.scale(15),
-    borderColor: R.color.gray,
-    borderWidth: R.unit.scale(0.5),
-    borderRadius: R.unit.scale(10),
-    marginRight: R.unit.scale(8),
-  },
-  chatButton: {
-    backgroundColor: R.color.mainColor,
-    padding: R.unit.scale(15),
-    borderColor: R.color.gray,
-    borderWidth: R.unit.scale(0.5),
-    borderRadius: R.unit.scale(10),
-    width: '83%',
-    alignItems: 'center',
-  },
-  lineStyles: {
-    height: R.unit.scale(0.5),
-    backgroundColor: R.color.gray2,
-    marginBottom: R.unit.scale(6),
   },
   detailView: {
     marginBottom: R.unit.scale(4),

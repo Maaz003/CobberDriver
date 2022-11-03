@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
+import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
-import navigationService from '../../../../../navigation/navigationService';
-import {useNavigation} from '@react-navigation/native';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import {isInRide} from '@store/user/userSlice';
 
@@ -24,10 +23,44 @@ function RideInProgressCard(props) {
   const {name, picture, location} = data;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const schedule = useSelector(state => state.schedule);
+  const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
-  const [isRideStarted, setIsRideStarted] = useState(
-    user?.inRide === 'started' ? true : false,
-  );
+  // const [isRideStarted, setIsRideStarted] = useState(
+  //   user?.inRide === 'started' ? true : false,
+  // );
+  const [isRideStarted, setIsRideStarted] = useState(false);
+
+  console.log('DATA', data.type);
+
+  useEffect(() => {
+    if (data) {
+      if (data.type === 'schedule') {
+        ///SCHEDULE
+        switch (data.rideStatus) {
+          case 'pickupstarted':
+            setButtonText('Complete Pickup');
+            break;
+          case 'pickupended':
+            setButtonText('Start DropOff');
+            break;
+          case 'dropoffstarted':
+            setButtonText('Complete DropOff');
+            break;
+        }
+      } //INSTANT
+      else {
+        switch (data.rideStatus) {
+          case 'notstarted':
+            setButtonText('Start Ride');
+            break;
+          case 'pickupstarted':
+            setButtonText('End Ride');
+            break;
+        }
+      }
+    }
+  }, []);
 
   const openCancelModal = () => {
     setIsModal(!isModal);
@@ -37,11 +70,22 @@ function RideInProgressCard(props) {
     openCancelModal();
   };
 
-  const onSubmit = () => {
+  const updateRideStatus = status => {
+    let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
+    let obj = tempArr?.find(item => item.id === data.id);
+    obj.rideStatus = status;
+    dispatch(scheduledRides(tempArr));
+  };
+
+  const onSubmit = async () => {
     setIsRideStarted(!isRideStarted);
     if (type === 'instant') {
-      if (!isRideStarted) {
-        const dataRide = {data: {...data, type: type}, inRide: 'started'};
+      if (data.rideStatus === 'notstarted') {
+        const dataRide = {
+          data: {...data, rideStatus: 'pickupstarted', type: type},
+          inRide: 'started',
+        };
+
         dispatch(isInRide(dataRide));
       } else {
         const dataRide = {data: {...data, type: type}, inRide: 'ended'};
@@ -50,6 +94,40 @@ function RideInProgressCard(props) {
           index: 0,
           routes: [{name: 'RideCompleted'}],
         });
+      }
+    } else {
+      if (!isRideStarted) {
+        if (data.rideStatus === 'pickupstarted') {
+          const dataRide = {
+            data: {...data, rideStatus: 'pickupended', type: type},
+            inRide: 'scheduleEnded',
+          };
+          updateRideStatus('pickupended');
+
+          console.log('YARR BHAE HOJA', dataRide);
+          await dispatch(isInRide(dataRide));
+        } else if (data.rideStatus === 'pickupended') {
+          const dataRide = {
+            data: {...data, rideStatus: 'dropoffstarted', type: type},
+            inRide: 'scheduleEnded',
+          };
+          updateRideStatus('dropoffstarted');
+          await dispatch(isInRide(dataRide));
+        } else if (data.rideStatus === 'dropoffstarted') {
+          const dataRide = {
+            data: {...data, rideStatus: 'dropoffended', type: type},
+            inRide: 'scheduleEnded',
+          };
+          updateRideStatus('dropoffended');
+          await dispatch(isInRide(dataRide));
+        }
+      } else {
+        const dataRide = {data: {...data, type: type}, inRide: 'scheduleEnded'};
+        let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
+        let obj = tempArr?.find(item => item.id === data.id);
+        obj.rideStatus = 'ended';
+        dispatch(scheduledRides(tempArr));
+        dispatch(isInRide(dataRide));
       }
     }
   };
@@ -154,7 +232,7 @@ function RideInProgressCard(props) {
         </View>
 
         <Button
-          value={!isRideStarted ? 'Start Ride' : 'End Ride'}
+          value={!isRideStarted ? `${buttonText}` : 'End Ride'}
           bgColor={R.color.mainColor}
           width={'90%'}
           size={'lg'}
@@ -164,7 +242,7 @@ function RideInProgressCard(props) {
           borderColor={R.color.mainColor}
           onPress={onSubmit}
         />
-        {!isRideStarted && (
+        {data.rideStatus === 'notstarted' && (
           <Button
             value={'Cancel Ride'}
             bgColor={'#DB1A2D'}

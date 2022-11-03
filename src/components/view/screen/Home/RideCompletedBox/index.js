@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import {isInRide} from '@store/user/userSlice';
+import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
+import {tempRidesSet} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import Button from '@components/common/Button';
@@ -11,10 +13,35 @@ function RideCompletedBox(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  console.log('USER', user?.rideSession);
+  const schedule = useSelector(state => state.schedule);
+  const common = useSelector(state => state.common);
   const rideComplete = () => {
-    const dataRide = {data: undefined, inRide: 'finished'};
-    dispatch(isInRide(dataRide));
+    if (user?.rideSession?.type === 'schedule') {
+      let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
+      let obj = tempArr?.find(item => item.id === user?.rideSession?.id);
+      obj.isCompleted = true;
+      let flag = schedule?.scheduledRides?.every(
+        item => item.rideStatus === 'dropoffended',
+      );
+      if (flag) {
+        let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
+        let index = commonTemparr.findIndex(item => item.requestedRides);
+        let requestedRides = commonTemparr[index];
+        requestedRides?.requestedRides.forEach(item => {
+          item.isCompleted = true;
+        });
+        dispatch(tempRidesSet(commonTemparr));
+      }
+      const dataRide = {
+        data: undefined,
+        inRide: flag ? 'finished' : 'scheduleEnded',
+      };
+      dispatch(scheduledRides(tempArr));
+      dispatch(isInRide(dataRide));
+    } else {
+      const dataRide = {data: undefined, inRide: 'finished'};
+      dispatch(isInRide(dataRide));
+    }
   };
 
   return (
@@ -36,7 +63,7 @@ function RideCompletedBox(props) {
         gutterTop={10}
         gutterBottom={20}
         transform={'none'}>
-        Final Cost: $80.00
+        Final Cost: ${user?.rideSession?.cost}
       </Text>
       <View style={R.styles.twoItemsRow}>
         <Image
@@ -63,7 +90,7 @@ function RideCompletedBox(props) {
       />
 
       <Button
-        value={`Ride is Completed`}
+        value={`Complete Ride`}
         bgColor={R.color.mainColor}
         width={'95%'}
         size={'lg'}

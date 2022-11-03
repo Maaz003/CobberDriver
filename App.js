@@ -116,6 +116,7 @@ const App = () => {
 
     useEffect(() => {
       if (auth?.isAuth) {
+        console.log('APP CL');
         CurrentLocation({actionCall: dispatch});
       }
     }, []);

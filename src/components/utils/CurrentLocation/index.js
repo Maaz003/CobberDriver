@@ -35,6 +35,7 @@ const CurrentLocation = async props => {
     let granted = await statusLocationPermission();
 
     if (granted) {
+      console.log('GRANTED', granted);
       Geolocation.getCurrentPosition(
         position => {
           let lat = position.coords.latitude;
@@ -54,58 +55,81 @@ const CurrentLocation = async props => {
   }
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
-    await Geocoder.from(latitude, longitude)
+    console.log('GEOCODE');
+    return await Geocoder.from(latitude, longitude)
       .then(json => {
         let addressRaw = json.results[0].formatted_address;
         const address = addressRaw && stringTrim(addressRaw, 2);
+        actionCall(locationLoader(false));
         const loc = {
           address,
           latitude,
           longitude,
         };
-
-        let array = json.results[0].address_components;
-        let CountryLocality = array.find(item => {
-          return item.types.includes('country');
-        });
-        let StateLocality = array.find(item => {
-          return item.types.includes('administrative_area_level_1');
-        });
-        let CityLocality = array.find(item => {
-          return item.types.includes('administrative_area_level_2');
-        });
-
-        let coordinates = [latitude, longitude];
-        let city = CityLocality.long_name.substring(
-          0,
-          CityLocality.long_name.indexOf(' '),
-        );
-
-        let userLocation = {
-          coordinates,
-          country: CountryLocality.long_name,
-          countCode: CountryLocality.short_name,
-          state: StateLocality.long_name,
-          city,
-        };
-        actionCall(authLocationCoords(userLocation));
-        actionCall(confirmPickUp(loc));
-
-        if (flag) {
-          actionCall(locationLoader(false));
-        }
+        return loc;
       })
       .catch(error => {
         console.log('ERROR GEOCODE', error);
+        actionCall(locationLoader(false));
       });
   };
+
+  // const getAddressFromCoordinates = async (latitude, longitude) => {
+  //   await Geocoder.from(latitude, longitude)
+  //     .then(json => {
+  //       let addressRaw = json.results[0].formatted_address;
+  //       const address = addressRaw && stringTrim(addressRaw, 2);
+  //       const loc = {
+  //         address,
+  //         latitude,
+  //         longitude,
+  //       };
+
+  //       let array = json.results[0].address_components;
+  //       let CountryLocality = array.find(item => {
+  //         return item.types.includes('country');
+  //       });
+  //       let StateLocality = array.find(item => {
+  //         return item.types.includes('administrative_area_level_1');
+  //       });
+  //       let CityLocality = array.find(item => {
+  //         return item.types.includes('administrative_area_level_2');
+  //       });
+
+  //       let coordinates = [latitude, longitude];
+  //       let city = CityLocality.long_name.substring(
+  //         0,
+  //         CityLocality.long_name.indexOf(' '),
+  //       );
+
+  //       let userLocation = {
+  //         coordinates,
+  //         country: CountryLocality.long_name,
+  //         countCode: CountryLocality.short_name,
+  //         state: StateLocality.long_name,
+  //         city,
+  //       };
+  //       actionCall(authLocationCoords(userLocation));
+  //       actionCall(confirmPickUp(loc));
+  //       actionCall(locationLoader(false));
+
+  //       // if (flag) {
+  //       // }
+  //     })
+  //     .catch(error => {
+  //       console.log('ERROR GEOCODE', error);
+  //       actionCall(locationLoader(false));
+  //     });
+  // };
 };
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
+  console.log('GEOCODE');
   return await Geocoder.from(latitude, longitude)
     .then(json => {
       let addressRaw = json.results[0].formatted_address;
       const address = addressRaw && stringTrim(addressRaw, 2);
+      actionCall(locationLoader(false));
       const loc = {
         address,
         latitude,
@@ -115,6 +139,7 @@ export const getAddressFromCoordinates = async (latitude, longitude) => {
     })
     .catch(error => {
       console.log('ERROR GEOCODE', error);
+      actionCall(locationLoader(false));
     });
 };
 

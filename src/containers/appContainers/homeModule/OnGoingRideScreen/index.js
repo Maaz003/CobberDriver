@@ -13,9 +13,13 @@ function OnGoingRideScreen(props) {
   const {navigation} = props;
   const user = useSelector(state => state.user);
   const mapRef = useRef(null);
+  let coordinates = LocationCoordinates();
+  const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
+    coordinates;
   let rideType;
   let rideData;
   if (props.route.params === undefined) {
+    console.log('IF PARAMS UNDEFINED');
     rideType = user.rideSession.type;
     rideData = user.rideSession;
   } else {
@@ -24,9 +28,7 @@ function OnGoingRideScreen(props) {
     rideData = data;
   }
 
-  let coordinates = LocationCoordinates();
-  const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
-    coordinates;
+  console.log('rideType', rideData);
 
   const headerProps = {
     isHeader: true,
@@ -58,15 +60,13 @@ function OnGoingRideScreen(props) {
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>
-        {/* {user?.inRide === 'ended' ||
-          (user?.inRide === 'finished' && (
-            <MapHeader
-              onPress={onPress}
-              iconName={user.inRide ? 'close' : 'arrow-back'}
-              iconType={user.inRide ? 'Ionicons' : 'MaterialIcons'}
-              showLive={false}
-            />
-          ))} */}
+        <MapHeader
+          onPress={onPress}
+          iconName={user.inRide ? 'close' : 'arrow-back'}
+          iconType={user.inRide ? 'Ionicons' : 'MaterialIcons'}
+          showLive={true}
+          showDrawer={false}
+        />
 
         <Map
           mapViewStyles={R.styles.mapView}
