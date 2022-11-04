@@ -23,20 +23,11 @@ function HomeMap() {
     pickupLoc,
   } = coordinates;
 
-  console.log('PICKUP', coordinates, '--------', common?.firstAnimate);
-
-  // useEffect(() => {
-  //   animatePickup();
-  // }, [pickUpLat || pickUpLong]);
-
   useEffect(() => {
     if (pickupLoc !== undefined) {
-      // if (common?.firstAnimate === true) {
       if (!user?.locationLoader) {
         animatePickup();
-        // dispatch(firstTimeAnimate(false));
       }
-      // }
     }
   }, [pickupLoc, user.locationLoader]);
 

@@ -61,7 +61,6 @@ function LoginScreen(props) {
       });
       const response = await Post(loginURL, reqData);
       const user = response?.data;
-      console.log('USER DATA', user?.data?.user?.role);
       // setIsLoading(false);
       if (user !== undefined) {
         let roleArray = user?.data?.user?.role;
