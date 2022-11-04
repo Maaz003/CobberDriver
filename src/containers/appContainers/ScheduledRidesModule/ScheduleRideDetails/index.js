@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, ScrollView, Image, Linking} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {isInRide} from '@store/user/userSlice';
-import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
-import {useIsFocused} from '@react-navigation/native';
+import {View, StyleSheet, ScrollView, Image} from 'react-native';
+import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {rideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import MediaDisplay from '@components/view/screen/Home/Instant/MediaDisplay';
@@ -16,15 +15,11 @@ import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, WalletReqIcon} from '@components/utils/Svg';
-import moment from 'moment';
+import {openDirections} from '@components/utils/ReuseableFunctions';
 
 function ScheduleRideDetailsScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  const schedule = useSelector(state => state.schedule);
-  const common = useSelector(state => state.common);
-  const user = useSelector(state => state.user);
   const {type = undefined, data = undefined, screenType} = props.route.params;
   const {
     name,
@@ -33,7 +28,6 @@ function ScheduleRideDetailsScreen(props) {
     isScheduled,
     scheduledTime,
     location,
-    id,
     rideStatus,
     isCompleted,
   } = data;
@@ -61,42 +55,6 @@ function ScheduleRideDetailsScreen(props) {
     }
   }, []);
 
-  const openDirections = type => {
-    let latitude;
-    let longitude;
-    let label;
-
-    if (type === 'Pickup') {
-      latitude = String(location.pickUpLoc.latitude);
-      longitude = String(location.pickUpLoc.longitude);
-      label = location.pickUpLocation;
-    } else {
-      latitude = String(location.dropOffLoc.latitude);
-      longitude = String(location.dropOffLoc.latitude);
-      label = location.dropOffLocation;
-    }
-
-    const url = Platform.select({
-      ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
-      android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
-    });
-
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        return Linking.openURL(url);
-      } else {
-        const browser_url =
-          'https://www.google.de/maps/@' +
-          latitude +
-          ',' +
-          longitude +
-          '?q=' +
-          label;
-        return Linking.openURL(browser_url);
-      }
-    });
-  };
-
   const headerProps = {
     isMainHeader: true,
     isSubHeader: false,
@@ -110,8 +68,6 @@ function ScheduleRideDetailsScreen(props) {
   const openModal = () => {
     setIsModal(!isModal);
   };
-
-  console.log('========', rideStatus);
 
   const startScheduleRide = () => {
     let dataRide;
@@ -136,8 +92,7 @@ function ScheduleRideDetailsScreen(props) {
         inRide: 'ended',
       };
     }
-    // console.log(':', dataRide);
-    dispatch(isInRide(dataRide));
+    dispatch(rideSession(dataRide));
   };
 
   return (
@@ -225,7 +180,7 @@ function ScheduleRideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              New York
+              Morphettville
             </Text>
 
             <View style={styles.dot} />
@@ -235,7 +190,7 @@ function ScheduleRideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              USA
+              Austrailia
             </Text>
           </View>
 
@@ -350,7 +305,7 @@ function ScheduleRideDetailsScreen(props) {
           </Text>
           <HoverText
             text={'Get directions'}
-            onPress={() => openDirections('Pickup')}
+            onPress={() => openDirections('Pickup', location)}
           />
           <Text
             variant={'body2'}
@@ -374,7 +329,7 @@ function ScheduleRideDetailsScreen(props) {
           </Text>
           <HoverText
             text={'Get directions'}
-            onPress={() => openDirections('Dropoff')}
+            onPress={() => openDirections('Dropoff', location)}
           />
           <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
             {rideStatus === 'notstarted' && (

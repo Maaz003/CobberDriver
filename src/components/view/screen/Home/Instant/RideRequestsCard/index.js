@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Image} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import {
@@ -16,6 +16,8 @@ import moment from 'moment';
 function RideRequestsCard(props) {
   const {item, index, arr, screenType} = props;
 
+  const [disabled, setDisabled] = useState(false);
+
   const onNavigate = () => {
     navigationService.navigate(
       screenType === 'History' ? 'ScheduleRideDetails' : 'RideDetails',
@@ -25,6 +27,16 @@ function RideRequestsCard(props) {
       },
     );
   };
+
+  useEffect(() => {
+    if (screenType === 'Rides') {
+      if (item.isCancelled || item.isRejected) {
+        setDisabled(true);
+      } else {
+        setDisabled(false);
+      }
+    }
+  }, [item]);
 
   return (
     <View style={styles.notificationCard}>
@@ -140,7 +152,7 @@ function RideRequestsCard(props) {
         </Text>
         <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
           <Button
-            value={'Details'}
+            value={disabled ? 'Ride Not Present' : 'Details'}
             bgColor={R.color.mainColor}
             width={'90%'}
             size={'lg'}
@@ -148,7 +160,7 @@ function RideRequestsCard(props) {
             font={'PoppinsMedium'}
             color={R.color.charcoalShade2}
             borderColor={R.color.mainColor}
-            disabled={false}
+            disabled={disabled}
             loaderColor={R.color.white}
             borderWidth={1}
             borderRadius={10}

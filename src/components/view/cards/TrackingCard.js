@@ -9,7 +9,6 @@ import Icon from '@components/common/Icon';
 import DashLine from '@components/common/DashLine';
 import {MessageIcon} from '@components/utils/Svg';
 import Button from '@components/common/Button';
-import CancelRideModal from '../modal/CancelRideModal';
 
 function TrackingCard(props) {
   const {navigation} = props;
@@ -285,7 +284,6 @@ function TrackingCard(props) {
         loaderColor={'white'}
         borderWidth={2}
       />
-      <CancelRideModal isVisibleModal={isModal} {...props} />
     </View>
   );
 }

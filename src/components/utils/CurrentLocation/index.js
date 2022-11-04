@@ -35,7 +35,6 @@ const CurrentLocation = async props => {
     let granted = await statusLocationPermission();
 
     if (granted) {
-      console.log('GRANTED', granted);
       Geolocation.getCurrentPosition(
         position => {
           let lat = position.coords.latitude;
@@ -49,13 +48,11 @@ const CurrentLocation = async props => {
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 1000},
       );
     } else {
-      console.log('ESLE');
       actionCall(locationLoader(false));
     }
   }
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
-    console.log('GEOCODE');
     return await Geocoder.from(latitude, longitude)
       .then(json => {
         let addressRaw = json.results[0].formatted_address;
@@ -124,7 +121,6 @@ const CurrentLocation = async props => {
 };
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
-  console.log('GEOCODE');
   return await Geocoder.from(latitude, longitude)
     .then(json => {
       let addressRaw = json.results[0].formatted_address;

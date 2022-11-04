@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
@@ -7,6 +8,7 @@ import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 
 function RideRequestsScreen(props) {
   const {navigation} = props;
+  const isFocused = useIsFocused();
   const {data, screenType = 'Rides'} = props.route.params;
   const [filteredArray, setFilteredArray] = useState(data);
 
@@ -18,7 +20,7 @@ function RideRequestsScreen(props) {
         setFilteredArray([]);
       }
     }
-  }, [data]);
+  }, [data, isFocused]);
 
   const onRemove = id => {
     let updatedArr = filteredArray.filter(item => item.id !== id);

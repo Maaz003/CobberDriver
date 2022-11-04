@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useSelector} from 'react-redux';
 import Text from '../../common/Text';
 import {moderateScale} from 'react-native-size-matters';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -11,6 +12,8 @@ const width = Dimensions.get('window').width;
 
 function SubHeaderComponent(props) {
   const {navigation, headerProps} = props;
+
+  const user = useSelector(state => state.user);
 
   const {
     mainHeading,
@@ -31,14 +34,17 @@ function SubHeaderComponent(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={toggleDrawer} style={{padding: 5}}>
-        <Icon
-          name={isBack || isCustomBack ? 'arrow-back-outline' : 'menu'}
-          type={'Ionicons'}
-          color={R.color.black}
-          size={25}
-        />
-      </TouchableOpacity>
+      {user?.inRide !== 'scheduleEnded' && (
+        <TouchableOpacity onPress={toggleDrawer} style={{padding: 5}}>
+          <Icon
+            name={isBack || isCustomBack ? 'arrow-back-outline' : 'menu'}
+            type={'Ionicons'}
+            color={R.color.black}
+            size={25}
+          />
+        </TouchableOpacity>
+      )}
+
       <View
         style={{
           flex: 1,

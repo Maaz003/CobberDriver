@@ -25,7 +25,6 @@ function HomeScreen(props) {
 
   useEffect(() => {
     if (!user?.pickupLoc) {
-      console.log('HOME CL');
       CurrentLocation({actionCall: dispatch, flag: true});
     }
   }, []);

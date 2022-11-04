@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, ScrollView, Image, Linking} from 'react-native';
+import {View, StyleSheet, ScrollView, Image} from 'react-native';
+import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
-import {isInRide} from '@store/user/userSlice';
+import {rideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
@@ -17,7 +18,7 @@ import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import {tempRidesSet} from '@store/common/commonSlice';
 import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, WalletReqIcon} from '@components/utils/Svg';
-import moment from 'moment';
+import {openDirections} from '@components/utils/ReuseableFunctions';
 
 function RideDetailsScreen(props) {
   const {navigation} = props;
@@ -34,6 +35,9 @@ function RideDetailsScreen(props) {
     scheduledTime,
     location,
     cost,
+    isCompleted,
+    isCancelled,
+    isRejected,
   } = data;
   const [isModal, setIsModal] = useState(false);
   const [isRideAccepted, setIsRideAccepted] = useState(false);
@@ -49,42 +53,6 @@ function RideDetailsScreen(props) {
     }
   }, [isFocused]);
 
-  const openDirections = type => {
-    let latitude;
-    let longitude;
-    let label;
-
-    if (type === 'Pickup') {
-      latitude = String(location.pickUpLoc.latitude);
-      longitude = String(location.pickUpLoc.longitude);
-      label = location.pickUpLocation;
-    } else {
-      latitude = String(location.dropOffLoc.latitude);
-      longitude = String(location.dropOffLoc.latitude);
-      label = location.dropOffLocation;
-    }
-
-    const url = Platform.select({
-      ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
-      android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
-    });
-
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        return Linking.openURL(url);
-      } else {
-        const browser_url =
-          'https://www.google.de/maps/@' +
-          latitude +
-          ',' +
-          longitude +
-          '?q=' +
-          label;
-        return Linking.openURL(browser_url);
-      }
-    });
-  };
-
   const headerProps = {
     isMainHeader: true,
     isSubHeader: false,
@@ -99,35 +67,40 @@ function RideDetailsScreen(props) {
     setIsModal(!isModal);
   };
 
-  const removeRequest = () => {
+  const rejectRide = async () => {
     if (isScheduled) {
       let tempArr = JSON.parse(JSON.stringify(common.tempRides));
-      let index = tempArr.findIndex(item => item.requestedRides);
-      let requestedRides = tempArr[index];
-      let updatedRides = requestedRides?.requestedRides.filter(
-        item => item.id !== data.id,
-      );
-
-      if (updatedRides.length > 0) {
-        tempArr[index].requestedRides = updatedRides;
-        dispatch(tempRidesSet(tempArr));
-        navigation.navigate('RideRequests', {
-          data: updatedRides,
-        });
-      } else {
-        tempArr = [common.tempRides[0]];
-        navigation.navigate('RideRequests', {
-          data: [],
-        });
-        dispatch(tempRidesSet(tempArr));
-      }
-    } else {
-      let tempArr = common?.tempRides?.filter(item => item.id !== data.id);
+      let obj = tempArr.find(item => item.requestedRides);
+      obj.requestedRides.find(item => item.id === data.id).isRejected = true;
       dispatch(tempRidesSet(tempArr));
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Home'}],
+      navigation.navigate('RideRequests', {
+        data: obj.requestedRides,
       });
+
+      // let requestedRides = tempArr[index];
+      // let updatedRides = requestedRides?.requestedRides.filter(
+      //   item => item.id !== data.id,
+      // );
+
+      // if (updatedRides.length > 0) {
+      //   tempArr[index].requestedRides = updatedRides;
+      //   dispatch(tempRidesSet(tempArr));
+      //   navigation.navigate('RideRequests', {
+      //     data: updatedRides,
+      //   });
+      // } else {
+      //   tempArr = [common.tempRides[0]];
+      //   navigation.navigate('RideRequests', {
+      //     data: [],
+      //   });
+      //   dispatch(tempRidesSet(tempArr));
+      // }
+    } else {
+      let tempArr = JSON.parse(JSON.stringify(common.tempRides));
+      let objFound = tempArr.find(item => item.id === data.id);
+      objFound.isRejected = true;
+      await dispatch(tempRidesSet(tempArr));
+      navigation.navigate('Home');
     }
   };
 
@@ -149,7 +122,7 @@ function RideDetailsScreen(props) {
       });
     } else {
       const dataRide = {data: {...data, type: type}, inRide: 'accepted'};
-      dispatch(isInRide(dataRide));
+      dispatch(rideSession(dataRide));
       navigation.navigate('OnGoingRide', {
         type: 'instant',
         data: data,
@@ -387,7 +360,7 @@ function RideDetailsScreen(props) {
 
           <HoverText
             text={'Get directions'}
-            onPress={() => openDirections('Pickup')}
+            onPress={() => openDirections('Pickup', location)}
           />
 
           <Text
@@ -414,32 +387,34 @@ function RideDetailsScreen(props) {
 
           <HoverText
             text={'Get directions'}
-            onPress={() => openDirections('Dropoff')}
+            onPress={() => openDirections('Dropoff', location)}
           />
 
           <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
             {isRideAccepted ? (
               <>
-                <Button
-                  bgColor={R.color.white}
-                  width={'16%'}
-                  size={'lg'}
-                  color={R.color.white}
-                  borderColor={R.color.gray}
-                  disabled={false}
-                  loaderColor={R.color.white}
-                  borderWidth={0.5}
-                  borderRadius={10}
-                  iconName={'close'}
-                  iconType={'Ionicons'}
-                  iconColor={R.color.blackShade2}
-                  onPress={openModal}
-                  rippleColor={R.color.gray}
-                />
+                {!isRideAccepted && (
+                  <Button
+                    bgColor={R.color.white}
+                    width={'16%'}
+                    size={'lg'}
+                    color={R.color.white}
+                    borderColor={R.color.gray}
+                    disabled={false}
+                    loaderColor={R.color.white}
+                    borderWidth={0.5}
+                    borderRadius={10}
+                    iconName={'close'}
+                    iconType={'Ionicons'}
+                    iconColor={R.color.blackShade2}
+                    onPress={openModal}
+                    rippleColor={R.color.gray}
+                  />
+                )}
 
                 <Button
                   bgColor={R.color.mainColor}
-                  width={'82%'}
+                  width={!isRideAccepted ? '82%' : '100%'}
                   size={'lg'}
                   color={R.color.white}
                   borderColor={R.color.mainColor}
@@ -458,7 +433,7 @@ function RideDetailsScreen(props) {
                 />
               </>
             ) : (
-              <>
+              <View style={R.styles.rowView}>
                 <Button
                   bgColor={R.color.white}
                   width={'16%'}
@@ -473,12 +448,12 @@ function RideDetailsScreen(props) {
                   iconType={'Ionicons'}
                   iconColor={R.color.blackShade3}
                   rippleColor={R.color.gray}
-                  onPress={removeRequest}
+                  onPress={rejectRide}
                 />
                 <Button
                   value={'Accept'}
                   bgColor={R.color.mainColor}
-                  width={'82%'}
+                  width={isRideAccepted ? '100%' : '82%'}
                   size={'lg'}
                   variant={'body2'}
                   font={'PoppinsMedium'}
@@ -490,11 +465,12 @@ function RideDetailsScreen(props) {
                   borderRadius={10}
                   onPress={acceptRide}
                 />
-              </>
+              </View>
             )}
           </View>
         </View>
       </ScrollView>
+
       <CancelBookingModal
         isVisibleModal={isModal}
         isScheduled={isScheduled}

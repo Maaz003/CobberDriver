@@ -7,9 +7,6 @@ import navigationService from '@navigation/navigationService';
 
 function ScheduleCard(props) {
   const {item, rideDay} = props;
-
-  console.log('SCHEDULE CARD', item);
-
   return (
     <Pressable
       style={({pressed}) => [

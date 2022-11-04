@@ -19,7 +19,6 @@ function OnGoingRideScreen(props) {
   let rideType;
   let rideData;
   if (props.route.params === undefined) {
-    console.log('IF PARAMS UNDEFINED');
     rideType = user.rideSession.type;
     rideData = user.rideSession;
   } else {
@@ -27,8 +26,6 @@ function OnGoingRideScreen(props) {
     rideType = type;
     rideData = data;
   }
-
-  console.log('rideType', rideData);
 
   const headerProps = {
     isHeader: true,

@@ -106,26 +106,23 @@ export const firstTimeAnimate = createAsyncThunk(
   },
 );
 
-export const tempRidesSet = createAsyncThunk(
-  'common/tempRidesSet',
-  async data => {
-    try {
-      return {
-        status: 'success',
-        error: false,
-        message: 'Success! You are logged out!',
-        location: data,
-      };
-    } catch (error) {
-      return {
-        status: 'failed',
-        error: true,
-        message: 'Oops! Something went wrong!',
-        location: false,
-      };
-    }
-  },
-);
+export const tempRidesSet = createAsyncThunk('common/tempRidesSet', data => {
+  try {
+    return {
+      status: 'success',
+      error: false,
+      message: 'Success! You are logged out!',
+      location: data,
+    };
+  } catch (error) {
+    return {
+      status: 'failed',
+      error: true,
+      message: 'Oops! Something went wrong!',
+      location: false,
+    };
+  }
+});
 
 export const firstTimeReduxSet = createAsyncThunk(
   'common/firstTimeReduxSet',

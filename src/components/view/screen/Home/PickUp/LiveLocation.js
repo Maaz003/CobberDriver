@@ -16,7 +16,6 @@ function LiveLocation(props) {
 
   const checkLocationAccess = async () => {
     if (Platform.OS === 'android') {
-      console.log('LICE CL');
       let granted = await statusLocationPermission();
       if (granted) {
         dispatch(locationLoader(true));

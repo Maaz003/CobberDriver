@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {isInRide} from '@store/user/userSlice';
+import {rideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
@@ -14,8 +14,6 @@ function ScheduleRideRequestsScreen(props) {
   const dispatch = useDispatch();
   const [filteredArray, setFilteredArray] = useState(data);
   const [showEndButton, setShowEndButton] = useState(false);
-
-  console.log('PEHLA DATA', data);
 
   useEffect(() => {
     if (data) {
@@ -50,7 +48,7 @@ function ScheduleRideRequestsScreen(props) {
 
   const finishRide = () => {
     const dataRide = {data: undefined, inRide: 'finished'};
-    dispatch(isInRide(dataRide));
+    dispatch(rideSession(dataRide));
   };
 
   return (

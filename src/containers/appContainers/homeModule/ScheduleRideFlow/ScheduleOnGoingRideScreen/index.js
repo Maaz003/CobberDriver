@@ -18,7 +18,6 @@ function ScheduleOnGoingRideScreen(props) {
 
   const onPress = () => {
     if (user?.inRide) {
-      console.log('Cancel');
     } else {
       navigation.goBack();
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {isInRide} from '@store/user/userSlice';
+import {rideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {tempRidesSet} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
@@ -15,6 +15,7 @@ function RideCompletedBox(props) {
   const user = useSelector(state => state.user);
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
+
   const rideComplete = () => {
     if (user?.rideSession?.type === 'schedule') {
       let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
@@ -37,10 +38,16 @@ function RideCompletedBox(props) {
         inRide: flag ? 'finished' : 'scheduleEnded',
       };
       dispatch(scheduledRides(tempArr));
-      dispatch(isInRide(dataRide));
+      dispatch(rideSession(dataRide));
     } else {
+      let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
+      let objFound = commonTemparr.find(
+        item => item.id === user?.rideSession?.id,
+      );
+      objFound.isCompleted = true;
+      dispatch(tempRidesSet(commonTemparr));
       const dataRide = {data: undefined, inRide: 'finished'};
-      dispatch(isInRide(dataRide));
+      dispatch(rideSession(dataRide));
     }
   };
 

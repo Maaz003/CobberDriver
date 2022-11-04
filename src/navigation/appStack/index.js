@@ -39,6 +39,7 @@ const AppStack = () => {
           drawerPosition="left"
           screenOptions={{
             headerShown: false,
+            swipeEnabled: user?.inRide === 'scheduleEnded' ? false : true,
           }}
           drawerStyle={{
             backgroundColor: 'black',
@@ -93,13 +94,6 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}
-        // initialRouteName={
-        //   user?.inRide === 'started' || user?.inRide === 'accepted'
-        //     ? 'OnGoingRide'
-        //     : user?.inRide === 'ended'
-        //     ? 'RideCompleted'
-        //     : 'Home'
-        // }
         initialRouteName={initalRoute()}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen

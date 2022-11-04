@@ -2,14 +2,13 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  Dimensions,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import Text from '@components/common/Text';
 import {imageUrl} from '@config/apiUrl';
-import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
@@ -27,7 +26,6 @@ import {
 } from '@components/utils/Svg';
 import LogOutModal from '@components/view/modal/LogOutModal';
 
-const height = Dimensions.get('window').height;
 const originalWidth = 465;
 const originalHeight = 140;
 const aspectRatio = originalWidth / originalHeight;
@@ -48,17 +46,19 @@ const CustomDrawer = props => {
   };
 
   const switchScreen = data => {
-    if (data?.id === 7) {
+    if (data?.id === 8) {
       logOutFunction();
     } else if (data?.id === 1) {
       navigation.reset({
         index: 0,
         routes: [{name: 'HomeScreen'}],
       });
+      navigation.closeDrawer();
     } else if (data.id === 2) {
       navigation.navigate('Payment', {
         type: 'home',
       });
+      navigation.closeDrawer();
     } else {
       navigation.navigate(data?.route);
       navigation.closeDrawer();
@@ -253,7 +253,7 @@ export default CustomDrawer;
 
 const styles = StyleSheet.create({
   container: {
-    height: height,
+    height: R.unit.height(1),
     backgroundColor: R.color.blackShade2,
   },
   headerView: {

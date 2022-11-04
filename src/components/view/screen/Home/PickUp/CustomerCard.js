@@ -5,18 +5,43 @@ import Text from '@components/common/Text';
 import LocationPoint from '@components/view/cards/LocationPoint';
 import Button from '@components/common/Button';
 import navigationService from '../../../../../navigation/navigationService';
+import {useIsFocused} from '@react-navigation/native';
 
 function CustomerCard(props) {
   const {item} = props;
+  const isFocused = useIsFocused();
   const [rideData, setRideData] = useState(undefined);
+  const [showControls, setShowControls] = useState(true);
+  const [allCompleted, setAllCompleted] = useState(false);
 
-  console.log('first');
+  useEffect(() => {
+    if (!item.isScheduled) {
+      if (item.isRejected || item.isCancelled || item.isCompleted) {
+        setShowControls(false);
+      } else {
+        setShowControls(true);
+      }
+    }
+    if (item.requestedRides) {
+      let flag = item?.requestedRides.every(
+        item => item.isRejected || item.isCompleted,
+      );
+      let allCompleted = item?.requestedRides.every(item => item.isCompleted);
+      if (flag) {
+        setShowControls(false);
+        if (allCompleted) {
+          setAllCompleted(true);
+        }
+      } else {
+        setShowControls(true);
+      }
+    }
+  }, [isFocused, item]);
 
   useEffect(() => {
     if (item.requestedRides) {
       setRideData(item.requestedRides[0]);
     } else {
-      console.log('false');
       setRideData(item);
     }
   }, [item]);
@@ -33,8 +58,6 @@ function CustomerCard(props) {
       });
     }
   };
-
-  console.log('ITEM', rideData);
 
   return (
     <View style={styles.mainLayout}>
@@ -77,6 +100,34 @@ function CustomerCard(props) {
                 </Text>
               </View>
             )}
+
+            {!showControls && (
+              <View
+                style={{
+                  ...styles.tag,
+                  backgroundColor:
+                    item.isCompleted || allCompleted
+                      ? R.color.mainColor
+                      : R.color.cancelColor,
+                }}>
+                <Text
+                  variant={'body4'}
+                  font={'InterMedium'}
+                  color={
+                    item.isCompleted || allCompleted
+                      ? R.color.blackShade2
+                      : R.color.white
+                  }
+                  align={'left'}
+                  transform={'none'}>
+                  {item.isCompleted || allCompleted
+                    ? 'Completed'
+                    : item.isRejected
+                    ? 'Rejected'
+                    : 'Cancelled'}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -86,20 +137,22 @@ function CustomerCard(props) {
         scheduledTime={rideData?.scheduledTime}
       />
 
-      <Button
-        value="Details"
-        bgColor={R.color.mainColor}
-        width={'100%'}
-        size={'lg'}
-        variant={'body2'}
-        font={'PoppinsMedium'}
-        color={R.color.charcoalShade2}
-        borderRadius={10}
-        gutterTop={10}
-        borderColor={R.color.mainColor}
-        onPress={acceptRide}
-        rippleColor={R.color.gray5}
-      />
+      {showControls && (
+        <Button
+          value="Details"
+          bgColor={R.color.mainColor}
+          width={'100%'}
+          size={'lg'}
+          variant={'body2'}
+          font={'PoppinsMedium'}
+          color={R.color.charcoalShade2}
+          borderRadius={10}
+          gutterTop={10}
+          borderColor={R.color.mainColor}
+          onPress={acceptRide}
+          rippleColor={R.color.gray5}
+        />
+      )}
     </View>
   );
 }

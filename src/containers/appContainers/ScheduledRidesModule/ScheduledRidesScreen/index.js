@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
-import {View, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  BackHandler,
+} from 'react-native';
 import Text from '@components/common/Text';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import R from '@components/utils/R';
 import {useSelector} from 'react-redux';
 import ScheduleCard from '@components/view/screen/ScheduledRide/ScheduleCard';
+import {useFocusEffect} from '@react-navigation/native';
 
 function ScheduledRidesScreen(props) {
   const {navigation} = props;
   const schedule = useSelector(state => state.schedule);
+  const user = useSelector(state => state.user);
   const [rides, setRides] = useState(new Array(schedule?.scheduledRides));
 
   const headerProps = {
@@ -16,6 +24,17 @@ function ScheduledRidesScreen(props) {
     mainHeading: 'Scheduled Rides',
   };
   const [tab, setTab] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => (user?.inRide === 'scheduleEnded' ? true : false),
+      );
+
+      return () => backHandler.remove();
+    }, [user?.inRide]),
+  );
 
   const tabContent = [
     {id: 0, name: 'Completed'},

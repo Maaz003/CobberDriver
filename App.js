@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import AppNavigator from './src/navigation/index';
 import 'react-native-gesture-handler';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -116,7 +108,6 @@ const App = () => {
 
     useEffect(() => {
       if (auth?.isAuth) {
-        console.log('APP CL');
         CurrentLocation({actionCall: dispatch});
       }
     }, []);
@@ -124,7 +115,8 @@ const App = () => {
     return (
       <>
         <AppNavigator />
-        {auth?.firstTimePop ? <Toast config={toastConfig} /> : null}
+        {/* {auth?.firstTimePop ? <Toast config={toastConfig} /> : null} */}
+        {true ? <Toast config={toastConfig} /> : null}
       </>
     );
   };

@@ -18,7 +18,6 @@ function History(props) {
   const {navigation} = props;
 
   const schedule = useSelector(state => state.schedule);
-  console.log('schedule', schedule?.scheduledRides);
 
   const headerProps = {
     isSubHeader: true,

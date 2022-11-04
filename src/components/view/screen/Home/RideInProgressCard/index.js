@@ -10,13 +10,13 @@ import {
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
+import {rideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
-import {isInRide} from '@store/user/userSlice';
 
 function RideInProgressCard(props) {
   const {type = undefined, data = undefined, navigation} = props;
@@ -26,12 +26,7 @@ function RideInProgressCard(props) {
   const schedule = useSelector(state => state.schedule);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
-  // const [isRideStarted, setIsRideStarted] = useState(
-  //   user?.inRide === 'started' ? true : false,
-  // );
   const [isRideStarted, setIsRideStarted] = useState(false);
-
-  console.log('DATA', data.type);
 
   useEffect(() => {
     if (data) {
@@ -85,49 +80,37 @@ function RideInProgressCard(props) {
           data: {...data, rideStatus: 'pickupstarted', type: type},
           inRide: 'started',
         };
-
-        dispatch(isInRide(dataRide));
+        dispatch(rideSession(dataRide));
       } else {
         const dataRide = {data: {...data, type: type}, inRide: 'ended'};
-        dispatch(isInRide(dataRide));
+        dispatch(rideSession(dataRide));
         navigation.reset({
           index: 0,
           routes: [{name: 'RideCompleted'}],
         });
       }
     } else {
-      if (!isRideStarted) {
-        if (data.rideStatus === 'pickupstarted') {
-          const dataRide = {
-            data: {...data, rideStatus: 'pickupended', type: type},
-            inRide: 'scheduleEnded',
-          };
-          updateRideStatus('pickupended');
-
-          console.log('YARR BHAE HOJA', dataRide);
-          await dispatch(isInRide(dataRide));
-        } else if (data.rideStatus === 'pickupended') {
-          const dataRide = {
-            data: {...data, rideStatus: 'dropoffstarted', type: type},
-            inRide: 'scheduleEnded',
-          };
-          updateRideStatus('dropoffstarted');
-          await dispatch(isInRide(dataRide));
-        } else if (data.rideStatus === 'dropoffstarted') {
-          const dataRide = {
-            data: {...data, rideStatus: 'dropoffended', type: type},
-            inRide: 'scheduleEnded',
-          };
-          updateRideStatus('dropoffended');
-          await dispatch(isInRide(dataRide));
-        }
-      } else {
-        const dataRide = {data: {...data, type: type}, inRide: 'scheduleEnded'};
-        let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
-        let obj = tempArr?.find(item => item.id === data.id);
-        obj.rideStatus = 'ended';
-        dispatch(scheduledRides(tempArr));
-        dispatch(isInRide(dataRide));
+      if (data.rideStatus === 'pickupstarted') {
+        const dataRide = {
+          data: {...data, rideStatus: 'pickupended', type: type},
+          inRide: 'scheduleEnded',
+        };
+        updateRideStatus('pickupended');
+        await dispatch(rideSession(dataRide));
+      } else if (data.rideStatus === 'pickupended') {
+        const dataRide = {
+          data: {...data, rideStatus: 'dropoffstarted', type: type},
+          inRide: 'scheduleEnded',
+        };
+        updateRideStatus('dropoffstarted');
+        await dispatch(rideSession(dataRide));
+      } else if (data.rideStatus === 'dropoffstarted') {
+        const dataRide = {
+          data: {...data, rideStatus: 'dropoffended', type: type},
+          inRide: 'ended',
+        };
+        updateRideStatus('dropoffended');
+        await dispatch(rideSession(dataRide));
       }
     }
   };
@@ -256,7 +239,12 @@ function RideInProgressCard(props) {
           />
         )}
       </View>
-      <CancelBookingModal isVisibleModal={isModal} title={'Ride'} />
+      <CancelBookingModal
+        isVisibleModal={isModal}
+        title={'Ride'}
+        itemId={data?.id}
+        isScheduled={data?.isScheduled}
+      />
     </View>
   );
 }

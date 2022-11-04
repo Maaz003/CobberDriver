@@ -58,9 +58,7 @@ function OTPVerifyScreen(props) {
     setIsLoading(false);
   };
 
-  const resendOtp = () => {
-    // console.log('RESEND OTP');
-  };
+  const resendOtp = () => {};
 
   const onPress = () => {
     navigation.goBack();

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {Linking, Platform} from 'react-native';
 
 export function stringTrim(value, index = 2) {
   if (value !== undefined) {
@@ -6,8 +7,6 @@ export function stringTrim(value, index = 2) {
     const firstTwo = parts.slice(0, index);
     const result = firstTwo.join(',');
     return result;
-  } else {
-    // console.log('UNDEFINED TRIM');
   }
 }
 
@@ -53,8 +52,45 @@ export const calculateDelta = points => {
   };
 };
 
+export const openDirections = (type, location) => {
+  let latitude;
+  let longitude;
+  let label;
+
+  if (type === 'Pickup') {
+    latitude = String(location.pickUpLoc.latitude);
+    longitude = String(location.pickUpLoc.longitude);
+    label = location.pickUpLocation;
+  } else {
+    latitude = String(location.dropOffLoc.latitude);
+    longitude = String(location.dropOffLoc.latitude);
+    label = location.dropOffLocation;
+  }
+
+  const url = Platform.select({
+    ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
+    android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
+  });
+
+  Linking.canOpenURL(url).then(supported => {
+    if (supported) {
+      return Linking.openURL(url);
+    } else {
+      const browser_url =
+        'https://www.google.de/maps/@' +
+        latitude +
+        ',' +
+        longitude +
+        '?q=' +
+        label;
+      return Linking.openURL(browser_url);
+    }
+  });
+};
+
 export default {
   stringTrim,
   timeFormatSchedule,
   calculateDelta,
+  openDirections,
 };
