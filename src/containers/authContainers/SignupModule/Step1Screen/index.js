@@ -55,15 +55,6 @@ function Step1Screen(props) {
     CurrentLocation({actionCall: dispatch});
   }, []);
 
-  // const getLatLong = async () => {
-  //   return Geocoder.from(authUser?.country)
-  //     .then(json => {
-  //       var location = json.results[0].geometry.location;
-  //       return location;
-  //     })
-  //     .catch(error => console.warn(error));
-  // };
-
   const uploadImage = async () => {
     try {
       let pickerResult;
@@ -219,8 +210,8 @@ function Step1Screen(props) {
         <View style={styles.formView}>
           <Text
             variant={'h5'}
-            font={'bold'}
-            gutterBottom={R.unit.scale(5)}
+            font={'Sequel451'}
+            gutterBottom={5}
             color={R.color.white}
             align={'left'}
             transform={'none'}>
@@ -228,16 +219,16 @@ function Step1Screen(props) {
           </Text>
           <Text
             variant={'largeTitle'}
-            font={'bold'}
-            gutterBottom={R.unit.scale(10)}
-            color={R.color.white}
+            font={'Sequel451'}
+            gutterBottom={10}
+            color={R.color.mainColor}
             align={'left'}
             transform={'none'}>
             Driver Account
           </Text>
           <Text
             variant={'body2'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             gutterBottom={R.unit.scale(25)}
             color={R.color.white}
             align={'left'}

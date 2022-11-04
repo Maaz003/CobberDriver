@@ -23,6 +23,8 @@ function HomeScreen(props) {
     isSubHeader: false,
   };
 
+  console.log('USEr', user?.pickupLoc);
+
   useEffect(() => {
     if (!user?.pickupLoc) {
       CurrentLocation({actionCall: dispatch, flag: true});

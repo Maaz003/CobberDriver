@@ -14,12 +14,12 @@ function PickUpMarker(props) {
   return (
     <Marker
       coordinate={{
-        latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : 30.0002,
+        latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : 34.9884,
         longitude: pickUpLong
           ? pickUpLong
           : initialLong
           ? initialLong
-          : 136.2092,
+          : 138.5397,
       }}
       tracksViewChanges={false}
       title={'User'}>

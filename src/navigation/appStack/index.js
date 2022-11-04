@@ -40,6 +40,7 @@ const AppStack = () => {
           screenOptions={{
             headerShown: false,
             swipeEnabled: user?.inRide === 'scheduleEnded' ? false : true,
+            drawerType: 'slide',
           }}
           drawerStyle={{
             backgroundColor: 'black',
@@ -67,24 +68,12 @@ const AppStack = () => {
   };
 
   const initalRoute = () => {
-    if (user?.rideSession?.isScheduled) {
-      if (user?.inRide === 'started' || user?.inRide === 'accepted') {
-        return 'OnGoingRide';
-      } else if (user?.inRide === 'ended') {
-        return 'RideCompleted';
-      } else {
-        return 'Home';
-      }
-    }
-    //FOR INSTANT RIDES
-    else {
-      if (user?.inRide === 'started' || user?.inRide === 'accepted') {
-        return 'OnGoingRide';
-      } else if (user?.inRide === 'ended') {
-        return 'RideCompleted';
-      } else {
-        return 'Home';
-      }
+    if (user?.inRide === 'started' || user?.inRide === 'accepted') {
+      return 'OnGoingRide';
+    } else if (user?.inRide === 'ended') {
+      return 'RideCompleted';
+    } else {
+      return 'Home';
     }
   };
 

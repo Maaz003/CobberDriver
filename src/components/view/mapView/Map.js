@@ -35,12 +35,12 @@ function Map(props) {
         loadingIndicatorColor={loadingIndicatorColor}
         loadingBackgroundColor={loadingBackgroundColor}
         initialRegion={{
-          latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : 30.0002,
+          latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : -34.9884,
           longitude: pickUpLong
             ? pickUpLong
             : initialLong
             ? initialLong
-            : 136.2092,
+            : 138.5397,
           latitudeDelta: 0.922,
           longitudeDelta: 0.922,
         }}>

@@ -61,9 +61,11 @@ function LoginScreen(props) {
       });
       const response = await Post(loginURL, reqData);
       const user = response?.data;
+      console.log('USER DATA', user?.data?.user?.role);
+      // setIsLoading(false);
       if (user !== undefined) {
         let roleArray = user?.data?.user?.role;
-        let role = roleArray?.includes('customer');
+        let role = roleArray?.includes('driver');
         if (role) {
           PopUp({
             heading: 'Logged In Successfully',
@@ -100,22 +102,23 @@ function LoginScreen(props) {
       <View style={styles.formView}>
         <Text
           variant={'h1'}
-          font={'bold'}
-          gutterBottom={R.unit.scale(5)}
+          font={'Sequel551'}
+          gutterBottom={5}
           color={R.color.white}
           style={{width: '100%'}}
           align={'left'}
           transform={'none'}>
           Welcome to{' '}
           <Text color={R.color.mainColor} transform={'none'}>
-            {'\n'}Cobber{' '}
+            Cobber{' '}
           </Text>
           {'\n'}Driver App
         </Text>
         <Text
-          variant={'body3'}
-          font={'bold'}
-          gutterBottom={R.unit.scale(25)}
+          variant={'body2'}
+          font={'PoppinsMedium'}
+          gutterTop={20}
+          gutterBottom={25}
           color={R.color.white}
           align={'left'}
           style={{width: '100%'}}
@@ -158,7 +161,7 @@ function LoginScreen(props) {
           width={'100%'}
           size={'lg'}
           variant={'h6'}
-          font={'bold'}
+          font={'PoppinsMedium'}
           color={'black'}
           borderRadius={100}
           borderColor={R.color.mainColor}
@@ -172,7 +175,7 @@ function LoginScreen(props) {
         <View style={styles.forgetPassView}>
           <Text
             variant={'body2'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             gutterTop={R.unit.scale(10)}
             color={R.color.white}
             align={'right'}
@@ -195,7 +198,7 @@ function LoginScreen(props) {
           }}>
           <Text
             variant={'body2'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             color={R.color.white}
             align={'center'}
             transform={'none'}>
@@ -203,7 +206,7 @@ function LoginScreen(props) {
           </Text>
           <Text
             variant={'body2'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             color={R.color.mainColor}
             align={'center'}
             style={{

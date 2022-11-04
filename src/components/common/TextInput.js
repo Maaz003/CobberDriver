@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: R.unit.scale(8, 0.6),
     paddingRight: R.unit.scale(32, 0.6),
     fontSize: R.unit.scale(14, 0.3),
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'Inter-Regular',
     textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
 });

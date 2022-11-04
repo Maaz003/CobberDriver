@@ -35,9 +35,6 @@ function RideDetailsScreen(props) {
     scheduledTime,
     location,
     cost,
-    isCompleted,
-    isCancelled,
-    isRejected,
   } = data;
   const [isModal, setIsModal] = useState(false);
   const [isRideAccepted, setIsRideAccepted] = useState(false);

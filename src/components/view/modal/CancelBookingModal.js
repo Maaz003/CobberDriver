@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {tempRidesSet} from '@store/common/commonSlice';
 import {reportData} from '@components/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {rideSession} from '@store/user/userSlice';
@@ -17,8 +19,6 @@ import Icon from '@components/common/Icon';
 import Button from '@components/common/Button';
 import TextInput from '@components/common/TextInput';
 import CheckBoxLine from '@components/common/CheckBoxLine';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {tempRidesSet} from '@store/common/commonSlice';
 
 function CancelBookingModal(props) {
   const {title = 'Booking', isScheduled, itemId, cancellationComplete} = props;
@@ -86,7 +86,7 @@ function CancelBookingModal(props) {
       <Modal
         animationType={'slide'}
         transparent={true}
-        // visible={true}/
+        // visible={true}
         visible={modalVisible}
         onRequestClose={() => setIsBlur(false)}
         onShow={() => {
@@ -226,9 +226,9 @@ function CancelBookingModal(props) {
                     bgColor={R.color.white}
                     width={'30%'}
                     size={'lg'}
-                    variant={'body3'}
-                    font={'InterMedium'}
-                    color={R.color.black}
+                    variant={'body2'}
+                    font={'PoppinsMedium'}
+                    color={R.color.blackShade2}
                     disabled={false}
                     loaderColor={R.color.white}
                     rippleColor={R.color.white}
@@ -241,9 +241,9 @@ function CancelBookingModal(props) {
                     bgColor={R.color.mainColor}
                     width={'40%'}
                     size={'lg'}
-                    variant={'body3'}
-                    font={'InterMedium'}
-                    color={R.color.white}
+                    variant={'body2'}
+                    font={'PoppinsMedium'}
+                    color={R.color.blackShade2}
                     borderColor={R.color.mainColor}
                     disabled={disabled}
                     borderRadius={10}

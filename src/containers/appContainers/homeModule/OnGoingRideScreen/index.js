@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import R from '@components/utils/R';
@@ -14,6 +14,8 @@ function OnGoingRideScreen(props) {
   const user = useSelector(state => state.user);
   const mapRef = useRef(null);
   let coordinates = LocationCoordinates();
+  const [origin, setOrigin] = useState(undefined);
+  const [destination, setDestination] = useState(undefined);
   const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
     coordinates;
   let rideType;
@@ -26,6 +28,18 @@ function OnGoingRideScreen(props) {
     rideType = type;
     rideData = data;
   }
+
+  // if()
+
+  // let origin = {
+  //   latitude: location.pickUpLoc.latitude,
+  //   longitude: location.pickUpLoc.longitude,
+  // };
+
+  // let destination = {
+  //   latitude: location.dropOffLoc.latitude,
+  //   longitude: location.dropOffLoc.longitude,
+  // };
 
   const headerProps = {
     isHeader: true,

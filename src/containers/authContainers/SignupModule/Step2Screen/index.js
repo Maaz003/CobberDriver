@@ -31,9 +31,9 @@ function Step2Screen(props) {
   });
 
   const onSubmit = async () => {
-    // navigation.navigate('Step3', {
-    //   step2Data: {},
-    // });
+    navigation.navigate('Step3', {
+      step2Data: {},
+    });
     const reqData = {
       license: authUser?.license,
       nic: authUser?.nic,
@@ -101,7 +101,7 @@ function Step2Screen(props) {
         <View style={styles.formView}>
           <Text
             variant={'h2'}
-            font={'bold'}
+            font={'Sequel451'}
             gutterBottom={30}
             color={R.color.white}
             align={'left'}

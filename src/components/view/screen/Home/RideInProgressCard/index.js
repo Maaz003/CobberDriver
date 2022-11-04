@@ -28,6 +28,8 @@ function RideInProgressCard(props) {
   const [isModal, setIsModal] = useState(false);
   const [isRideStarted, setIsRideStarted] = useState(false);
 
+  console.log('USER', user?.rideSession);
+
   useEffect(() => {
     if (data) {
       if (data.type === 'schedule') {
@@ -73,7 +75,7 @@ function RideInProgressCard(props) {
   };
 
   const onSubmit = async () => {
-    setIsRideStarted(!isRideStarted);
+    // setIsRideStarted(!isRideStarted);
     if (type === 'instant') {
       if (data.rideStatus === 'notstarted') {
         const dataRide = {
@@ -168,7 +170,7 @@ function RideInProgressCard(props) {
         </View>
         <Divider lineStyles={styles.dividerStyles} />
         <View style={{...R.styles.rowView}}>
-          {!isRideStarted ? (
+          {user?.rideStatus === 'notstarted' ? (
             <View style={styles.pickupEllipse} />
           ) : (
             <View style={styles.svgView}>
@@ -188,7 +190,11 @@ function RideInProgressCard(props) {
               style={{top: 2}}
               gutterBottom={5}
               transform={'none'}>
-              User's {!isRideStarted ? 'Pickup' : 'DropOff'} Location
+              User's{' '}
+              {user?.rideSession.rideStatus === 'notstarted'
+                ? 'Pickup'
+                : 'DropOff'}{' '}
+              Location
             </Text>
             <Text
               variant={'body2'}
@@ -198,9 +204,9 @@ function RideInProgressCard(props) {
               style={{top: 2}}
               numberOfLines={3}
               transform={'none'}>
-              {isRideStarted
-                ? location.dropOffLocation
-                : location.pickUpLocation}
+              {user?.rideSession.rideStatus === 'notstarted'
+                ? location.pickUpLocation
+                : location.dropOffLocation}
             </Text>
           </View>
           <Text

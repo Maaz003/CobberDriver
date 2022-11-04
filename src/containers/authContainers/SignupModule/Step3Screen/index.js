@@ -113,7 +113,7 @@ function Step3Screen(props) {
         <View style={styles.formView}>
           <Text
             variant={'h2'}
-            font={'bold'}
+            font={'Sequel451'}
             gutterBottom={30}
             color={R.color.white}
             align={'left'}
@@ -121,7 +121,7 @@ function Step3Screen(props) {
             Enter{' '}
             <Text
               variant={'h2'}
-              font={'bold'}
+              font={'Sequel451'}
               gutterBottom={30}
               color={R.color.mainColor}
               align={'left'}
@@ -161,7 +161,7 @@ function Step3Screen(props) {
           <View style={{...R.styles.twoItemsRow, justifyContent: 'center'}}>
             <Text
               variant={'body2'}
-              font={'bold'}
+              font={'PoppinsMedium'}
               color={R.color.white}
               align={'center'}
               transform={'none'}>
@@ -169,7 +169,7 @@ function Step3Screen(props) {
             </Text>
             <Text
               variant={'body2'}
-              font={'bold'}
+              font={'PoppinsMedium'}
               color={R.color.mainColor}
               align={'center'}
               style={{

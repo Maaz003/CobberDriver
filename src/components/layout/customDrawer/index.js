@@ -48,12 +48,6 @@ const CustomDrawer = props => {
   const switchScreen = data => {
     if (data?.id === 8) {
       logOutFunction();
-    } else if (data?.id === 1) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'HomeScreen'}],
-      });
-      navigation.closeDrawer();
     } else if (data.id === 2) {
       navigation.navigate('Payment', {
         type: 'home',
@@ -223,7 +217,7 @@ const CustomDrawer = props => {
                     <View style={styles.svgView}>{item.svg}</View>
                     <Text
                       variant={'body2'}
-                      font={'semiBold'}
+                      font={'PoppinsRegular'}
                       gutterTop={2}
                       color={R.color.white}
                       align={'left'}

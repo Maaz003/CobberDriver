@@ -1,14 +1,8 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 import {NextArrow, OnBoardStep1} from '@components/utils/Svg';
 import R from '@components/utils/R';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {onBoardPresent} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
 import {firstTimePop} from '@store/auth/authSlice';
@@ -20,7 +14,6 @@ const windowWidth = Dimensions.get('window').width;
 
 function OnBoardingStep1(props) {
   const dispatch = useDispatch();
-  const common = useSelector(state => state.common);
   const {navigation} = props;
 
   const onNext = () => {
@@ -47,7 +40,7 @@ function OnBoardingStep1(props) {
       <View style={styles.textView}>
         <Text
           variant={'h1'}
-          font={'bold'}
+          font={'Sequel551'}
           gutterTop={80}
           gutterBottom={50}
           color={R.color.white}
@@ -74,7 +67,7 @@ function OnBoardingStep1(props) {
           style={{width: '20%', paddingVertical: R.unit.scale(10)}}>
           <Text
             variant={'body1'}
-            font={'bold'}
+            font={'Sequel551'}
             gutterTop={30}
             gutterBottom={20}
             color={R.color.mainColor}

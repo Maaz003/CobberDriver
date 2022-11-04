@@ -97,7 +97,7 @@ function OTPVerifyScreen(props) {
           </View>
           <Text
             variant={R.unit.height(1) > 850 ? 'h5' : 'h6'}
-            font={'bold'}
+            font={'Sequel451'}
             gutterBottom={5}
             color={R.color.white}
             align={'left'}
@@ -105,19 +105,20 @@ function OTPVerifyScreen(props) {
             Enter your
           </Text>
           <Text
-            variant={R.unit.height(1) > 850 ? 'extraLargeTitle' : 'h2'}
-            font={'bold'}
+            variant={R.unit.height(1) > 850 ? 'largeTitle' : 'h2'}
+            font={'Sequel451'}
             gutterBottom={10}
-            color={R.color.white}
+            color={R.color.mainColor}
             align={'left'}
+            lineHeight={70}
             letterSpacing={2}
             transform={'none'}>
             Verification {`\n`}
             Code
           </Text>
           <Text
-            variant={R.unit.height(1) > 850 ? 'h1' : 'body1'}
-            font={'bold'}
+            variant={R.unit.height(1) > 850 ? 'h6' : 'body1'}
+            font={'PoppinsMedium'}
             gutterBottom={25}
             color={R.color.white}
             align={'left'}
@@ -137,8 +138,8 @@ function OTPVerifyScreen(props) {
             disabled={code?.length < 4}
             width={'100%'}
             size={'lg'}
-            variant={'body2'}
-            font={'semiBold'}
+            variant={'body1'}
+            font={'PoppinsMedium'}
             color={'black'}
             gutterTop={20}
             loaderColor={R.color.black}
@@ -150,7 +151,7 @@ function OTPVerifyScreen(props) {
           />
           <Text
             variant={'body2'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             gutterTop={R.unit.scale(30)}
             color={R.color.white}
             align={'center'}
@@ -158,7 +159,7 @@ function OTPVerifyScreen(props) {
             Didn't receive a code?{' '}
             <Text
               variant={'body2'}
-              font={'bold'}
+              font={'PoppinsMedium'}
               color={R.color.mainColor}
               align={'center'}
               style={{

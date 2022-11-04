@@ -36,7 +36,7 @@ function OnBoardingStep2(props) {
       <View style={styles.textView}>
         <Text
           variant={'h1'}
-          font={'bold'}
+          font={'Sequel551'}
           gutterTop={80}
           gutterBottom={50}
           color={R.color.white}
@@ -67,7 +67,7 @@ function OnBoardingStep2(props) {
           style={{width: '20%', paddingVertical: R.unit.scale(10)}}>
           <Text
             variant={'body1'}
-            font={'bold'}
+            font={'Sequel551'}
             gutterTop={30}
             gutterBottom={20}
             color={R.color.mainColor}

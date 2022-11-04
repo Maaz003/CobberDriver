@@ -1,8 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native';
-import R from '@components/utils/R';
+import Map from '@components/view/mapView/Map';
 import {LocationCoordinates} from '@components/utils/LocationCoordinates';
-import MapView from 'react-native-maps';
 import PickUpMarker from '@components/view/mapView/PickUpMarker';
 import {mapStyles} from '@components/constants';
 
@@ -11,6 +10,8 @@ function HomeMap() {
   let coordinates = LocationCoordinates();
   const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
     coordinates;
+
+  console.log('PICKUP', pickUpLat);
 
   useEffect(() => {
     animatePickup();
@@ -32,26 +33,10 @@ function HomeMap() {
 
   return (
     <SafeAreaView>
-      <MapView
-        style={R.styles.mapView}
-        cacheEnabled={false}
+      <Map
         customMapStyle={mapStyles}
-        ref={mapRef}
-        loadingEnabled={true}
-        showsCompass={false}
-        onMapReady={onMapReady}
-        loadingIndicatorColor={R.color.mainColor}
-        loadingBackgroundColor={'rgba(0,0,0,0.3)'}
-        initialRegion={{
-          latitude: pickUpLat ? pickUpLat : initialLat ? initialLat : 30.0002,
-          longitude: pickUpLong
-            ? pickUpLong
-            : initialLong
-            ? initialLong
-            : 136.2092,
-          latitudeDelta: 0.922,
-          longitudeDelta: 0.922,
-        }}>
+        mapForwardRef={mapRef}
+        onMapReady={onMapReady}>
         <PickUpMarker
           pickUpLat={pickUpLat}
           pickUpLong={pickUpLong}
@@ -59,7 +44,7 @@ function HomeMap() {
           initialLat={initialLat}
           initialLong={initialLong}
         />
-      </MapView>
+      </Map>
     </SafeAreaView>
   );
 }

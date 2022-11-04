@@ -107,7 +107,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      if (auth?.isAuth) {
+      if (!auth?.isAuth) {
         CurrentLocation({actionCall: dispatch});
       }
     }, []);
@@ -115,8 +115,8 @@ const App = () => {
     return (
       <>
         <AppNavigator />
-        {/* {auth?.firstTimePop ? <Toast config={toastConfig} /> : null} */}
-        {true ? <Toast config={toastConfig} /> : null}
+        {auth?.firstTimePop ? <Toast config={toastConfig} /> : null}
+        {/* {true ? <Toast config={toastConfig} /> : null} */}
       </>
     );
   };
