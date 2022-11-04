@@ -108,6 +108,7 @@ function RideDetailsScreen(props) {
           ? [...schedule?.scheduledRides]
           : [];
       tempArr.push(data);
+      console.log('TEMPARR', tempArr);
       setIsRideAccepted(true);
       await dispatch(scheduledRides(tempArr));
       PopUp({
