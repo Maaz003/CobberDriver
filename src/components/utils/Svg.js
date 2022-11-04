@@ -36,3 +36,4 @@ export {default as ClockReqIcon} from '@assets/Images/Svgs/ClockReqIcon.svg';
 export {default as WalletReqIcon} from '@assets/Images/Svgs/WalletReqIcon.svg';
 export {default as LocationReqIcon} from '@assets/Images/Svgs/LocationReqIcon.svg';
 export {default as PickUpCircle} from '@assets/Images/Svgs/pickUpCircle.svg';
+export {default as DimensionIcon} from '@assets/Images/Svgs/dimensionIcon.svg';

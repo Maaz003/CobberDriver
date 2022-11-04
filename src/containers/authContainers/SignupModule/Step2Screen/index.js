@@ -34,47 +34,47 @@ function Step2Screen(props) {
     navigation.navigate('Step3', {
       step2Data: {},
     });
-    const reqData = {
-      license: authUser?.license,
-      nic: authUser?.nic,
-      residence: authUser?.residence,
-      model: authUser?.model,
-    };
+    // const reqData = {
+    //   license: authUser?.license,
+    //   nic: authUser?.nic,
+    //   residence: authUser?.residence,
+    //   model: authUser?.model,
+    // };
 
-    const formError = FormValidation(reqData);
-    if (formError) {
-      const obj = {};
-      formError?.errorArr?.map(item => {
-        obj[item] = formError?.message;
-      });
+    // const formError = FormValidation(reqData);
+    // if (formError) {
+    //   const obj = {};
+    //   formError?.errorArr?.map(item => {
+    //     obj[item] = formError?.message;
+    //   });
 
-      setErrorField({
-        ...{
-          nic: '',
-          license: '',
-          residence: '',
-          model: '',
-        },
-        ...obj,
-      });
-    } else {
-      setErrorField({
-        nic: '',
-        license: '',
-        residence: '',
-        model: '',
-      });
+    //   setErrorField({
+    //     ...{
+    //       nic: '',
+    //       license: '',
+    //       residence: '',
+    //       model: '',
+    //     },
+    //     ...obj,
+    //   });
+    // } else {
+    //   setErrorField({
+    //     nic: '',
+    //     license: '',
+    //     residence: '',
+    //     model: '',
+    //   });
 
-      const reqData = {
-        license: authUser?.license,
-        nic: authUser?.nic,
-        residence: authUser?.country,
-        model: authUser?.model,
-      };
-      navigation.navigate('Step3', {
-        step2Data: {...step1Data, ...reqData},
-      });
-    }
+    //   const reqData = {
+    //     license: authUser?.license,
+    //     nic: authUser?.nic,
+    //     residence: authUser?.country,
+    //     model: authUser?.model,
+    //   };
+    //   navigation.navigate('Step3', {
+    //     step2Data: {...step1Data, ...reqData},
+    //   });
+    // }
   };
 
   return (

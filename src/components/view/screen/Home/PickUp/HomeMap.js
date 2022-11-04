@@ -1,21 +1,44 @@
 import React, {useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import Map from '@components/view/mapView/Map';
 import {LocationCoordinates} from '@components/utils/LocationCoordinates';
 import PickUpMarker from '@components/view/mapView/PickUpMarker';
 import {mapStyles} from '@components/constants';
+import {firstTimeAnimate} from '@store/common/commonSlice';
 
 function HomeMap() {
   const mapRef = useRef(null);
+  const dispatch = useDispatch();
   let coordinates = LocationCoordinates();
-  const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
-    coordinates;
+  const common = useSelector(state => state.common);
+  const user = useSelector(state => state.user);
 
-  console.log('PICKUP', pickUpLat);
+  const {
+    pickUpLat,
+    pickUpLong,
+    addressRawPickup,
+    initialLat,
+    initialLong,
+    pickupLoc,
+  } = coordinates;
+
+  console.log('PICKUP', coordinates, '--------', common?.firstAnimate);
+
+  // useEffect(() => {
+  //   animatePickup();
+  // }, [pickUpLat || pickUpLong]);
 
   useEffect(() => {
-    animatePickup();
-  }, [pickUpLat || pickUpLong]);
+    if (pickupLoc !== undefined) {
+      // if (common?.firstAnimate === true) {
+      if (!user?.locationLoader) {
+        animatePickup();
+        // dispatch(firstTimeAnimate(false));
+      }
+      // }
+    }
+  }, [pickupLoc, user.locationLoader]);
 
   const animatePickup = () => {
     let region = {
@@ -27,16 +50,15 @@ function HomeMap() {
     mapRef.current.animateToRegion(region, 2000);
   };
 
-  const onMapReady = () => {
-    animatePickup();
-  };
+  const onMapReady = () => {};
 
   return (
     <SafeAreaView>
       <Map
         customMapStyle={mapStyles}
         mapForwardRef={mapRef}
-        onMapReady={onMapReady}>
+        loadingEnabled={false}
+        mapReady={onMapReady}>
         <PickUpMarker
           pickUpLat={pickUpLat}
           pickUpLong={pickUpLong}

@@ -34,28 +34,30 @@ function OTPVerifyScreen(props) {
   const maximumCodeLength = 4;
 
   const onSubmit = async () => {
-    setIsLoading(true);
-    if (!code || code?.length < 4) {
-      setCodeError(true);
-    } else {
-      const reqData = {
-        user,
-        otp: code,
-      };
-      const verifyOTPUrl = URL('auth/verify/otp');
-      const response = await Post(verifyOTPUrl, reqData);
+    navigation.navigate('VerfiySucess');
 
-      if (response !== undefined) {
-        Toast.show({
-          title: 'Account Created Successfully',
-          message: 'Login and get your goods delivered successfully',
-        });
-        navigation.navigate('VerfiySucess');
-      }
-      setCodeError(false);
-      setIsLoading(false);
-    }
-    setIsLoading(false);
+    // setIsLoading(true);
+    // if (!code || code?.length < 4) {
+    //   setCodeError(true);
+    // } else {
+    //   const reqData = {
+    //     user,
+    //     otp: code,
+    //   };
+    //   const verifyOTPUrl = URL('auth/verify/otp');
+    //   const response = await Post(verifyOTPUrl, reqData);
+
+    //   if (response !== undefined) {
+    //     Toast.show({
+    //       title: 'Account Created Successfully',
+    //       message: 'Login and get your goods delivered successfully',
+    //     });
+    //     navigation.navigate('VerfiySucess');
+    //   }
+    //   setCodeError(false);
+    //   setIsLoading(false);
+    // }
+    // setIsLoading(false);
   };
 
   const resendOtp = () => {};

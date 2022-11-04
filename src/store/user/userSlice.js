@@ -265,7 +265,7 @@ const initialState = {
   Eta: 0,
   locationLoader: true,
   scheduledTime: undefined,
-  pinLoc: false,
+  pinLoc: true,
   inRide: 'finished',
   rideSession: undefined,
 };

@@ -34,6 +34,7 @@ const CurrentLocation = async props => {
   if (Platform.OS === 'android') {
     console.log('ANDROID');
     let granted = await statusLocationPermission();
+    console.log('GRANREED', granted);
     if (granted) {
       console.log('first');
       Geolocation.getCurrentPosition(
@@ -45,7 +46,8 @@ const CurrentLocation = async props => {
         error => {
           actionCall(locationLoader(false));
         },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 1000},
+        // {enableHighAccuracy: true, timeout: 15000, maximumAge: 1000},
+        {enableHighAccuracy: false, timeout: 15000, maximumAge: 1000},
       );
     } else {
       actionCall(locationLoader(false));
@@ -88,6 +90,7 @@ const CurrentLocation = async props => {
           state: StateLocality.long_name,
           city,
         };
+        console.log('PROMISE RESOLVED');
         actionCall(authLocationCoords(userLocation));
         actionCall(confirmPickUp(loc));
         actionCall(locationLoader(false));
@@ -96,29 +99,30 @@ const CurrentLocation = async props => {
         // }
       })
       .catch(error => {
-        console.log('ERROR GEOCODE', error);
+        console.log('ERROR GEOCODE 3', error);
         actionCall(locationLoader(false));
       });
   };
 };
 
-export const getAddressFromCoordinates = async (latitude, longitude) => {
-  return await Geocoder.from(latitude, longitude)
-    .then(json => {
-      let addressRaw = json.results[0].formatted_address;
-      const address = addressRaw && stringTrim(addressRaw, 2);
-      actionCall(locationLoader(false));
-      const loc = {
-        address,
-        latitude,
-        longitude,
-      };
-      return loc;
-    })
-    .catch(error => {
-      console.log('ERROR GEOCODE', error);
-      actionCall(locationLoader(false));
-    });
-};
+// export const getAddressFromCoordinates = async (latitude, longitude) => {
+//   console.log('BRUH');
+//   return await Geocoder.from(latitude, longitude)
+//     .then(json => {
+//       let addressRaw = json.results[0].formatted_address;
+//       const address = addressRaw && stringTrim(addressRaw, 2);
+//       actionCall(locationLoader(false));
+//       const loc = {
+//         address,
+//         latitude,
+//         longitude,
+//       };
+//       return loc;
+//     })
+//     .catch(error => {
+//       console.log('ERROR GEOCODE', error);
+//       actionCall(locationLoader(false));
+//     });
+// };
 
 export default CurrentLocation;

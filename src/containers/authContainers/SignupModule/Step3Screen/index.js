@@ -28,65 +28,65 @@ function Step3Screen(props) {
   });
 
   const onSubmit = async () => {
-    // navigation.navigate('Verification', {
-    //   user: '2222',
-    // });
-    const reqData = {
-      password: authUser?.password,
-      confirmPassword: authUser?.confirmPassword,
-    };
+    navigation.navigate('Verification', {
+      user: '2222',
+    });
+    // const reqData = {
+    //   password: authUser?.password,
+    //   confirmPassword: authUser?.confirmPassword,
+    // };
 
-    const formError = FormValidation(reqData);
+    // const formError = FormValidation(reqData);
 
-    if (formError) {
-      const obj = {};
-      formError?.errorArr?.map(item => {
-        obj[item] = formError?.message;
-      });
+    // if (formError) {
+    //   const obj = {};
+    //   formError?.errorArr?.map(item => {
+    //     obj[item] = formError?.message;
+    //   });
 
-      setErrorField({
-        ...{
-          password: '',
-          confirmPassword: '',
-        },
-        ...obj,
-      });
-    } else {
-      setErrorField({
-        password: '',
-        confirmPassword: '',
-      });
+    //   setErrorField({
+    //     ...{
+    //       password: '',
+    //       confirmPassword: '',
+    //     },
+    //     ...obj,
+    //   });
+    // } else {
+    //   setErrorField({
+    //     password: '',
+    //     confirmPassword: '',
+    //   });
 
-      const reqData = {
-        license: authUser?.license,
-        nic: authUser?.nic,
-        residence: authUser?.country,
-        model: authUser?.model,
-      };
-      PopUp({
-        heading: `Registered Successfully.sicationCode}`,
-        bottomOffset: 0.8,
-        visibilityTime: 3000,
-        position: 'top',
-      });
-      // navigation.navigate('Verification');
-      // const signUrl = URL('auth/signup');
-      // const response = await Post(signUrl, reqData);
-      // if (response !== undefined) {
-      //   PopUp({
-      //     heading: `Registered Successfully.Meantime ${response?.data?.data?.user?.verificationCode}`,
-      //     bottomOffset: 0.8,
-      //     visibilityTime: 5000,
-      //     position: 'top',
-      //   });
-      //   navigation.navigate('Verification', {
-      //     user: response?.data?.data?.user?._id,
-      //   });
-      //   setIsLoading(false);
-      // } else {
-      //   setIsLoading(false);
-      // }
-    }
+    //   const reqData = {
+    //     license: authUser?.license,
+    //     nic: authUser?.nic,
+    //     residence: authUser?.country,
+    //     model: authUser?.model,
+    //   };
+    //   PopUp({
+    //     heading: `Registered Successfully.sicationCode}`,
+    //     bottomOffset: 0.8,
+    //     visibilityTime: 3000,
+    //     position: 'top',
+    //   });
+    // navigation.navigate('Verification');
+    // const signUrl = URL('auth/signup');
+    // const response = await Post(signUrl, reqData);
+    // if (response !== undefined) {
+    //   PopUp({
+    //     heading: `Registered Successfully.Meantime ${response?.data?.data?.user?.verificationCode}`,
+    //     bottomOffset: 0.8,
+    //     visibilityTime: 5000,
+    //     position: 'top',
+    //   });
+    //   navigation.navigate('Verification', {
+    //     user: response?.data?.data?.user?._id,
+    //   });
+    //   setIsLoading(false);
+    // } else {
+    //   setIsLoading(false);
+    // }
+    // }
   };
 
   return (

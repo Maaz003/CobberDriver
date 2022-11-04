@@ -8,6 +8,7 @@ import R from '@components/utils/R';
 import Button from '@components/common/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import LocationPoint from '@components/view/cards/LocationPoint';
+import PopUp from '@components/common/PopUp';
 
 function RideCompletedBox(props) {
   const {navigation} = props;
@@ -39,6 +40,12 @@ function RideCompletedBox(props) {
       };
       dispatch(scheduledRides(tempArr));
       dispatch(rideSession(dataRide));
+      PopUp({
+        heading: 'Ride Completed',
+        bottomOffset: 0.7,
+        visibilityTime: 3000,
+        position: 'top',
+      });
     } else {
       let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
       let objFound = commonTemparr.find(
@@ -48,6 +55,12 @@ function RideCompletedBox(props) {
       dispatch(tempRidesSet(commonTemparr));
       const dataRide = {data: undefined, inRide: 'finished'};
       dispatch(rideSession(dataRide));
+      PopUp({
+        heading: 'Ride Completed',
+        bottomOffset: 0.7,
+        visibilityTime: 3000,
+        position: 'top',
+      });
     }
   };
 

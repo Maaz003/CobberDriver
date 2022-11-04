@@ -113,77 +113,77 @@ function Step1Screen(props) {
   );
 
   const onSubmit = async () => {
-    // navigation.navigate('Step2', {
-    //   step1Data: {},
-    // });
-    const reqData = {
-      name: authUser?.name,
-      email: authUser?.email,
-      dialCode: authUser?.dialCode,
-      country: authUser?.country,
-      phoneNumber: authUser?.phoneNumber,
-    };
+    navigation.navigate('Step2', {
+      step1Data: {},
+    });
+    // const reqData = {
+    //   name: authUser?.name,
+    //   email: authUser?.email,
+    //   dialCode: authUser?.dialCode,
+    //   country: authUser?.country,
+    //   phoneNumber: authUser?.phoneNumber,
+    // };
 
-    const formError = FormValidation(reqData);
-    if (formError) {
-      const obj = {};
-      formError?.errorArr?.map(item => {
-        obj[item] = formError?.message;
-      });
+    // const formError = FormValidation(reqData);
+    // if (formError) {
+    //   const obj = {};
+    //   formError?.errorArr?.map(item => {
+    //     obj[item] = formError?.message;
+    //   });
 
-      setErrorField({
-        ...{
-          name: '',
-          email: '',
-          dialCode: '',
-          country: '',
-          phoneNumber: '',
-        },
-        ...obj,
-      });
-    } else if (photo.length === 0) {
-      PopUp({
-        heading: 'Please upload a picture',
-        bottomOffset: 0.7,
-        visibilityTime: 3000,
-        position: 'top',
-      });
-    } else {
-      setErrorField({
-        name: '',
-        email: '',
-        dialCode: '',
-        country: '',
-        phoneNumber: '',
-      });
-      var currentLoc;
-      if (common?.authCoordinates) {
-        if (common?.authCoordinates?.coordinates.length > 0) {
-          currentLoc = {coordinates: common?.authCoordinates?.coordinates};
-        }
-      } else {
-        let res = await getLatLong();
-        let tempArr = [];
-        let latitude = res.lat;
-        let longitude = res.lng;
-        tempArr.push(latitude, longitude);
-        currentLoc = {coordinates: tempArr};
-      }
+    //   setErrorField({
+    //     ...{
+    //       name: '',
+    //       email: '',
+    //       dialCode: '',
+    //       country: '',
+    //       phoneNumber: '',
+    //     },
+    //     ...obj,
+    //   });
+    // } else if (photo.length === 0) {
+    //   PopUp({
+    //     heading: 'Please upload a picture',
+    //     bottomOffset: 0.7,
+    //     visibilityTime: 3000,
+    //     position: 'top',
+    //   });
+    // } else {
+    //   setErrorField({
+    //     name: '',
+    //     email: '',
+    //     dialCode: '',
+    //     country: '',
+    //     phoneNumber: '',
+    //   });
+    //   var currentLoc;
+    //   if (common?.authCoordinates) {
+    //     if (common?.authCoordinates?.coordinates.length > 0) {
+    //       currentLoc = {coordinates: common?.authCoordinates?.coordinates};
+    //     }
+    //   } else {
+    //     let res = await getLatLong();
+    //     let tempArr = [];
+    //     let latitude = res.lat;
+    //     let longitude = res.lng;
+    //     tempArr.push(latitude, longitude);
+    //     currentLoc = {coordinates: tempArr};
+    //   }
 
-      const reqData = {
-        displayName: authUser?.name,
-        role: 'driver',
-        dialCode: authUser?.dialCode,
-        country: authUser?.country,
-        countryCode: countryCode,
-        email: authUser?.email,
-        currentLocation: currentLoc,
-        contact: authUser?.phoneNumber,
-      };
-      navigation.navigate('Step2', {
-        step1Data: reqData,
-      });
-    }
+    //   const reqData = {
+    //     displayName: authUser?.name,
+    //     role: 'driver',
+    //     dialCode: authUser?.dialCode,
+    //     country: authUser?.country,
+    //     countryCode: countryCode,
+    //     email: authUser?.email,
+    //     currentLocation: currentLoc,
+    //     contact: authUser?.phoneNumber,
+    //   };
+    //   navigation.navigate('Step2', {
+    //     step1Data: reqData,
+    //   });
+    // }
   };
 
   return (

@@ -17,7 +17,7 @@ import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import {tempRidesSet} from '@store/common/commonSlice';
 import PopUp from '@components/common/PopUp';
-import {ClockReqIcon, WalletReqIcon} from '@components/utils/Svg';
+import {ClockReqIcon, DimensionIcon} from '@components/utils/Svg';
 import {openDirections} from '@components/utils/ReuseableFunctions';
 
 function RideDetailsScreen(props) {
@@ -101,7 +101,7 @@ function RideDetailsScreen(props) {
     }
   };
 
-  const acceptRide = () => {
+  const acceptRide = async () => {
     if (isScheduled) {
       let tempArr =
         schedule?.scheduledRides.length > 0
@@ -109,17 +109,17 @@ function RideDetailsScreen(props) {
           : [];
       tempArr.push(data);
       setIsRideAccepted(true);
-      dispatch(scheduledRides(tempArr));
+      await dispatch(scheduledRides(tempArr));
       PopUp({
         heading:
-          'Schedule Ride Accepted. For more details go to schedulees section in drawer',
+          'Ride Accepted.For more details go to schedules section in drawer',
         bottomOffset: 0.7,
         visibilityTime: 7000,
         position: 'top',
       });
     } else {
       const dataRide = {data: {...data, type: type}, inRide: 'accepted'};
-      dispatch(rideSession(dataRide));
+      await dispatch(rideSession(dataRide));
       navigation.navigate('OnGoingRide', {
         type: 'instant',
         data: data,
@@ -235,9 +235,19 @@ function RideDetailsScreen(props) {
             </Text>
           </View>
 
-          <Divider lineStyles={styles.lineStyles} />
           {data?.isScheduled && (
             <>
+              <Divider lineStyles={styles.lineStyles} />
+              <Text
+                variant={'h4'}
+                font={'Sequel551'}
+                color={R.color.charcoalShade}
+                gutterTop={16}
+                gutterBottom={4}
+                align={'left'}
+                transform={'none'}>
+                Scheduled Time
+              </Text>
               <Text
                 variant={'body2'}
                 font={'InterMedium'}
@@ -295,20 +305,27 @@ function RideDetailsScreen(props) {
             </>
           )}
 
+          <Divider
+            lineStyles={{
+              ...styles.lineStyles,
+              marginTop: R.unit.scale(data?.isScheduled ? 12 : 0),
+            }}
+          />
+
           <Text
-            variant={'body2'}
-            font={'InterMedium'}
+            variant={'h4'}
+            font={'Sequel551'}
             color={R.color.charcoalShade}
-            gutterTop={12}
+            gutterTop={16}
             gutterBottom={4}
             align={'left'}
             transform={'none'}>
-            Cost
+            Equipment Details
           </Text>
 
-          <View style={[R.styles.twoItemsRow, styles.detailView]}>
+          <View style={[R.styles.twoItemsRow, {marginTop: R.unit.scale(12)}]}>
             <View style={{...styles.svgView, height: R.unit.scale(22)}}>
-              <WalletReqIcon height="100%" width="100%" fill={'#717171'} />
+              <DimensionIcon height="100%" width="100%" />
             </View>
             <Text
               variant={'body3'}
@@ -317,9 +334,41 @@ function RideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              ${cost}
+              Length : 30
+            </Text>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Width : 30
+            </Text>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Depth : 340
+            </Text>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Weight : 130
             </Text>
           </View>
+
+          <Divider
+            lineStyles={{...styles.lineStyles, marginTop: R.unit.scale(20)}}
+          />
+
           <Text
             variant={'h4'}
             font={'Sequel551'}
@@ -531,7 +580,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lineStyles: {
-    height: R.unit.scale(0.5),
+    height: R.unit.scale(0.75),
     backgroundColor: R.color.gray2,
     marginBottom: R.unit.scale(6),
   },

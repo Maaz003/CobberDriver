@@ -6,7 +6,6 @@ import {
   CalendarReqIcon,
   ClockReqIcon,
   LocationReqIcon,
-  WalletReqIcon,
 } from '@components/utils/Svg';
 import Button from '@components/common/Button';
 import Divider from '@components/common/Divider';
@@ -99,21 +98,6 @@ function RideRequestsCard(props) {
       </View>
 
       <View style={[R.styles.twoItemsRow, styles.detailView]}>
-        <View style={styles.svgView}>
-          <WalletReqIcon height="100%" width="100%" />
-        </View>
-        <Text
-          variant={'body3'}
-          font={'InterRegular'}
-          color={R.color.blackShade3}
-          align={'left'}
-          style={{marginLeft: R.unit.scale(8)}}
-          transform={'none'}>
-          {item.cost}
-        </Text>
-      </View>
-
-      <View style={[R.styles.twoItemsRow, styles.detailView]}>
         <View style={styles.pickUpCircle} />
         <Text
           variant={'body3'}
@@ -123,6 +107,16 @@ function RideRequestsCard(props) {
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
           {item.location?.pickUpLocation}
+        </Text>
+        <View style={styles.dot} />
+        <Text
+          variant={'body3'}
+          font={'InterRegular'}
+          color={R.color.blackShade3}
+          align={'left'}
+          style={{fontStyle: 'italic', width: '30%'}}
+          transform={'none'}>
+          PickUp
         </Text>
       </View>
 
@@ -138,6 +132,16 @@ function RideRequestsCard(props) {
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
           {item.location?.dropOffLocation}
+        </Text>
+        <View style={styles.dot} />
+        <Text
+          variant={'body3'}
+          font={'InterRegular'}
+          color={R.color.blackShade3}
+          align={'left'}
+          style={{fontStyle: 'italic', width: '30%'}}
+          transform={'none'}>
+          DropOff
         </Text>
       </View>
 
@@ -232,5 +236,12 @@ const styles = StyleSheet.create({
     borderRadius: R.unit.scale(16),
     borderWidth: R.unit.scale(6),
     borderColor: R.color.gray6,
+  },
+  dot: {
+    height: R.unit.scale(4),
+    width: R.unit.scale(4),
+    backgroundColor: R.color.gray5,
+    borderRadius: R.unit.scale(30),
+    marginHorizontal: R.unit.scale(8),
   },
 });

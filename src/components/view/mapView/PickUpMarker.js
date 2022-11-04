@@ -22,7 +22,8 @@ function PickUpMarker(props) {
           : 138.5397,
       }}
       tracksViewChanges={false}
-      title={'User'}>
+      // title={'User'}
+    >
       <View style={R.styles.columnView}>
         <Text
           variant={'body6'}
@@ -35,7 +36,7 @@ function PickUpMarker(props) {
           }}
           align={'center'}
           transform={'none'}>
-          {pickUpAddr ? pickUpAddr : 'PickUp'}
+          {pickUpAddr ? pickUpAddr : ''}
         </Text>
         <Icon
           name={'truck-moving'}

@@ -19,7 +19,7 @@ function LiveLocation(props) {
       let granted = await statusLocationPermission();
       if (granted) {
         dispatch(locationLoader(true));
-        CurrentLocation({actionCall: dispatch, flag: 'home'});
+        CurrentLocation({actionCall: dispatch, flag: true});
         dispatch(pinLocation(false));
       } else {
         Toast.show({
@@ -35,7 +35,7 @@ function LiveLocation(props) {
       let granted = await statusLocationPermission();
       if (granted) {
         dispatch(locationLoader(true));
-        CurrentLocation({actionCall: dispatch, flag: 'home'});
+        CurrentLocation({actionCall: dispatch, flag: true});
         dispatch(pinLocation(false));
       } else {
         // openSettings().catch(() => console.warn('cannot open settings'));

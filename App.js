@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppNavigator from './src/navigation/index';
 import 'react-native-gesture-handler';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -14,6 +14,7 @@ import {AppState, LogBox, Platform, TouchableOpacity, View} from 'react-native';
 import {
   requestLocationPermission,
   requestLocationPermissionIOS,
+  statusLocationPermission,
 } from '@components/utils/Validators';
 import CurrentLocation from '@components/utils/CurrentLocation';
 import Icon from '@components/common/Icon';
@@ -72,8 +73,8 @@ const App = () => {
             }}>
             <View>{props.props.leftIcon}</View>
             <Text
-              variant={'body2'}
-              font={'bold'}
+              variant={'body3'}
+              font={'PoppinsMedium'}
               color={props.props.textColor}
               align={'left'}
               numberOfLines={3}
@@ -106,11 +107,24 @@ const App = () => {
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
+    const [isAccess, setIsAccess] = useState(false);
+
+    const getLiveLocation = async () => {
+      try {
+        let granted = await statusLocationPermission();
+        if (granted) {
+          dispatch(locationLoader(true));
+          setIsAccess(true);
+          if (!auth?.isAuth) {
+            CurrentLocation({actionCall: dispatch});
+          }
+        }
+      } catch (error) {}
+    };
+
     useEffect(() => {
-      if (!auth?.isAuth) {
-        CurrentLocation({actionCall: dispatch});
-      }
-    }, []);
+      getLiveLocation();
+    }, [isAccess]);
 
     return (
       <>

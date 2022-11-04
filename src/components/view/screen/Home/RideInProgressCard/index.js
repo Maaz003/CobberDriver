@@ -17,6 +17,7 @@ import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
+import PopUp from '@components/common/PopUp';
 
 function RideInProgressCard(props) {
   const {type = undefined, data = undefined, navigation} = props;
@@ -27,8 +28,6 @@ function RideInProgressCard(props) {
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
   const [isRideStarted, setIsRideStarted] = useState(false);
-
-  console.log('USER', user?.rideSession);
 
   useEffect(() => {
     if (data) {
@@ -75,7 +74,6 @@ function RideInProgressCard(props) {
   };
 
   const onSubmit = async () => {
-    // setIsRideStarted(!isRideStarted);
     if (type === 'instant') {
       if (data.rideStatus === 'notstarted') {
         const dataRide = {
@@ -83,9 +81,16 @@ function RideInProgressCard(props) {
           inRide: 'started',
         };
         dispatch(rideSession(dataRide));
+        PopUp({
+          heading: 'Ride Started',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
       } else {
         const dataRide = {data: {...data, type: type}, inRide: 'ended'};
         dispatch(rideSession(dataRide));
+
         navigation.reset({
           index: 0,
           routes: [{name: 'RideCompleted'}],
@@ -98,6 +103,12 @@ function RideInProgressCard(props) {
           inRide: 'scheduleEnded',
         };
         updateRideStatus('pickupended');
+        PopUp({
+          heading: 'PickUp Completed',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
         await dispatch(rideSession(dataRide));
       } else if (data.rideStatus === 'pickupended') {
         const dataRide = {
@@ -106,6 +117,12 @@ function RideInProgressCard(props) {
         };
         updateRideStatus('dropoffstarted');
         await dispatch(rideSession(dataRide));
+        PopUp({
+          heading: 'DropOff Started',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
       } else if (data.rideStatus === 'dropoffstarted') {
         const dataRide = {
           data: {...data, rideStatus: 'dropoffended', type: type},
@@ -113,6 +130,12 @@ function RideInProgressCard(props) {
         };
         updateRideStatus('dropoffended');
         await dispatch(rideSession(dataRide));
+        PopUp({
+          heading: 'DropOff Ended',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
       }
     }
   };
@@ -125,6 +148,165 @@ function RideInProgressCard(props) {
       phoneNumber = `telprompt:${data.phoneNumber}`;
     }
     Linking.openURL(phoneNumber);
+  };
+
+  const locationIcon = () => {
+    if (type === 'instant') {
+      if (data?.rideStatus === 'notstarted') {
+        return <View style={styles.pickupEllipse} />;
+      } else {
+        return (
+          <View style={styles.svgView}>
+            <PinLocation height="100%" width="100%" fill={R.color.mainColor} />
+          </View>
+        );
+      }
+    } else {
+      let pickUpStatuesSchedule = [
+        'notstarted',
+        'pickupstarted',
+        'pickupended',
+      ];
+      if (pickUpStatuesSchedule.includes(data.rideStatus)) {
+        return <View style={styles.pickupEllipse} />;
+      } else {
+        return (
+          <View style={styles.svgView}>
+            <PinLocation height="100%" width="100%" fill={R.color.mainColor} />
+          </View>
+        );
+      }
+    }
+  };
+
+  const locationTitle = () => {
+    if (type === 'instant') {
+      if (data?.rideStatus === 'notstarted') {
+        return (
+          <Text
+            variant={'body3'}
+            font={'PoppinsRegular'}
+            color={R.color.gray}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            User's PickUp Location
+          </Text>
+        );
+      } else {
+        return (
+          <Text
+            variant={'body3'}
+            font={'PoppinsRegular'}
+            color={R.color.gray}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            User's DropOff Location
+          </Text>
+        );
+      }
+    } else {
+      let pickUpStatuesSchedule = [
+        'notstarted',
+        'pickupstarted',
+        'pickupended',
+      ];
+      if (pickUpStatuesSchedule.includes(data.rideStatus)) {
+        return (
+          <Text
+            variant={'body3'}
+            font={'PoppinsRegular'}
+            color={R.color.gray}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            User's PickUp Location
+          </Text>
+        );
+      } else {
+        return (
+          <Text
+            variant={'body3'}
+            font={'PoppinsRegular'}
+            color={R.color.gray}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            User's DropOff Location
+          </Text>
+        );
+      }
+    }
+  };
+
+  const locationText = () => {
+    if (type === 'instant') {
+      if (data?.rideStatus === 'notstarted') {
+        return (
+          <Text
+            variant={'body2'}
+            font={'PoppinsMedium'}
+            color={R.color.white}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            {location.pickUpLocation}
+          </Text>
+        );
+      } else {
+        return (
+          <Text
+            variant={'body2'}
+            font={'PoppinsMedium'}
+            color={R.color.white}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            {location.dropOffLocation}
+          </Text>
+        );
+      }
+    } else {
+      let pickUpStatuesSchedule = [
+        'notstarted',
+        'pickupstarted',
+        'pickupended',
+      ];
+      if (pickUpStatuesSchedule.includes(data.rideStatus)) {
+        return (
+          <Text
+            variant={'body2'}
+            font={'PoppinsMedium'}
+            color={R.color.white}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            {location.pickUpLocation}
+          </Text>
+        );
+      } else {
+        return (
+          <Text
+            variant={'body2'}
+            font={'PoppinsMedium'}
+            color={R.color.white}
+            align={'left'}
+            style={{top: 2}}
+            gutterBottom={5}
+            transform={'none'}>
+            {location.dropOffLocation}
+          </Text>
+        );
+      }
+    }
   };
 
   return (
@@ -170,54 +352,11 @@ function RideInProgressCard(props) {
         </View>
         <Divider lineStyles={styles.dividerStyles} />
         <View style={{...R.styles.rowView}}>
-          {user?.rideStatus === 'notstarted' ? (
-            <View style={styles.pickupEllipse} />
-          ) : (
-            <View style={styles.svgView}>
-              <PinLocation
-                height="100%"
-                width="100%"
-                fill={R.color.mainColor}
-              />
-            </View>
-          )}
+          {locationIcon()}
           <View style={{flex: 1, marginLeft: R.unit.scale(12)}}>
-            <Text
-              variant={'body3'}
-              font={'regular'}
-              color={R.color.gray6}
-              align={'left'}
-              style={{top: 2}}
-              gutterBottom={5}
-              transform={'none'}>
-              User's{' '}
-              {user?.rideSession.rideStatus === 'notstarted'
-                ? 'Pickup'
-                : 'DropOff'}{' '}
-              Location
-            </Text>
-            <Text
-              variant={'body2'}
-              font={'bold'}
-              color={R.color.white}
-              align={'left'}
-              style={{top: 2}}
-              numberOfLines={3}
-              transform={'none'}>
-              {user?.rideSession.rideStatus === 'notstarted'
-                ? location.pickUpLocation
-                : location.dropOffLocation}
-            </Text>
+            {locationTitle()}
+            {locationText()}
           </View>
-          <Text
-            variant={'body3'}
-            font={'regular'}
-            color={R.color.white}
-            align={'right'}
-            style={{top: 2}}
-            transform={'none'}>
-            10:13 am
-          </Text>
         </View>
 
         <Button

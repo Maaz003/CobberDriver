@@ -65,6 +65,7 @@ function EarningsScreen(props) {
               font={'semiBold'}
               color={R.color.black}
               borderRadius={10}
+              onPress={() => null}
             />
           </View>
           <Text

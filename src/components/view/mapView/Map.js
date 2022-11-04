@@ -10,8 +10,9 @@ function Map(props) {
   const {
     children,
     mapForwardRef,
-    mapReady = () => null,
+    mapReady,
     mapViewStyles,
+    loadingEnabled = true,
     loadingIndicatorColor = R.color.mainColor,
     loadingBackgroundColor = 'rgba(0,0,0,0.5)',
   } = props;
@@ -29,7 +30,7 @@ function Map(props) {
         cacheEnabled={false}
         customMapStyle={mapStyles}
         ref={mapForwardRef}
-        loadingEnabled={true}
+        loadingEnabled={loadingEnabled}
         showsCompass={false}
         onMapReady={onMapReady}
         loadingIndicatorColor={loadingIndicatorColor}
@@ -41,8 +42,8 @@ function Map(props) {
             : initialLong
             ? initialLong
             : 138.5397,
-          latitudeDelta: 0.922,
-          longitudeDelta: 0.922,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
         }}>
         {children}
       </MapView>

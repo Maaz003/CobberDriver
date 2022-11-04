@@ -32,7 +32,7 @@ function DropOffMarker(props) {
           }}
           align={'center'}
           transform={'none'}>
-          {dropOffAddr ? dropOffAddr : 'DropOff'}
+          {dropOffAddr ? dropOffAddr : ''}
         </Text>
         <Icon
           name={'location-sharp'}

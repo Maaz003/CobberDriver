@@ -13,8 +13,11 @@ import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
-import PopUp from '@components/common/PopUp';
-import {ClockReqIcon, WalletReqIcon} from '@components/utils/Svg';
+import {
+  ClockReqIcon,
+  DimensionIcon,
+  WalletReqIcon,
+} from '@components/utils/Svg';
 import {openDirections} from '@components/utils/ReuseableFunctions';
 
 function ScheduleRideDetailsScreen(props) {
@@ -197,6 +200,16 @@ function ScheduleRideDetailsScreen(props) {
           <Divider lineStyles={styles.lineStyles} />
 
           <Text
+            variant={'h4'}
+            font={'Sequel551'}
+            color={R.color.charcoalShade}
+            gutterTop={16}
+            gutterBottom={4}
+            align={'left'}
+            transform={'none'}>
+            Scheduled Time
+          </Text>
+          <Text
             variant={'body2'}
             font={'InterMedium'}
             color={R.color.charcoalShade}
@@ -270,6 +283,67 @@ function ScheduleRideDetailsScreen(props) {
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
               ${data.cost}
+            </Text>
+          </View>
+
+          <Divider
+            lineStyles={{
+              ...styles.lineStyles,
+              marginTop: R.unit.scale(data?.isScheduled ? 12 : 0),
+            }}
+          />
+          <Text
+            variant={'h4'}
+            font={'Sequel551'}
+            color={R.color.charcoalShade}
+            gutterTop={16}
+            gutterBottom={4}
+            align={'left'}
+            transform={'none'}>
+            Equipment Details
+          </Text>
+
+          <Text
+            variant={'body2'}
+            font={'InterMedium'}
+            color={R.color.charcoalShade}
+            gutterTop={12}
+            gutterBottom={4}
+            align={'left'}
+            transform={'none'}>
+            Dimensions
+          </Text>
+
+          <View style={[R.styles.twoItemsRow, styles.detailView]}>
+            <View style={{...styles.svgView, height: R.unit.scale(22)}}>
+              <DimensionIcon height="100%" width="100%" />
+            </View>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Length : 30
+            </Text>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Width : 30
+            </Text>
+            <Text
+              variant={'body3'}
+              font={'InterRegular'}
+              color={R.color.gray4}
+              align={'left'}
+              style={{marginLeft: R.unit.scale(8)}}
+              transform={'none'}>
+              Depth : 30
             </Text>
           </View>
           <Text
