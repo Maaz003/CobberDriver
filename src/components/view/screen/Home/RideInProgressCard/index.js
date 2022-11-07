@@ -90,7 +90,6 @@ function RideInProgressCard(props) {
       } else {
         const dataRide = {data: {...data, type: type}, inRide: 'ended'};
         dispatch(rideSession(dataRide));
-
         navigation.reset({
           index: 0,
           routes: [{name: 'RideCompleted'}],

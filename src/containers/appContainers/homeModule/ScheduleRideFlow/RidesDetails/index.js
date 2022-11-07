@@ -118,12 +118,11 @@ function RideDetailsScreen(props) {
         position: 'top',
       });
     } else {
-      const dataRide = {data: {...data, type: type}, inRide: 'accepted'};
+      const dataRide = {
+        data: {...data, rideStatus: 'notstarted', type: type},
+        inRide: 'accepted',
+      };
       await dispatch(rideSession(dataRide));
-      navigation.navigate('OnGoingRide', {
-        type: 'instant',
-        data: data,
-      });
       PopUp({
         heading: 'Ride Accepted',
         bottomOffset: 0.7,

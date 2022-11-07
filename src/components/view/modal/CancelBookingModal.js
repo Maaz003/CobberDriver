@@ -143,9 +143,10 @@ function CancelBookingModal(props) {
                     Cancel {title}
                   </Text>
 
-                  {reportData?.map(item => {
+                  {reportData?.map((item, index) => {
                     return (
                       <CheckBoxLine
+                        key={index}
                         onPress={() => checkBoxPress(item.id)}
                         text={item.title}
                         selected={item.id === activeIndex}
