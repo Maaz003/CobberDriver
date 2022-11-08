@@ -382,7 +382,9 @@ const userSlice = createSlice({
       state.locationLoader = true;
       state.errorMessage = '';
       state.scheduledTime = undefined;
-      state.pinLoc = false;
+      state.pinLoc = true;
+      state.inRide = 'finished';
+      state.rideSession = undefined;
     },
   },
 });

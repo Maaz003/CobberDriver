@@ -3,6 +3,7 @@ import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {logOut} from '@store/auth/authSlice';
 import {clearUser} from '@store/user/userSlice';
+import {clearScheduleRides} from '@store/scheduleRides/scheduleSlice';
 import {clearCommon} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
@@ -26,6 +27,7 @@ function LogOutModal(props) {
       dispatch(logOut());
       dispatch(clearUser());
       dispatch(clearCommon());
+      dispatch(clearScheduleRides());
     } else {
       setIsBlur(false);
     }

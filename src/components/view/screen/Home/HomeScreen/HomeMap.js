@@ -1,17 +1,14 @@
 import React, {useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Map from '@components/view/mapView/Map';
 import {LocationCoordinates} from '@components/utils/LocationCoordinates';
 import PickUpMarker from '@components/view/mapView/PickUpMarker';
 import {mapStyles} from '@components/constants';
-import {firstTimeAnimate} from '@store/common/commonSlice';
 
 function HomeMap() {
   const mapRef = useRef(null);
-  const dispatch = useDispatch();
   let coordinates = LocationCoordinates();
-  const common = useSelector(state => state.common);
   const user = useSelector(state => state.user);
 
   const {
@@ -35,13 +32,11 @@ function HomeMap() {
     let region = {
       latitude: pickUpLat ? Number(pickUpLat) : initialLat,
       longitude: pickUpLong ? Number(pickUpLong) : initialLong,
-      latitudeDelta: Platform.OS === 'ios' ? 0.001 : 0.002,
-      longitudeDelta: Platform.OS === 'ios' ? 0.001 : 0.002,
+      latitudeDelta: 0.001,
+      longitudeDelta: 0.001,
     };
     mapRef.current.animateToRegion(region, 2000);
   };
-
-  const onMapReady = () => {};
 
   return (
     <SafeAreaView>
@@ -49,7 +44,7 @@ function HomeMap() {
         customMapStyle={mapStyles}
         mapForwardRef={mapRef}
         loadingEnabled={false}
-        mapReady={onMapReady}>
+        mapReady={() => null}>
         <PickUpMarker
           pickUpLat={pickUpLat}
           pickUpLong={pickUpLong}

@@ -9,7 +9,6 @@ import CustomDrawer from '@components/layout/customDrawer';
 import Profile from '@containers/appContainers/profileModule/profile';
 import History from '@containers/appContainers/historyModule/historyScreen';
 import {ChatScreen} from '@components/common/Chats';
-import LocationTracking from '@containers/appContainers/homeModule/LocationTracking';
 import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
 import PaymentScreen from '@containers/appContainers/PaymentScreen';
@@ -18,9 +17,9 @@ import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
 import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
 import RideCompletedScreen from '@containers/appContainers/homeModule/RideCompletedScreen';
 import EarningsScreen from '@containers/appContainers/EarningsScreen';
-import ScheduleOnGoingRideScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/ScheduleOnGoingRideScreen';
-import RideRequestsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesRequests';
-import RideDetailsScreen from '@containers/appContainers/homeModule/ScheduleRideFlow/RidesDetails';
+import RideDetailsScreen from '@containers/appContainers/homeModule/RidesDetails';
+import RideRequestsScreen from '@containers/appContainers/homeModule/RidesRequests';
+//SCHEDULE MODULE
 import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
@@ -93,13 +92,8 @@ const AppStack = () => {
           component={OnGoingRideScreen}
         />
         <Stack.Screen name="RideCompleted" component={RideCompletedScreen} />
-        <Stack.Screen name="LocationTracking" component={LocationTracking} />
         <Stack.Screen name="RideRequests" component={RideRequestsScreen} />
         <Stack.Screen name="RideDetails" component={RideDetailsScreen} />
-        <Stack.Screen
-          name="ScheduleOnGoingRide"
-          component={ScheduleOnGoingRideScreen}
-        />
         <Stack.Screen
           name="EditField"
           options={{

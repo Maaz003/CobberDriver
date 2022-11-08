@@ -84,6 +84,7 @@ const DropDown = props => {
             <View
               style={{
                 padding: R.unit.scale(15),
+                backgroundColor: 'black',
               }}>
               <Text
                 variant={'body2'}
@@ -91,7 +92,7 @@ const DropDown = props => {
                 color={R.color.white}
                 align={'left'}
                 transform={'none'}>
-                {props.title}
+                {props.title ? props.title : props.name}
               </Text>
             </View>
           );

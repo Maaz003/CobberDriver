@@ -737,110 +737,6 @@ export const reportData = [
   {id: uuid.v4(), title: 'Other (nothing from the above)', isChecked: false},
 ];
 
-export const rides = [
-  {
-    id: uuid.v4(),
-    name: 'John Doe',
-    picture: R.image.dummyUser(),
-    productImages: [
-      R.image.item(),
-      R.image.item(),
-      R.image.item(),
-      R.image.item(),
-      R.image.VanPerson(),
-      R.image.item(),
-    ],
-    cost: 240,
-    isScheduled: false,
-    rideStatus: 'notstarted',
-    isCancelled: false,
-    isCompleted: false,
-    isRejected: false,
-    phoneNumber: '0213232212',
-    location: {
-      pickUpLocation: 'Ferere Hall',
-      dropOffLocation: 'Memon Hospital',
-      pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
-      dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
-    },
-  },
-  {
-    rideCompleted: false,
-    requestedRides: [
-      {
-        id: uuid.v4(),
-        name: 'Kate Madison',
-        picture: R.image.dummyUser(),
-        productImages: [
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-        ],
-        cost: 60,
-        isScheduled: true,
-        isCancelled: false,
-        isCompleted: false,
-        isRejected: false,
-        isReviewed: false,
-        phoneNumber: '0213232212',
-        rideStatus: 'notstarted',
-        scheduledTime: {
-          pickUpTime: moment(moment().add(1, 'hours').format())
-            .add(1, 'days')
-            .format(),
-          dropOffTime: moment(moment().add(5, 'hours').format())
-            .add(1, 'days')
-            .format(),
-        },
-        location: {
-          pickUpLocation: 'Ferere Hall',
-          dropOffLocation: 'Maritime Meuseun',
-          pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
-          dropOffLoc: {latitude: 24.9010784, longitude: 67.0677002},
-        },
-      },
-      {
-        id: uuid.v4(),
-        name: 'David Miller',
-        picture: R.image.dummyUser(),
-        productImages: [
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-          R.image.item(),
-        ],
-        isScheduled: true,
-        isCancelled: false,
-        isCompleted: false,
-        isRejected: false,
-        isReviewed: false,
-        rideStatus: 'notstarted',
-        cost: 130,
-        phoneNumber: '0213232212',
-        scheduledTime: {
-          pickUpTime: moment(moment().add(1, 'hours').format())
-            .add(1, 'days')
-            .format(),
-          dropOffTime: moment(moment().add(5, 'hours').format())
-            .add(1, 'days')
-            .format(),
-        },
-        location: {
-          pickUpLocation: 'Ferere Hall',
-          dropOffLocation: 'Memon Hospital',
-          pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
-          dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
-        },
-      },
-    ],
-  },
-];
-
 // export const rides = [
 //   {
 //     id: uuid.v4(),
@@ -862,10 +758,10 @@ export const rides = [
 //     isRejected: false,
 //     phoneNumber: '0213232212',
 //     location: {
-//       pickUpLocation: 'Glenelg North',
-//       dropOffLocation: 'Netherby',
-//       pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
-//       dropOffLoc: {latitude: -34.964981, longitude: 138.620459},
+//       pickUpLocation: 'Ferere Hall',
+//       dropOffLocation: 'Memon Hospital',
+//       pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
+//       dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
 //     },
 //   },
 //   {
@@ -900,10 +796,10 @@ export const rides = [
 //             .format(),
 //         },
 //         location: {
-//           pickUpLocation: 'Glenelg North',
-//           dropOffLocation: 'North Plympton',
-//           pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
-//           dropOffLoc: {latitude: -34.955628, longitude: 138.545333},
+//           pickUpLocation: 'Ferere Hall',
+//           dropOffLocation: 'Maritime Meuseun',
+//           pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
+//           dropOffLoc: {latitude: 24.9010784, longitude: 67.0677002},
 //         },
 //       },
 //       {
@@ -935,12 +831,116 @@ export const rides = [
 //             .format(),
 //         },
 //         location: {
-//           pickUpLocation: 'Glenelg North',
-//           dropOffLocation: 'Adelaide Airport SA 5950, Australia',
-//           pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
-//           dropOffLoc: {latitude: -34.955845, longitude: 138.515387},
+//           pickUpLocation: 'Ferere Hall',
+//           dropOffLocation: 'Memon Hospital',
+//           pickUpLoc: {latitude: 24.8475152, longitude: 67.0330418},
+//           dropOffLoc: {latitude: 24.9456063, longitude: 67.1441915},
 //         },
 //       },
 //     ],
 //   },
 // ];
+
+export const rides = [
+  {
+    id: uuid.v4(),
+    name: 'John Doe',
+    picture: R.image.dummyUser(),
+    productImages: [
+      R.image.item(),
+      R.image.item(),
+      R.image.item(),
+      R.image.item(),
+      R.image.VanPerson(),
+      R.image.item(),
+    ],
+    cost: 240,
+    isScheduled: false,
+    rideStatus: 'notstarted',
+    isCancelled: false,
+    isCompleted: false,
+    isRejected: false,
+    phoneNumber: '0213232212',
+    location: {
+      pickUpLocation: 'Glenelg North',
+      dropOffLocation: 'Netherby',
+      pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
+      dropOffLoc: {latitude: -34.964981, longitude: 138.620459},
+    },
+  },
+  {
+    rideCompleted: false,
+    requestedRides: [
+      {
+        id: uuid.v4(),
+        name: 'Kate Madison',
+        picture: R.image.dummyUser(),
+        productImages: [
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+        ],
+        cost: 60,
+        isScheduled: true,
+        isCancelled: false,
+        isCompleted: false,
+        isRejected: false,
+        isReviewed: false,
+        phoneNumber: '0213232212',
+        rideStatus: 'notstarted',
+        scheduledTime: {
+          pickUpTime: moment(moment().add(1, 'hours').format())
+            .add(1, 'days')
+            .format(),
+          dropOffTime: moment(moment().add(5, 'hours').format())
+            .add(1, 'days')
+            .format(),
+        },
+        location: {
+          pickUpLocation: 'Glenelg North',
+          dropOffLocation: 'North Plympton',
+          pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
+          dropOffLoc: {latitude: -34.955628, longitude: 138.545333},
+        },
+      },
+      {
+        id: uuid.v4(),
+        name: 'David Miller',
+        picture: R.image.dummyUser(),
+        productImages: [
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+          R.image.item(),
+        ],
+        isScheduled: true,
+        isCancelled: false,
+        isCompleted: false,
+        isRejected: false,
+        isReviewed: false,
+        rideStatus: 'notstarted',
+        cost: 130,
+        phoneNumber: '0213232212',
+        scheduledTime: {
+          pickUpTime: moment(moment().add(1, 'hours').format())
+            .add(1, 'days')
+            .format(),
+          dropOffTime: moment(moment().add(5, 'hours').format())
+            .add(1, 'days')
+            .format(),
+        },
+        location: {
+          pickUpLocation: 'Glenelg North',
+          dropOffLocation: 'Adelaide Airport SA 5950, Australia',
+          pickUpLoc: {latitude: -34.971724, longitude: 138.517394},
+          dropOffLoc: {latitude: -34.955845, longitude: 138.515387},
+        },
+      },
+    ],
+  },
+];

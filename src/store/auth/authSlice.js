@@ -125,6 +125,7 @@ const authSlice = createSlice({
       state.isAuth = action.payload.userAuth;
       state.user = undefined;
       state.userToken = '';
+      state.firstTimePop = false;
     },
   },
 });

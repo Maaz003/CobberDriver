@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Platform,
-  Linking,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
@@ -18,16 +11,15 @@ import Text from '@components/common/Text';
 import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
+import {openCall} from '@components/utils/ReuseableFunctions';
 
 function RideInProgressCard(props) {
   const {type = undefined, data = undefined, navigation} = props;
   const {name, picture, location} = data;
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
   const schedule = useSelector(state => state.schedule);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
-  const [isRideStarted, setIsRideStarted] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -137,16 +129,6 @@ function RideInProgressCard(props) {
         });
       }
     }
-  };
-
-  const openCall = () => {
-    let phoneNumber = '';
-    if (Platform.OS === 'android') {
-      phoneNumber = `tel:${data.phoneNumber}`;
-    } else {
-      phoneNumber = `telprompt:${data.phoneNumber}`;
-    }
-    Linking.openURL(phoneNumber);
   };
 
   const locationIcon = () => {
@@ -325,7 +307,11 @@ function RideInProgressCard(props) {
             {name}
           </Text>
           <View style={[R.styles.rowView, styles.iconContainer]}>
-            <TouchableOpacity style={styles.iconView} onPress={openCall}>
+            <TouchableOpacity
+              style={styles.iconView}
+              onPress={() => {
+                openCall(data.phoneNumber);
+              }}>
               <Icon
                 type={'FontAwesome'}
                 name={'phone'}
@@ -359,7 +345,7 @@ function RideInProgressCard(props) {
         </View>
 
         <Button
-          value={!isRideStarted ? `${buttonText}` : 'End Ride'}
+          value={buttonText}
           bgColor={R.color.mainColor}
           width={'90%'}
           size={'lg'}

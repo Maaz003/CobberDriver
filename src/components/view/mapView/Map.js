@@ -16,8 +16,7 @@ function Map(props) {
     loadingIndicatorColor = R.color.mainColor,
     loadingBackgroundColor = 'rgba(0,0,0,0.5)',
   } = props;
-  const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
-    coordinates;
+  const {pickUpLat, pickUpLong, initialLat, initialLong} = coordinates;
 
   const onMapReady = () => {
     mapReady();

@@ -21,7 +21,6 @@ const CurrentLocation = async props => {
           getAddressFromCoordinates(lat, long);
         },
         error => {
-          console.log('ERRROR GET LOC IOS', error);
           actionCall(locationLoader(false));
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 1000},
@@ -32,11 +31,8 @@ const CurrentLocation = async props => {
   }
 
   if (Platform.OS === 'android') {
-    console.log('ANDROID');
     let granted = await statusLocationPermission();
-    console.log('GRANREED', granted);
     if (granted) {
-      console.log('first');
       Geolocation.getCurrentPosition(
         position => {
           let lat = position.coords.latitude;
@@ -55,7 +51,6 @@ const CurrentLocation = async props => {
   }
 
   const getAddressFromCoordinates = async (latitude, longitude) => {
-    console.log('MJ');
     await Geocoder.from(latitude, longitude)
       .then(json => {
         let addressRaw = json.results[0].formatted_address;
@@ -90,39 +85,14 @@ const CurrentLocation = async props => {
           state: StateLocality.long_name,
           city,
         };
-        console.log('PROMISE RESOLVED');
         actionCall(authLocationCoords(userLocation));
         actionCall(confirmPickUp(loc));
         actionCall(locationLoader(false));
-
-        // if (flag) {
-        // }
       })
       .catch(error => {
-        console.log('ERROR GEOCODE 3', error);
         actionCall(locationLoader(false));
       });
   };
 };
-
-// export const getAddressFromCoordinates = async (latitude, longitude) => {
-//   console.log('BRUH');
-//   return await Geocoder.from(latitude, longitude)
-//     .then(json => {
-//       let addressRaw = json.results[0].formatted_address;
-//       const address = addressRaw && stringTrim(addressRaw, 2);
-//       actionCall(locationLoader(false));
-//       const loc = {
-//         address,
-//         latitude,
-//         longitude,
-//       };
-//       return loc;
-//     })
-//     .catch(error => {
-//       console.log('ERROR GEOCODE', error);
-//       actionCall(locationLoader(false));
-//     });
-// };
 
 export default CurrentLocation;

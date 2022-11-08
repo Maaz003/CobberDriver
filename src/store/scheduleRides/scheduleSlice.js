@@ -28,30 +28,32 @@ export const scheduledRides = createAsyncThunk(
   },
 );
 
-export const clearPlans = createAsyncThunk('plans/clearPlans', async data => {
-  try {
-    return {
-      status: 'success',
-      error: false,
-      message: 'Success!',
-      isData: data,
-    };
-  } catch (error) {
-    return {
-      status: 'failed',
-      error: true,
-      message: 'Oops! Something went wrong!',
-      isData: undefined,
-    };
-  }
-});
+export const clearScheduleRides = createAsyncThunk(
+  'plans/clearScheduleRides',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success!',
+        isData: data,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        isData: undefined,
+      };
+    }
+  },
+);
 
 const initialState = {
   isLoadingRequest: false,
   status: 'idle',
   error: false,
   errorMessage: '',
-  plansData: undefined,
   scheduledRides: [],
 };
 
@@ -67,7 +69,7 @@ const scheduleSlice = createSlice({
       state.error = false;
       state.scheduledRides = action.payload.rideData;
     },
-    [clearPlans.fulfilled]: (state, action) => {
+    [clearScheduleRides.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;

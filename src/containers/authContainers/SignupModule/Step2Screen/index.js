@@ -17,20 +17,28 @@ import FormValidation from '@components/utils/FormValidation';
 import Icon from '@components/common/Icon';
 import PictureOptionsModals from '@components/view/modal/PictureOptionsModal';
 import Toast from '@components/utils/Toast';
+import DropDown from '@components/common/DropDown';
+import {useSelector} from 'react-redux';
+import {useCallback} from 'react';
 
 function Step2Screen(props) {
   const {navigation} = props;
   const {step1Data} = props.route.params;
+  const common = useSelector(state => state.common);
   const [modalType, setModalType] = useState(undefined);
   const [activeIndex, setActiveIndex] = useState(undefined);
   const [isModal, setIsModal] = useState(false);
   const [authUser, setAuthUser] = useState({
     model: '',
     color: '',
+    vehicle: '',
+    vehicleId: '',
   });
   const [errorField, setErrorField] = useState({
     model: '',
     color: '',
+    vehicle: '',
+    vehicleId: '',
   });
 
   const [options, setOptions] = useState([
@@ -91,6 +99,19 @@ function Step2Screen(props) {
     setOptions(tempArr);
   };
 
+  const vehicleDropDown = useCallback(
+    childData => {
+      let dataObj = '';
+      dataObj = childData;
+      setAuthUser({
+        ...authUser,
+        vehicle: dataObj.name,
+        vehicleId: dataObj._id,
+      });
+    },
+    [{...authUser, vehicle: authUser?.vehicle}],
+  );
+
   const onSubmit = async () => {
     // navigation.navigate('Step3', {
     //   step2Data: {},
@@ -110,6 +131,8 @@ function Step2Screen(props) {
       const formData = {
         model: authUser?.model,
         color: authUser?.color,
+        vehicle: authUser?.vehicle,
+        vehicleId: authUser?.vehicleId,
       };
       const formError = FormValidation(formData);
       if (formError) {
@@ -121,6 +144,8 @@ function Step2Screen(props) {
           ...{
             model: '',
             color: '',
+            vehicle: '',
+            vehicleId: '',
           },
           ...obj,
         });
@@ -130,7 +155,10 @@ function Step2Screen(props) {
         });
         const reqData = {
           model: authUser?.model,
+          color: authUser?.color,
           pictures: options,
+          vehicle: authUser?.vehicle,
+          vehicleId: authUser?.vehicleId,
         };
         navigation.navigate('Step3', {
           step2Data: {...step1Data, ...reqData},
@@ -179,6 +207,25 @@ function Step2Screen(props) {
               Driver Details
             </Text>
           </Text>
+
+          <DropDown
+            zIndex={1000}
+            zIndexInverse={2000}
+            zIndexIOS={10}
+            arrayData={common?.vehicles}
+            placeholder={'Select Vehicle'}
+            loaderParentCall={vehicleDropDown}
+            schema={{
+              label: 'name',
+              value: 'name',
+            }}
+            search={true}
+            value={authUser?.vehicle}
+            gutterBottom={24}
+            formError={errorField?.vehicle}
+            iconName={'globe'}
+            iconType={'FontAwesome'}
+          />
 
           <TextInput
             secureText={false}

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
-import LiveLocation from '../PickUp/LiveLocation';
+import LiveLocation from '../HomeScreen/LiveLocation';
 
 function MapHeader(props) {
   const {

@@ -88,6 +88,16 @@ export const openDirections = (type, location) => {
   });
 };
 
+export const openCall = data => {
+  let phoneNumber = '';
+  if (Platform.OS === 'android') {
+    phoneNumber = `tel:${data}`;
+  } else {
+    phoneNumber = `telprompt:${data}`;
+  }
+  Linking.openURL(phoneNumber);
+};
+
 export default {
   stringTrim,
   timeFormatSchedule,

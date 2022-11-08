@@ -15,6 +15,7 @@ import TextInput from '@components/common/TextInput';
 import R from '@components/utils/R';
 import FormValidation from '@components/utils/FormValidation';
 import Icon from '@components/common/Icon';
+import Loader from '@components/common/Loader';
 import PopUp from '@components/common/PopUp';
 
 function Step3Screen(props) {
@@ -24,6 +25,7 @@ function Step3Screen(props) {
     password: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(false);
   const [errorField, setErrorField] = useState({
     password: '',
     confirmPassword: '',
@@ -43,9 +45,12 @@ function Step3Screen(props) {
       currentLocation,
       contact,
       pictures,
+      model,
+      color,
+      vehicleId,
     } = step2Data;
     let driverPics = pictures;
-
+    const [lat, long] = currentLocation.coordinates;
     formData.append('displayName', displayName);
     formData.append('role', role);
     formData.append('dialCode', dialCode);
@@ -54,9 +59,14 @@ function Step3Screen(props) {
     formData.append('email', email);
     formData.append('country', country);
     formData.append('state', state);
-    formData.append('currentLocation', JSON.stringify(currentLocation));
+    formData.append('latitude', lat);
+    formData.append('longitude', long);
+    formData.append('color', color);
+    formData.append('model', model);
+    formData.append('vehicle', vehicleId);
     formData.append('password', authUser?.password);
     formData.append('passwordConfirm', authUser?.confirmPassword);
+
     formData.append('licenseCopy', {
       uri: driverPics[0].frontPicture.path,
       type: driverPics[0].frontPicture.mime,
@@ -91,22 +101,18 @@ function Step3Screen(props) {
   };
 
   const onSubmit = async () => {
-    // navigation.navigate('Verification', {
-    //   user: '2222',
-    // });
+    setLoading(true);
     const formData = {
       password: authUser?.password,
       confirmPassword: authUser?.confirmPassword,
     };
-
     const formError = FormValidation(formData);
-
     if (formError) {
       const obj = {};
       formError?.errorArr?.map(item => {
         obj[item] = formError?.message;
       });
-
+      setLoading(false);
       setErrorField({
         ...{
           password: '',
@@ -120,59 +126,24 @@ function Step3Screen(props) {
         confirmPassword: '',
       });
 
-      let formResult = convertFormData();
-      console.log('FORM RESULT', JSON.stringify(formResult, null, 2));
-
-      // const reqData = {
-      //   ...formResult,
-      //   displayName: displayName,
-      //   role: role,
-      //   dialCode: dialCode,
-      //   countryCode: countryCode,
-      //   country: country,
-      //   contact: contact,
-      //   state: 'sindh',
-      //   email: email,
-      //   currentLocation: updatedCoordinates,
-      //   password: authUser?.password,
-      //   passwordConfirm: authUser?.confirmPassword,
-      //   driverInfo: {
-      //     color: 'red',
-
-      //     // licenseCopy: formResult._parts[0],
-      //     // nicCopy: formResult._parts[1],
-      //     // residenceProof: formResult._parts[2],
-      //   },
-      // };
-
-      // console.log('REQ', reqData);
-      // const signUrl = URL('auth/signup');
-      // console.log('URL', signUrl);
-      // const response = await Post(signUrl, reqData);
-      // console.log('RESPOMSE', response?.data);
-      // PopUp({
-      //   heading: `Registered Successfully.sicationCode}`,
-      //   bottomOffset: 0.8,
-      //   visibilityTime: 3000,
-      //   position: 'top',
-      // });
-      // navigation.navigate('Verification');
-      // const signUrl = URL('auth/signup');
-      // const response = await Post(signUrl, reqData);
-      // if (response !== undefined) {
-      //   PopUp({
-      //     heading: `Registered Successfully.Meantime ${response?.data?.data?.user?.verificationCode}`,
-      //     bottomOffset: 0.8,
-      //     visibilityTime: 5000,
-      //     position: 'top',
-      //   });
-      //   navigation.navigate('Verification', {
-      //     user: response?.data?.data?.user?._id,
-      //   });
-      //   setIsLoading(false);
-      // } else {
-      //   setIsLoading(false);
-      // }
+      const userData = await convertFormData();
+      const signUrl = URL('auth/driver-signup');
+      const response = await Post(signUrl, userData);
+      if (response !== undefined) {
+        const code = response?.data?.data?.user?.verificationCode;
+        navigation.navigate('Verification', {
+          user: response?.data?.data?.user?._id,
+        });
+        PopUp({
+          heading: `Registered Successfully. Meanwhile ${code}`,
+          bottomOffset: 0.8,
+          visibilityTime: 7000,
+          position: 'top',
+        });
+      } else {
+        setLoading(false);
+      }
+      setLoading(false);
     }
   };
 
@@ -182,6 +153,7 @@ function Step3Screen(props) {
         style={{flex: 0, backgroundColor: 'green'}}
         barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
       />
+
       <ScrollView
         style={{
           ...R.styles.container,
@@ -314,6 +286,12 @@ function Step3Screen(props) {
           </TouchableNativeFeedback>
         </View>
       </ScrollView>
+
+      {loading && (
+        <View style={styles.loaderContainer}>
+          <Loader size={'large'} color={R.color.mainColor} />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -328,13 +306,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(50),
-    // backgroundColor: 'purple',
   },
   nextButtonLayout: {
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexDirection: 'row',
-    // backgroundColor: 'red',
     width: '100%',
+  },
+  loaderContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 });

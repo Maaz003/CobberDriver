@@ -106,6 +106,27 @@ export const firstTimeAnimate = createAsyncThunk(
   },
 );
 
+export const vehiclesList = createAsyncThunk(
+  'common/vehiclesList',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success! You are logged out!',
+        location: data,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        location: false,
+      };
+    }
+  },
+);
+
 export const tempRidesSet = createAsyncThunk('common/tempRidesSet', data => {
   try {
     return {
@@ -179,6 +200,7 @@ const initialState = {
   firstAnimate: true,
   firstReduxSet: false,
   tempRides: [],
+  vehicles: [],
 };
 
 const commonSlice = createSlice({
@@ -222,6 +244,12 @@ const commonSlice = createSlice({
       state.error = false;
       state.firstAnimate = action.payload.location;
     },
+    [vehiclesList.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.isLoadingRequest = false;
+      state.error = false;
+      state.vehicles = action.payload.location;
+    },
     [firstTimeReduxSet.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
@@ -245,6 +273,9 @@ const commonSlice = createSlice({
       state.mapRef = undefined;
       state.slideRef = undefined;
       state.firstAnimate = true;
+      state.firstReduxSet = false;
+      state.vehicles = true;
+      state.tempRides = [];
     },
   },
 });

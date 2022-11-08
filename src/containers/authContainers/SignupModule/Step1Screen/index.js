@@ -10,6 +10,8 @@ import {
   Image as Imagec,
   TouchableOpacity,
 } from 'react-native';
+import {URL} from '@config/apiUrl';
+import {Get} from '@axios/AxiosInterceptorFunction';
 import CountryFlag from 'react-native-country-flag';
 import Geocoder from 'react-native-geocoding';
 import {Image} from 'react-native-compressor';
@@ -27,6 +29,7 @@ import Icon from '@components/common/Icon';
 import Toast from '@components/utils/Toast';
 import PopUp from '@components/common/PopUp';
 import {useIsFocused} from '@react-navigation/native';
+import {vehiclesList} from '@store/common/commonSlice';
 
 function Step1Screen(props) {
   const {navigation} = props;
@@ -74,6 +77,7 @@ function Step1Screen(props) {
 
   useEffect(() => {
     CurrentLocation({actionCall: dispatch});
+    fetchVehicles();
   }, []);
 
   useEffect(() => {
@@ -108,6 +112,12 @@ function Step1Screen(props) {
         setFilteredStates(states);
       })
       .catch(error => console.log('error ', error));
+  };
+
+  const fetchVehicles = async data => {
+    const signUrl = URL('vehicle/');
+    const response = await Get(signUrl);
+    dispatch(vehiclesList(response?.data?.data));
   };
 
   const uploadImage = async () => {
@@ -255,7 +265,6 @@ function Step1Screen(props) {
           picture: picture,
           state: authUser?.state,
         };
-        // console.log('sTEP !', reqData);
         navigation.navigate('Step2', {
           step1Data: reqData,
         });

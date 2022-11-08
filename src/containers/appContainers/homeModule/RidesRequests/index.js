@@ -3,7 +3,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
+import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 
 function RideRequestsScreen(props) {

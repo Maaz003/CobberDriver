@@ -6,9 +6,9 @@ import R from '@components/utils/R';
 import {firstTimeReduxSet, tempRidesSet} from '@store/common/commonSlice';
 import {useFocusEffect} from '@react-navigation/native';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
-import HomeMap from '@components/view/screen/Home/PickUp/HomeMap';
+import HomeMap from '@components/view/screen/Home/HomeScreen/HomeMap';
 import MapHeader from '@components/view/screen/Home/MapHeader';
-import RidesList from '@components/view/screen/Home/PickUp/RidesList';
+import RidesList from '@components/view/screen/Home/HomeScreen/RidesList';
 import CurrentLocation from '@components/utils/CurrentLocation';
 import {rides} from '@components/constants';
 

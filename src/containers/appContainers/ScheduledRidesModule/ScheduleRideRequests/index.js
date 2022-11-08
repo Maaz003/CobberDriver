@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {rideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import RideRequestsCard from '@components/view/screen/Home/Instant/RideRequestsCard';
+import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import Button from '@components/common/Button';
 

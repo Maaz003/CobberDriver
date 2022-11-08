@@ -7,10 +7,10 @@ import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-import MediaDisplay from '@components/view/screen/Home/Instant/MediaDisplay';
+import MediaDisplay from '@components/view/screen/Home/MediaDisplay';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
-import RideMap from '@components/view/screen/Home/Instant/RideMap';
+import RideMap from '@components/view/screen/Home/RideMap';
 import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
@@ -73,25 +73,6 @@ function RideDetailsScreen(props) {
       navigation.navigate('RideRequests', {
         data: obj.requestedRides,
       });
-
-      // let requestedRides = tempArr[index];
-      // let updatedRides = requestedRides?.requestedRides.filter(
-      //   item => item.id !== data.id,
-      // );
-
-      // if (updatedRides.length > 0) {
-      //   tempArr[index].requestedRides = updatedRides;
-      //   dispatch(tempRidesSet(tempArr));
-      //   navigation.navigate('RideRequests', {
-      //     data: updatedRides,
-      //   });
-      // } else {
-      //   tempArr = [common.tempRides[0]];
-      //   navigation.navigate('RideRequests', {
-      //     data: [],
-      //   });
-      //   dispatch(tempRidesSet(tempArr));
-      // }
     } else {
       let tempArr = JSON.parse(JSON.stringify(common.tempRides));
       let objFound = tempArr.find(item => item.id === data.id);

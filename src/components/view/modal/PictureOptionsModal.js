@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
@@ -8,7 +7,6 @@ import Button from '@components/common/Button';
 
 function PictureOptionsModals(props) {
   const {uploadPicture} = props;
-  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
 
@@ -33,11 +31,11 @@ function PictureOptionsModals(props) {
           uploadPicture(pickerResult);
           setIsBlur(false);
         } else {
-          console.log('EL:SE');
+          // console.log('EL:SE');
         }
       }
     } catch (error) {
-      console.log('ERR', error);
+      // console.log('ERR', error);
     }
   };
 
