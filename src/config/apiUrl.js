@@ -1,7 +1,8 @@
 // export const apiUrl = 'https://lac-app-backend.herokuapp.com';
-// export const apiUrl = 'https://6e13-103-244-178-85.ngrok.io';
+export const apiUrl =
+  'https://c8d8-2400-adc1-146-a100-102d-8c29-a823-6577.in.ngrok.io';
 // export const apiUrl = 'https://backend.leanderathleticclub.com'; // LIVE RELEASE purpose
-export const apiUrl = 'https://cobber-backend.herokuapp.com'; // DEPLOYMENT(STAGING) purpose=
+// export const apiUrl = 'https://cobber-backend.herokuapp.com'; // DEPLOYMENT(STAGING) purpose=
 
 export const imageUrl = `${apiUrl}/api/v1/images/`;
 

@@ -58,7 +58,7 @@ function LogOutModal(props) {
           <View style={[styles.modalView]}>
             <Text
               variant={'h3'}
-              font={'semiBold'}
+              font={'PoppinsMedium'}
               gutterTop={20}
               gutterBottom={25}
               color={R.color.wzs}
@@ -74,8 +74,8 @@ function LogOutModal(props) {
                 width={'49%'}
                 size={'xmd'}
                 gutterTop={R.unit.scale(20)}
-                variant={'h6'}
-                font={'bold'}
+                variant={'body1'}
+                font={'PoppinsMedium'}
                 color={R.color.charcoalShade}
                 borderRadius={100}
                 onPress={() => buttonSubmit(true)}
@@ -90,8 +90,8 @@ function LogOutModal(props) {
                 width={'49%'}
                 size={'xmd'}
                 gutterTop={R.unit.scale(20)}
-                variant={'h6'}
-                font={'bold'}
+                variant={'body1'}
+                font={'PoppinsMedium'}
                 color={R.color.mainColor}
                 borderRadius={100}
                 onPress={() => buttonSubmit(false)}

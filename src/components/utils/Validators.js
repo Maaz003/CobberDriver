@@ -1,10 +1,12 @@
 import {PermissionsAndroid, Platform} from 'react-native';
+import RNExitApp from 'react-native-exit-app';
 import {
   check,
   PERMISSIONS,
   request,
   openSettings,
 } from 'react-native-permissions';
+import {View, StyleSheet, Button, Alert} from 'react-native';
 
 const emailREX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,256}))$/;
@@ -30,6 +32,13 @@ export const requestLocationPermission = async () => {
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       return true;
     } else {
+      Alert.alert(
+        'Location Permission',
+        `You haven't enabled location access. For enabling location go to user settings and grant location access`,
+        [{text: 'OK', onPress: () => RNExitApp.exitApp()}],
+        {cancelable: false},
+      );
+
       return false;
     }
   } catch (err) {

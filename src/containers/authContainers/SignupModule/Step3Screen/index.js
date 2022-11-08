@@ -8,6 +8,8 @@ import {
   StatusBar,
   TouchableNativeFeedback,
 } from 'react-native';
+import {URL} from '@config/apiUrl';
+import {Post} from '@axios/AxiosInterceptorFunction';
 import Text from '@components/common/Text';
 import TextInput from '@components/common/TextInput';
 import R from '@components/utils/R';
@@ -27,66 +29,151 @@ function Step3Screen(props) {
     confirmPassword: '',
   });
 
-  const onSubmit = async () => {
-    navigation.navigate('Verification', {
-      user: '2222',
+  const convertFormData = () => {
+    var formData = new FormData();
+
+    const {
+      displayName,
+      role,
+      dialCode,
+      country,
+      state,
+      countryCode,
+      email,
+      currentLocation,
+      contact,
+      pictures,
+    } = step2Data;
+    let driverPics = pictures;
+
+    formData.append('displayName', displayName);
+    formData.append('role', role);
+    formData.append('dialCode', dialCode);
+    formData.append('countryCode', countryCode);
+    formData.append('contact', contact);
+    formData.append('email', email);
+    formData.append('country', country);
+    formData.append('state', state);
+    formData.append('currentLocation', JSON.stringify(currentLocation));
+    formData.append('password', authUser?.password);
+    formData.append('passwordConfirm', authUser?.confirmPassword);
+    formData.append('licenseCopy', {
+      uri: driverPics[0].frontPicture.path,
+      type: driverPics[0].frontPicture.mime,
+      name: new Date() + '_image',
     });
-    // const reqData = {
-    //   password: authUser?.password,
-    //   confirmPassword: authUser?.confirmPassword,
-    // };
+    formData.append('licenseCopy', {
+      uri: driverPics[0].backPicture.path,
+      type: driverPics[0].backPicture.mime,
+      name: new Date() + '_image',
+    });
+    formData.append('nicCopy', {
+      uri: driverPics[1].frontPicture.path,
+      type: driverPics[1].frontPicture.mime,
+      name: new Date() + '_image',
+    });
+    formData.append('nicCopy', {
+      uri: driverPics[1].backPicture.path,
+      type: driverPics[1].backPicture.mime,
+      name: new Date() + '_image',
+    });
+    formData.append('residenceProof', {
+      uri: driverPics[2].frontPicture.path,
+      type: driverPics[2].frontPicture.mime,
+      name: new Date() + '_image',
+    });
+    formData.append('residenceProof', {
+      uri: driverPics[2].backPicture.path,
+      type: driverPics[2].backPicture.mime,
+      name: new Date() + '_image',
+    });
+    return formData;
+  };
 
-    // const formError = FormValidation(reqData);
+  const onSubmit = async () => {
+    // navigation.navigate('Verification', {
+    //   user: '2222',
+    // });
+    const formData = {
+      password: authUser?.password,
+      confirmPassword: authUser?.confirmPassword,
+    };
 
-    // if (formError) {
-    //   const obj = {};
-    //   formError?.errorArr?.map(item => {
-    //     obj[item] = formError?.message;
-    //   });
+    const formError = FormValidation(formData);
 
-    //   setErrorField({
-    //     ...{
-    //       password: '',
-    //       confirmPassword: '',
-    //     },
-    //     ...obj,
-    //   });
-    // } else {
-    //   setErrorField({
-    //     password: '',
-    //     confirmPassword: '',
-    //   });
+    if (formError) {
+      const obj = {};
+      formError?.errorArr?.map(item => {
+        obj[item] = formError?.message;
+      });
 
-    //   const reqData = {
-    //     license: authUser?.license,
-    //     nic: authUser?.nic,
-    //     residence: authUser?.country,
-    //     model: authUser?.model,
-    //   };
-    //   PopUp({
-    //     heading: `Registered Successfully.sicationCode}`,
-    //     bottomOffset: 0.8,
-    //     visibilityTime: 3000,
-    //     position: 'top',
-    //   });
-    // navigation.navigate('Verification');
-    // const signUrl = URL('auth/signup');
-    // const response = await Post(signUrl, reqData);
-    // if (response !== undefined) {
-    //   PopUp({
-    //     heading: `Registered Successfully.Meantime ${response?.data?.data?.user?.verificationCode}`,
-    //     bottomOffset: 0.8,
-    //     visibilityTime: 5000,
-    //     position: 'top',
-    //   });
-    //   navigation.navigate('Verification', {
-    //     user: response?.data?.data?.user?._id,
-    //   });
-    //   setIsLoading(false);
-    // } else {
-    //   setIsLoading(false);
-    // }
-    // }
+      setErrorField({
+        ...{
+          password: '',
+          confirmPassword: '',
+        },
+        ...obj,
+      });
+    } else {
+      setErrorField({
+        password: '',
+        confirmPassword: '',
+      });
+
+      let formResult = convertFormData();
+      console.log('FORM RESULT', JSON.stringify(formResult, null, 2));
+
+      // const reqData = {
+      //   ...formResult,
+      //   displayName: displayName,
+      //   role: role,
+      //   dialCode: dialCode,
+      //   countryCode: countryCode,
+      //   country: country,
+      //   contact: contact,
+      //   state: 'sindh',
+      //   email: email,
+      //   currentLocation: updatedCoordinates,
+      //   password: authUser?.password,
+      //   passwordConfirm: authUser?.confirmPassword,
+      //   driverInfo: {
+      //     color: 'red',
+
+      //     // licenseCopy: formResult._parts[0],
+      //     // nicCopy: formResult._parts[1],
+      //     // residenceProof: formResult._parts[2],
+      //   },
+      // };
+
+      // console.log('REQ', reqData);
+      // const signUrl = URL('auth/signup');
+      // console.log('URL', signUrl);
+      // const response = await Post(signUrl, reqData);
+      // console.log('RESPOMSE', response?.data);
+      // PopUp({
+      //   heading: `Registered Successfully.sicationCode}`,
+      //   bottomOffset: 0.8,
+      //   visibilityTime: 3000,
+      //   position: 'top',
+      // });
+      // navigation.navigate('Verification');
+      // const signUrl = URL('auth/signup');
+      // const response = await Post(signUrl, reqData);
+      // if (response !== undefined) {
+      //   PopUp({
+      //     heading: `Registered Successfully.Meantime ${response?.data?.data?.user?.verificationCode}`,
+      //     bottomOffset: 0.8,
+      //     visibilityTime: 5000,
+      //     position: 'top',
+      //   });
+      //   navigation.navigate('Verification', {
+      //     user: response?.data?.data?.user?._id,
+      //   });
+      //   setIsLoading(false);
+      // } else {
+      //   setIsLoading(false);
+      // }
+    }
   };
 
   return (

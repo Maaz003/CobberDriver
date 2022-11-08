@@ -26,15 +26,18 @@ import FormValidation from '@components/utils/FormValidation';
 import Icon from '@components/common/Icon';
 import Toast from '@components/utils/Toast';
 import PopUp from '@components/common/PopUp';
+import {useIsFocused} from '@react-navigation/native';
 
 function Step1Screen(props) {
   const {navigation} = props;
   Geocoder.init(GOOGLE_GEOCODE);
+  const headers = new Headers();
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
   const [countryCode, setCountryCode] = useState('');
   const [photo, setPhoto] = useState('');
-  const [picture, setPicture] = useState({});
+  const isFocused = useIsFocused();
+  const [picture, setPicture] = useState(undefined);
   const [authUser, setAuthUser] = useState({
     name: '',
     email: '',
@@ -42,6 +45,7 @@ function Step1Screen(props) {
     country: '',
     phoneNumber: '',
     currentLoc: undefined,
+    state: '',
   });
   const [errorField, setErrorField] = useState({
     name: '',
@@ -49,11 +53,62 @@ function Step1Screen(props) {
     dialCode: '',
     country: '',
     phoneNumber: '',
+    state: '',
   });
+  const [filteredStates, setFilteredStates] = useState([]);
+
+  headers.append(
+    'X-CSCAPI-KEY',
+    'VjlSNUFCZXhaVWU2Yktuenl3bU1CRFA0a2FBbXhrYzNuTGlsOU5JZw==',
+  );
+
+  const requestOptions = {
+    method: 'GET',
+    headers: headers,
+    redirect: 'follow',
+  };
+
+  useEffect(() => {
+    fetchStates();
+  }, [countryCode]);
 
   useEffect(() => {
     CurrentLocation({actionCall: dispatch});
   }, []);
+
+  useEffect(() => {
+    if (common?.authCoordinates !== undefined) {
+      const {country, state, countCode} = common?.authCoordinates;
+      let dc = countriesDialCode.find(item => item?.code?.includes(countCode));
+      setCountryCode(countCode);
+      setAuthUser({
+        ...authUser,
+        country: country,
+        state: state,
+        dialCode: dc.dial_code,
+      });
+    }
+  }, [common?.authCoordinates, isFocused]);
+
+  const fetchStates = async data => {
+    await fetch(
+      `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        const res = result;
+        let states = res?.map(item => {
+          return {
+            title: item?.name,
+            value: item?.name,
+            iso2: item?.iso2,
+          };
+        });
+        setFilteredStates(states);
+      })
+      .catch(error => console.log('error ', error));
+  };
 
   const uploadImage = async () => {
     try {
@@ -112,78 +167,100 @@ function Step1Screen(props) {
     ],
   );
 
+  const stateDropDown = useCallback(
+    data => {
+      setAuthUser({...authUser, state: data?.value});
+    },
+    [
+      {...authUser, country: authUser?.country},
+      {...authUser, dialCode: authUser?.dialCode},
+    ],
+  );
+
   const onSubmit = async () => {
-    navigation.navigate('Step2', {
-      step1Data: {},
-    });
-    // const reqData = {
-    //   name: authUser?.name,
-    //   email: authUser?.email,
-    //   dialCode: authUser?.dialCode,
-    //   country: authUser?.country,
-    //   phoneNumber: authUser?.phoneNumber,
-    // };
+    // navigation.navigate('Step2', {
+    //   step1Data: {},
+    // });
 
-    // const formError = FormValidation(reqData);
-    // if (formError) {
-    //   const obj = {};
-    //   formError?.errorArr?.map(item => {
-    //     obj[item] = formError?.message;
-    //   });
+    if (picture === undefined) {
+      Toast.show({
+        title: 'Picture not uploaded',
+        message: 'Kindly upload your profile picture',
+        type: 'danger',
+      });
+    } else {
+      const formData = {
+        name: authUser?.name,
+        email: authUser?.email,
+        dialCode: authUser?.dialCode,
+        country: authUser?.country,
+        phoneNumber: authUser?.phoneNumber,
+      };
 
-    //   setErrorField({
-    //     ...{
-    //       name: '',
-    //       email: '',
-    //       dialCode: '',
-    //       country: '',
-    //       phoneNumber: '',
-    //     },
-    //     ...obj,
-    //   });
-    // } else if (photo.length === 0) {
-    //   PopUp({
-    //     heading: 'Please upload a picture',
-    //     bottomOffset: 0.7,
-    //     visibilityTime: 3000,
-    //     position: 'top',
-    //   });
-    // } else {
-    //   setErrorField({
-    //     name: '',
-    //     email: '',
-    //     dialCode: '',
-    //     country: '',
-    //     phoneNumber: '',
-    //   });
-    //   var currentLoc;
-    //   if (common?.authCoordinates) {
-    //     if (common?.authCoordinates?.coordinates.length > 0) {
-    //       currentLoc = {coordinates: common?.authCoordinates?.coordinates};
-    //     }
-    //   } else {
-    //     let res = await getLatLong();
-    //     let tempArr = [];
-    //     let latitude = res.lat;
-    //     let longitude = res.lng;
-    //     tempArr.push(latitude, longitude);
-    //     currentLoc = {coordinates: tempArr};
-    //   }
+      const formError = FormValidation(formData);
+      if (formError) {
+        const obj = {};
+        formError?.errorArr?.map(item => {
+          obj[item] = formError?.message;
+        });
 
-    //   const reqData = {
-    //     displayName: authUser?.name,
-    //     role: 'driver',
-    //     dialCode: authUser?.dialCode,
-    //     country: authUser?.country,
-    //     countryCode: countryCode,
-    //     email: authUser?.email,
-    //     currentLocation: currentLoc,
-    //     contact: authUser?.phoneNumber,
-    //   };
-    //   navigation.navigate('Step2', {
-    //     step1Data: reqData,
-    //   });
-    // }
+        setErrorField({
+          ...{
+            name: '',
+            email: '',
+            dialCode: '',
+            country: '',
+            phoneNumber: '',
+          },
+          ...obj,
+        });
+      } else if (photo.length === 0) {
+        PopUp({
+          heading: 'Please upload a picture',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
+      } else {
+        setErrorField({
+          name: '',
+          email: '',
+          dialCode: '',
+          country: '',
+          phoneNumber: '',
+        });
+        var currentLoc;
+        if (common?.authCoordinates) {
+          if (common?.authCoordinates?.coordinates.length > 0) {
+            currentLoc = {coordinates: common?.authCoordinates?.coordinates};
+          }
+        } else {
+          let res = await getLatLong();
+          let tempArr = [];
+          let latitude = res.lat;
+          let longitude = res.lng;
+          tempArr.push(latitude, longitude);
+          currentLoc = {coordinates: tempArr};
+        }
+
+        const reqData = {
+          displayName: authUser?.name,
+          role: 'driver',
+          dialCode: authUser?.dialCode,
+          country: authUser?.country,
+          countryCode: countryCode,
+          email: authUser?.email,
+          currentLocation: currentLoc,
+          contact: authUser?.phoneNumber,
+          picture: picture,
+          state: authUser?.state,
+        };
+        // console.log('sTEP !', reqData);
+        navigation.navigate('Step2', {
+          step1Data: reqData,
+        });
+      }
+    }
   };
 
   return (
@@ -272,6 +349,7 @@ function Step1Screen(props) {
               </View>
             </TouchableOpacity>
           </View>
+
           <TextInput
             secureText={false}
             placeholder={'Name'}
@@ -318,6 +396,25 @@ function Step1Screen(props) {
             formError={errorField?.country}
             iconName={'globe'}
             iconType={'FontAwesome'}
+          />
+
+          <DropDown
+            zIndex={1000}
+            zIndexInverse={2000}
+            zIndexIOS={10}
+            arrayData={filteredStates}
+            placeholder={'Select State'}
+            loaderParentCall={stateDropDown}
+            schema={{
+              label: 'title',
+              value: 'value',
+            }}
+            search={true}
+            value={authUser?.state}
+            gutterBottom={24}
+            formError={errorField?.state}
+            iconName={'city'}
+            iconType={'MaterialCommunityIcons'}
           />
 
           <View

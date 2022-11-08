@@ -7,74 +7,136 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableNativeFeedback,
+  Image,
+  ImageBackground,
 } from 'react-native';
 import Text from '@components/common/Text';
 import TextInput from '@components/common/TextInput';
 import R from '@components/utils/R';
 import FormValidation from '@components/utils/FormValidation';
 import Icon from '@components/common/Icon';
+import PictureOptionsModals from '@components/view/modal/PictureOptionsModal';
+import Toast from '@components/utils/Toast';
 
 function Step2Screen(props) {
   const {navigation} = props;
   const {step1Data} = props.route.params;
+  const [modalType, setModalType] = useState(undefined);
+  const [activeIndex, setActiveIndex] = useState(undefined);
+  const [isModal, setIsModal] = useState(false);
   const [authUser, setAuthUser] = useState({
-    nic: '',
-    license: '',
-    residence: '',
     model: '',
+    color: '',
   });
   const [errorField, setErrorField] = useState({
-    nic: '',
-    license: '',
-    residence: '',
     model: '',
+    color: '',
   });
 
+  const [options, setOptions] = useState([
+    {
+      title: 'License',
+      key: 'license',
+      frontPicture: undefined,
+      backPicture: undefined,
+    },
+    {
+      title: 'Nic',
+      key: 'nic',
+      frontPicture: undefined,
+      backPicture: undefined,
+    },
+    {
+      title: 'Proof Of Residence',
+      key: 'residence',
+      frontPicture: undefined,
+      backPicture: undefined,
+    },
+  ]);
+
+  const openModal = (type, slotNo) => {
+    setIsModal(!isModal);
+    setModalType(type);
+    setActiveIndex(slotNo);
+  };
+
+  const uploadPicture = data => {
+    if (modalType === 'nic') {
+      pictureNic(data);
+    } else if (modalType === 'license') {
+      pictureLicense(data);
+    } else {
+      pictureResidence(data);
+    }
+  };
+
+  const pictureLicense = data => {
+    let tempArr = JSON.parse(JSON.stringify(options));
+    let obj = tempArr.find(item => item.key === modalType);
+    obj[activeIndex] = data;
+    setOptions(tempArr);
+  };
+
+  const pictureNic = data => {
+    let tempArr = JSON.parse(JSON.stringify(options));
+    let obj = tempArr.find(item => item.key === modalType);
+    obj[activeIndex] = data;
+    setOptions(tempArr);
+  };
+
+  const pictureResidence = data => {
+    let tempArr = JSON.parse(JSON.stringify(options));
+    let obj = tempArr.find(item => item.key === modalType);
+    obj[activeIndex] = data;
+    setOptions(tempArr);
+  };
+
   const onSubmit = async () => {
-    navigation.navigate('Step3', {
-      step2Data: {},
-    });
-    // const reqData = {
-    //   license: authUser?.license,
-    //   nic: authUser?.nic,
-    //   residence: authUser?.residence,
-    //   model: authUser?.model,
-    // };
+    // navigation.navigate('Step3', {
+    //   step2Data: {},
+    // });
 
-    // const formError = FormValidation(reqData);
-    // if (formError) {
-    //   const obj = {};
-    //   formError?.errorArr?.map(item => {
-    //     obj[item] = formError?.message;
-    //   });
-
-    //   setErrorField({
-    //     ...{
-    //       nic: '',
-    //       license: '',
-    //       residence: '',
-    //       model: '',
-    //     },
-    //     ...obj,
-    //   });
-    // } else {
-    //   setErrorField({
-    //     nic: '',
-    //     license: '',
-    //     residence: '',
-    //     model: '',
-    //   });
-
-    //   const reqData = {
-    //     license: authUser?.license,
-    //     nic: authUser?.nic,
-    //     residence: authUser?.country,
-    //     model: authUser?.model,
-    //   };
-    //   navigation.navigate('Step3', {
-    //     step2Data: {...step1Data, ...reqData},
-    //   });
-    // }
+    let res = options?.every(
+      item =>
+        item?.backPicture !== undefined && item?.frontPicture !== undefined,
+    );
+    if (!res) {
+      Toast.show({
+        title: 'Pictures not uploaded',
+        message: 'Kindly upload all pictures',
+        type: 'danger',
+      });
+    } else {
+      const formData = {
+        model: authUser?.model,
+        color: authUser?.color,
+      };
+      const formError = FormValidation(formData);
+      if (formError) {
+        const obj = {};
+        formError?.errorArr?.map(item => {
+          obj[item] = formError?.message;
+        });
+        setErrorField({
+          ...{
+            model: '',
+            color: '',
+          },
+          ...obj,
+        });
+      } else {
+        setErrorField({
+          model: '',
+        });
+        const reqData = {
+          model: authUser?.model,
+          pictures: options,
+        };
+        navigation.navigate('Step3', {
+          step2Data: {...step1Data, ...reqData},
+        });
+      }
+    }
   };
 
   return (
@@ -109,7 +171,7 @@ function Step2Screen(props) {
             Enter{' '}
             <Text
               variant={'h2'}
-              font={'bold'}
+              font={'Sequel551'}
               gutterBottom={30}
               color={R.color.mainColor}
               align={'left'}
@@ -117,50 +179,6 @@ function Step2Screen(props) {
               Driver Details
             </Text>
           </Text>
-
-          <TextInput
-            secureText={false}
-            placeholder={`Driver's License`}
-            onChangeText={text => {
-              setAuthUser({...authUser, license: text});
-            }}
-            color={R.color.white}
-            value={authUser?.license}
-            gutterBottom={24}
-            iconName={'idcard'}
-            iconType={'AntDesign'}
-            formError={errorField?.license}
-          />
-
-          <TextInput
-            secureText={false}
-            placeholder={`Driver's NIC`}
-            onChangeText={text => {
-              setAuthUser({...authUser, nic: text});
-            }}
-            color={R.color.white}
-            value={authUser?.nic}
-            width={0.94}
-            gutterBottom={24}
-            iconName={'id-card'}
-            iconType={'FontAwesome5'}
-            formError={errorField?.nic}
-          />
-
-          <TextInput
-            secureText={false}
-            placeholder={`Proof of Residence`}
-            onChangeText={text => {
-              setAuthUser({...authUser, residence: text});
-            }}
-            color={R.color.white}
-            value={authUser?.residence}
-            width={0.94}
-            gutterBottom={24}
-            iconName={'house-user'}
-            iconType={'FontAwesome5'}
-            formError={errorField?.residence}
-          />
 
           <TextInput
             secureText={false}
@@ -176,6 +194,145 @@ function Step2Screen(props) {
             iconType={'MaterialCommunityIcons'}
             formError={errorField?.model}
           />
+          <TextInput
+            secureText={false}
+            placeholder={`Vehcile Color`}
+            onChangeText={text => {
+              setAuthUser({...authUser, color: text});
+            }}
+            color={R.color.white}
+            value={authUser?.color}
+            width={0.94}
+            gutterBottom={24}
+            iconName={'truck'}
+            iconType={'MaterialCommunityIcons'}
+            formError={errorField?.color}
+          />
+
+          {options?.map(item => {
+            return (
+              <>
+                <Text
+                  variant={'body2'}
+                  font={'PoppinsMedium'}
+                  gutterBottom={10}
+                  color={R.color.white}
+                  align={'left'}
+                  transform={'none'}>
+                  Driver {item.title} Pictures
+                </Text>
+
+                <View
+                  style={{...R.styles.rowView, marginBottom: R.unit.scale(30)}}>
+                  <>
+                    <TouchableNativeFeedback
+                      delayPressIn={0.1}
+                      delayPressOut={0.1}
+                      delayLongPress={0.1}
+                      onPress={() => openModal(item.key, 'frontPicture')}
+                      background={TouchableNativeFeedback.Ripple(
+                        R.color.charcoalShade,
+                        false,
+                        300,
+                      )}>
+                      <View style={styles.touchableBox}>
+                        {item.frontPicture ? (
+                          <View style={styles.imageContainer}>
+                            <ImageBackground
+                              source={{uri: item.frontPicture?.path}}
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                              }}
+                              resizeMode={'cover'}
+                            />
+                            <View style={styles.overlay}>
+                              <Icon
+                                name={'pencil-outline'}
+                                type={'MaterialCommunityIcons'}
+                                size={20}
+                                color={R.color.white}
+                              />
+                            </View>
+                          </View>
+                        ) : (
+                          <>
+                            <Icon
+                              name={'paperclip'}
+                              type={'Foundation'}
+                              size={20}
+                              color={R.color.white}
+                            />
+                            <Text
+                              variant={'body2'}
+                              gutterTop={10}
+                              font={'PoppinsRegular'}
+                              color={R.color.mainColor}
+                              align={'left'}
+                              transform={'none'}>
+                              {item.title}
+                              Front Picture
+                            </Text>
+                          </>
+                        )}
+                      </View>
+                    </TouchableNativeFeedback>
+                    <TouchableNativeFeedback
+                      delayPressIn={0.1}
+                      delayPressOut={0.1}
+                      delayLongPress={0.1}
+                      onPress={() => openModal(item.key, 'backPicture')}
+                      background={TouchableNativeFeedback.Ripple(
+                        R.color.charcoalShade,
+                        false,
+                        300,
+                      )}>
+                      <View style={styles.touchableBox}>
+                        {item.backPicture ? (
+                          <View style={styles.imageContainer}>
+                            <ImageBackground
+                              source={{uri: item?.backPicture?.path}}
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                              }}
+                              resizeMode={'cover'}
+                            />
+                            <View style={styles.overlay}>
+                              <Icon
+                                name={'pencil-outline'}
+                                type={'MaterialCommunityIcons'}
+                                size={20}
+                                color={R.color.white}
+                              />
+                            </View>
+                          </View>
+                        ) : (
+                          <>
+                            <Icon
+                              name={'paperclip'}
+                              type={'Foundation'}
+                              size={20}
+                              color={R.color.white}
+                            />
+                            <Text
+                              variant={'body2'}
+                              gutterTop={10}
+                              font={'PoppinsRegular'}
+                              color={R.color.mainColor}
+                              align={'left'}
+                              transform={'none'}>
+                              {item.title} Back Picture
+                            </Text>
+                          </>
+                        )}
+                      </View>
+                    </TouchableNativeFeedback>
+                  </>
+                </View>
+              </>
+            );
+          })}
         </View>
 
         <View style={styles.nextButtonLayout}>
@@ -223,6 +380,10 @@ function Step2Screen(props) {
           </TouchableNativeFeedback>
         </View>
       </ScrollView>
+      <PictureOptionsModals
+        isVisibleModal={isModal}
+        uploadPicture={uploadPicture}
+      />
     </SafeAreaView>
   );
 }
@@ -237,13 +398,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(50),
-    // backgroundColor: 'purple',
   },
   nextButtonLayout: {
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexDirection: 'row',
-    // backgroundColor: 'red',
     width: '100%',
+  },
+  touchableBox: {
+    backgroundColor: R.color.blackShade2,
+    borderRadius: R.unit.scale(10),
+    overflow: 'hidden',
+    width: '47%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: R.unit.scale(100),
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -244,6 +244,8 @@ const Button = props => {
     borderRadius,
     variant = 'body2',
     disabled,
+    iconName,
+    iconType,
     iconColor = R.color.white,
     iconSize = R.unit.scale(20),
   } = props;
@@ -308,10 +310,10 @@ const Button = props => {
               color={loaderColor}
             />
           )}
-          {props.iconName && (
+          {iconName && (
             <Icon
-              name={props.iconName}
-              type={props.iconType}
+              name={iconName}
+              type={iconType}
               color={iconColor}
               size={iconSize}
             />

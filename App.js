@@ -118,8 +118,14 @@ const App = () => {
           if (!auth?.isAuth) {
             CurrentLocation({actionCall: dispatch});
           }
+        } else {
+          getLocationAccess();
         }
       } catch (error) {}
+    };
+
+    const getLocationAccess = async () => {
+      let granted = await requestLocationPermission();
     };
 
     useEffect(() => {
@@ -130,7 +136,6 @@ const App = () => {
       <>
         <AppNavigator />
         {auth?.firstTimePop ? <Toast config={toastConfig} /> : null}
-        {/* {true ? <Toast config={toastConfig} /> : null} */}
       </>
     );
   };
