@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import {Image} from 'react-native-compressor';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import Button from '@components/common/Button';
@@ -28,8 +29,16 @@ function PictureOptionsModals(props) {
           pickerResult.path.includes('.JPEG') ||
           pickerResult.path.includes('.HEIC')
         ) {
-          uploadPicture(pickerResult);
           setIsBlur(false);
+          const result = await Image.compress(pickerResult.path, {
+            maxWidth: 1000,
+            maxHeight: 1000,
+            quality: 0.9,
+            input: 'uri',
+            output: 'jpg',
+          });
+          let pictureObject = {path: result, mime: pickerResult.mime};
+          uploadPicture(pictureObject);
         } else {
           // console.log('EL:SE');
         }

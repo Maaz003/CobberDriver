@@ -53,52 +53,6 @@ export const FONTVARIANTS = {
   small: {fontSize: SIZES.small, lineHeight: R.unit.fontSize(12, 0.3)},
 };
 
-// export const FONTSSTYLE = {
-//   black: {
-//     fontFamily: 'Nunito-Black',
-//   },
-//   blackItalic: {
-//     fontFamily: 'Nunito-BlackItalic',
-//   },
-//   bold: {
-//     fontFamily: 'Nunito-Bold', //700
-//   },
-//   boldItalic: {
-//     fontFamily: 'Nunito-BoldItalic',
-//   },
-//   extraBold: {
-//     fontFamily: 'Nunito-ExtraBold', //900
-//   },
-//   extraBoldItalic: {
-//     fontFamily: 'Nunito-ExtraBoldItalic',
-//   },
-//   italic: {
-//     fontFamily: 'Nunito-Italic',
-//   },
-//   lightItalic: {
-//     fontFamily: 'Roboto-LightItalic',
-//   },
-//   medium: {
-//     fontFamily: 'Nunito-Medium', //500
-//   },
-//   mediumItalic: {
-//     fontFamily: 'Nunito-MediumItalic',
-//   },
-//   regular: {
-//     fontFamily: 'Nunito-Regular', //400
-//   },
-//   semiBold: {
-//     fontFamily: 'Nunito-SemiBold',
-//   },
-//   semiBoldItalic: {
-//     fontFamily: 'Nunito-ThinItalic',
-//   },
-//   underline: {
-//     fontFamily: 'Nunito-Light',
-//     textDecorationLine: 'underline',
-//   },
-// };
-
 export const FONTSSTYLE = {
   //IINTER FAMILY
   InterBlack: {

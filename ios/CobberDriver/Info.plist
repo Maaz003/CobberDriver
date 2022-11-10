@@ -41,6 +41,16 @@
 	<string>App uses for perfomance</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>LSApplicationQueriesSchemes</key> 
+<array> 
+  <string>tel</string> 
+  <string>telprompt</string> 
+</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>App uses for perfomance</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>App uses for perfomance</string>
+
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

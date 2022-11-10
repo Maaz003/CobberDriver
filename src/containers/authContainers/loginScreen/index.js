@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, ScrollView, Platform, PixelRatio} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {View, StyleSheet, Platform, BackHandler} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useDispatch} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {login} from '@store/auth/authSlice';
 import {getUserData} from '@store/user/userSlice';
 import {URL} from '@config/apiUrl';
@@ -23,6 +24,8 @@ function LoginScreen(props) {
   const dispatch = useDispatch();
   const loginURL = URL('auth/login');
   const {navigation} = props;
+  const common = useSelector(state => state.common);
+
   const [authUser, setAuthUser] = useState({
     email: '',
     password: '',
@@ -32,6 +35,25 @@ function LoginScreen(props) {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        console.log(common?.onBoard);
+        if (common?.onBoard) {
+          BackHandler.exitApp();
+          return true;
+        }
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => backHandler.remove();
+    }, [common?.onBoard]),
+  );
 
   const onSubmit = async () => {
     setIsLoading(true);

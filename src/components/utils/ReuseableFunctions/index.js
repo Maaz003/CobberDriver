@@ -89,12 +89,13 @@ export const openDirections = (type, location) => {
 };
 
 export const openCall = data => {
-  let phoneNumber = '';
-  if (Platform.OS === 'android') {
-    phoneNumber = `tel:${data}`;
-  } else {
-    phoneNumber = `telprompt:${data}`;
-  }
+  let phoneNumber = `tel:${data}`;
+
+  // if (Platform.OS === 'android') {
+  //   phoneNumber = `tel:${data}`;
+  // } else {
+  //   phoneNumber = `telprompt:${data}`;
+  // }
   Linking.openURL(phoneNumber);
 };
 

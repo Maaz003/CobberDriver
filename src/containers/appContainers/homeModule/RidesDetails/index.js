@@ -303,46 +303,52 @@ function RideDetailsScreen(props) {
             Equipment Details
           </Text>
 
-          <View style={[R.styles.twoItemsRow, {marginTop: R.unit.scale(12)}]}>
+          <View
+            style={[
+              R.styles.twoItemsRow,
+              {marginTop: R.unit.scale(12), alignItems: 'flex-start'},
+            ]}>
             <View style={{...styles.svgView, height: R.unit.scale(22)}}>
               <DimensionIcon height="100%" width="100%" />
             </View>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Length : 30
-            </Text>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Width : 30
-            </Text>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Depth : 340
-            </Text>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Weight : 130
-            </Text>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(8)}}
+                transform={'none'}>
+                Length : 30
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(8)}}
+                transform={'none'}>
+                Width : 30
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(8)}}
+                transform={'none'}>
+                Depth : 340
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(8)}}
+                transform={'none'}>
+                Weight : 130
+              </Text>
+            </View>
           </View>
 
           <Divider

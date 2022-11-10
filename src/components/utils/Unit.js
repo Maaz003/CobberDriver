@@ -3,6 +3,7 @@ import {Dimensions, PixelRatio, Platform} from 'react-native';
 const containerWidth = Dimensions.get('window').width;
 const containerHeight = Dimensions.get('window').height;
 import {moderateScale} from 'react-native-size-matters';
+import R from './R';
 
 // const initialScale = Math.min(containerWidth, containerHeight) / 375;
 const unit = {
@@ -39,6 +40,25 @@ const unit = {
       return moderateScale(value + 2, 0.3);
     }
   },
+  inputContainerVerticalPadding: (value, flag) => {
+    console.log('FLAG', flag, 'containerWidth', containerWidth);
+
+    if (Platform.OS === 'ios') {
+      if (containerWidth > 900) {
+        return value + 5;
+      } else {
+        return value;
+      }
+    } else {
+      if (flag) {
+        console.log('G');
+        return flag;
+      } else {
+        return value;
+      }
+    }
+  },
+
   //   fontSize: (multi?) => (multi ? initialScale * 16 * multi : initialScale * 16),
   //   windowHeight: (multi?: number) =>
   //     multi ? containerHeight * multi : containerHeight,

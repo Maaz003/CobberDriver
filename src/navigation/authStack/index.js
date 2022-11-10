@@ -20,11 +20,15 @@ const AuthStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={common?.isStep1 ? 'login' : 'OnBoardStep1'}>
+        initialRouteName={common?.onBoard ? 'Login' : 'OnBoardStep1'}>
         <Stack.Screen name="OnBoardStep1" component={OnBoardingStep1} />
         <Stack.Screen name="OnBoardStep2" component={OnBoardingStep2} />
         <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{gestureEnabled: common?.onBoard ? false : true}}
+        />
         <Stack.Screen name="Step1" component={Step1Screen} />
         <Stack.Screen
           name="Step2"

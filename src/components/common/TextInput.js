@@ -28,7 +28,8 @@ const TextInput = props => {
     height,
     width = 0.94,
     color = R.color.black,
-    inputHeight = R.unit.height(1) > 1000 ? 100 : 50,
+    // inputHeight = R.unit.height(1) > 1000 ? 100 : 50,
+    inputHeight,
     widthInPercent,
     inputWidth = width - 0.01,
     inputContainerStyles,
@@ -223,8 +224,7 @@ const TextInput = props => {
 const styles = StyleSheet.create({
   fieldSet: {
     width: Dimensions.get('window').width * 0.9,
-    paddingVertical:
-      R.unit.height(1) > 1000 || Platform.OS === 'ios' ? R.unit.scale(12) : 0,
+    paddingVertical: R.unit.inputContainerVerticalPadding(12, 1),
     backgroundColor: R.color.black,
     alignItems: 'center',
     justifyContent: 'center',
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: R.unit.scale(8, 0.6),
     paddingRight: R.unit.scale(32, 0.6),
     fontSize: R.unit.scale(14, 0.3),
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Poppins-Regular',
     textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
 });

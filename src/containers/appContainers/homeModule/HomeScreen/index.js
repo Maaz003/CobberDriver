@@ -21,6 +21,7 @@ function HomeScreen(props) {
   const headerProps = {
     isHeader: true,
     isSubHeader: false,
+    headerColor: R.color.charcoalShade2,
   };
 
   useEffect(() => {

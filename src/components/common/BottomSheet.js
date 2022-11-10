@@ -4,7 +4,13 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import R from '@components/utils/R';
 
 function SwipeSheet(props) {
-  const {children, maxHeight, initalHeight = 0.1, onSwipeBottomSheet} = props;
+  const {
+    children,
+    maxHeight,
+    initalHeight = 0.1,
+    onSwipeBottomSheet,
+    containerStyles,
+  } = props;
   const sheetRef = useRef();
   const snapPoints = useMemo(
     () => [R.unit.height(initalHeight), R.unit.height(0.8)],
@@ -18,7 +24,7 @@ function SwipeSheet(props) {
     <BottomSheet
       ref={sheetRef}
       snapPoints={snapPoints}
-      backgroundStyle={styles.mainLayout}
+      backgroundStyle={[styles.mainLayout, containerStyles]}
       handleIndicatorStyle={styles.notch}
       onChange={handleSheetChange}>
       {children}

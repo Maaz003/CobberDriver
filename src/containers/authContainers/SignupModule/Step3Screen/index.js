@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   Platform,
   SafeAreaView,
   StatusBar,
   TouchableNativeFeedback,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import {URL} from '@config/apiUrl';
 import {Post} from '@axios/AxiosInterceptorFunction';
 import Text from '@components/common/Text';
@@ -35,6 +36,7 @@ function Step3Screen(props) {
     var formData = new FormData();
 
     const {
+      picture,
       displayName,
       role,
       dialCode,
@@ -66,6 +68,12 @@ function Step3Screen(props) {
     formData.append('vehicle', vehicleId);
     formData.append('password', authUser?.password);
     formData.append('passwordConfirm', authUser?.confirmPassword);
+
+    formData.append('photo', {
+      uri: picture.path,
+      type: picture.mime,
+      name: new Date() + '_image',
+    });
 
     formData.append('licenseCopy', {
       uri: driverPics[0].frontPicture.path,
@@ -101,49 +109,58 @@ function Step3Screen(props) {
   };
 
   const onSubmit = async () => {
-    setLoading(true);
-    const formData = {
-      password: authUser?.password,
-      confirmPassword: authUser?.confirmPassword,
-    };
-    const formError = FormValidation(formData);
-    if (formError) {
-      const obj = {};
-      formError?.errorArr?.map(item => {
-        obj[item] = formError?.message;
-      });
-      setLoading(false);
-      setErrorField({
-        ...{
-          password: '',
-          confirmPassword: '',
-        },
-        ...obj,
+    if (authUser?.password !== authUser?.confirmPassword) {
+      PopUp({
+        heading: `Passwords Mismatch`,
+        bottomOffset: 0.8,
+        visibilityTime: 3000,
+        position: 'top',
       });
     } else {
-      setErrorField({
-        password: '',
-        confirmPassword: '',
-      });
-
-      const userData = await convertFormData();
-      const signUrl = URL('auth/driver-signup');
-      const response = await Post(signUrl, userData);
-      if (response !== undefined) {
-        const code = response?.data?.data?.user?.verificationCode;
-        navigation.navigate('Verification', {
-          user: response?.data?.data?.user?._id,
+      setLoading(true);
+      const formData = {
+        password: authUser?.password,
+        confirmPassword: authUser?.confirmPassword,
+      };
+      const formError = FormValidation(formData);
+      if (formError) {
+        const obj = {};
+        formError?.errorArr?.map(item => {
+          obj[item] = formError?.message;
         });
-        PopUp({
-          heading: `Registered Successfully. Meanwhile ${code}`,
-          bottomOffset: 0.8,
-          visibilityTime: 7000,
-          position: 'top',
+        setLoading(false);
+        setErrorField({
+          ...{
+            password: '',
+            confirmPassword: '',
+          },
+          ...obj,
         });
       } else {
+        setErrorField({
+          password: '',
+          confirmPassword: '',
+        });
+
+        const userData = await convertFormData();
+        const signUrl = URL('auth/driver-signup');
+        const response = await Post(signUrl, userData);
+        if (response !== undefined) {
+          const code = response?.data?.data?.user?.verificationCode;
+          navigation.navigate('Verification', {
+            user: response?.data?.data?.user?._id,
+          });
+          PopUp({
+            heading: `Registered Successfully. Meanwhile ${code}`,
+            bottomOffset: 0.8,
+            visibilityTime: 7000,
+            position: 'top',
+          });
+        } else {
+          setLoading(false);
+        }
         setLoading(false);
       }
-      setLoading(false);
     }
   };
 
@@ -154,7 +171,7 @@ function Step3Screen(props) {
         barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
       />
 
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{
           ...R.styles.container,
           ...styles.mainLayout,
@@ -285,7 +302,7 @@ function Step3Screen(props) {
             </View>
           </TouchableNativeFeedback>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       {loading && (
         <View style={styles.loaderContainer}>

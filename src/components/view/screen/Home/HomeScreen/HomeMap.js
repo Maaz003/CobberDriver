@@ -5,6 +5,7 @@ import Map from '@components/view/mapView/Map';
 import {LocationCoordinates} from '@components/utils/LocationCoordinates';
 import PickUpMarker from '@components/view/mapView/PickUpMarker';
 import {mapStyles} from '@components/constants';
+import R from '@components/utils/R';
 
 function HomeMap() {
   const mapRef = useRef(null);
@@ -44,6 +45,7 @@ function HomeMap() {
         customMapStyle={mapStyles}
         mapForwardRef={mapRef}
         loadingEnabled={false}
+        mapViewStyles={{height: R.unit.height(0.9)}}
         mapReady={() => null}>
         <PickUpMarker
           pickUpLat={pickUpLat}

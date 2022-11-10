@@ -4,25 +4,25 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import navigationService from '../navigationService';
 import {useSelector} from 'react-redux';
-import Contact from '@containers/appContainers/contactScreen/Contactus';
+import Contact from '@containers/appContainers/ContactScreen/Contactus';
 import CustomDrawer from '@components/layout/customDrawer';
-import Profile from '@containers/appContainers/profileModule/profile';
-import History from '@containers/appContainers/historyModule/historyScreen';
+import Profile from '@containers/appContainers/ProfileModule/profile';
+import History from '@containers/appContainers/HistoryModule/historyScreen';
 import {ChatScreen} from '@components/common/Chats';
-import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
+import EditProfileField from '@containers/appContainers/ProfileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
-import PaymentScreen from '@containers/appContainers/PaymentScreen';
 import PrivacyPolicyScreen from '@containers/appContainers/PrivacyPolicyScreen';
-import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
-import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
-import RideCompletedScreen from '@containers/appContainers/homeModule/RideCompletedScreen';
+import HomeScreen from '@containers/appContainers/HomeModule/HomeScreen';
+import OnGoingRideScreen from '@containers/appContainers/HomeModule/OnGoingRideScreen';
+import RideCompletedScreen from '@containers/appContainers/HomeModule/RideCompletedScreen';
 import EarningsScreen from '@containers/appContainers/EarningsScreen';
-import RideDetailsScreen from '@containers/appContainers/homeModule/RidesDetails';
-import RideRequestsScreen from '@containers/appContainers/homeModule/RidesRequests';
+import RideDetailsScreen from '@containers/appContainers/HomeModule/RidesDetails';
+import RideRequestsScreen from '@containers/appContainers/HomeModule/RidesRequests';
 //SCHEDULE MODULE
 import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
+import PaymentScreen from '@containers/appContainers/PaymentScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();

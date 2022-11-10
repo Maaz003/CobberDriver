@@ -22,6 +22,7 @@ function ScheduledRidesScreen(props) {
   const headerProps = {
     isSubHeader: true,
     mainHeading: 'Scheduled Rides',
+    headerColor: R.color.white,
   };
   const [tab, setTab] = useState(0);
 

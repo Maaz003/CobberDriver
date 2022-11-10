@@ -1,5 +1,5 @@
 // export const apiUrl = 'https://lac-app-backend.herokuapp.com';
-// export const apiUrl = 'https://ed5f-119-155-153-170.in.ngrok.io';
+// export const apiUrl = 'https://4d45-119-155-153-170.in.ngrok.io';
 // export const apiUrl = 'https://backend.leanderathleticclub.com'; // LIVE RELEASE purpose
 export const apiUrl = 'https://cobber-backend.herokuapp.com'; // DEPLOYMENT(STAGING) purpose=
 
