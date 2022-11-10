@@ -14,7 +14,7 @@ const MapDirections = props => {
       origin={origin}
       destination={destination}
       apikey={GOOGLE_GEOCODE}
-      strokeWidth={1.5}
+      strokeWidth={R.unit.tabSizeCalc(1.5, 3)}
       strokeColor={R.color.black}
       timePrecision={'now'}
       precision={'high'}

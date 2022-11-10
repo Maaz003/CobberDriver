@@ -201,7 +201,7 @@ const Button = props => {
     iconName,
     iconType,
     iconColor = R.color.white,
-    iconSize = R.unit.scale(20),
+    iconSize = R.unit.tabSizeCalc(20, 20),
   } = props;
 
   const buttonPress = () => {

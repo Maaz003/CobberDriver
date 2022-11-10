@@ -10,8 +10,12 @@ import {useSelector} from 'react-redux';
 function RidesList() {
   const common = useSelector(state => state.common);
 
+  console.log('R', R.unit.width(1));
+
   return (
-    <BottomSheet onSwipeBottomSheet={() => null} initalHeight={0.11}>
+    <BottomSheet
+      onSwipeBottomSheet={() => null}
+      initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.11}>
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
           <Text
@@ -30,7 +34,7 @@ function RidesList() {
               color={R.color.black}
               align={'center'}
               transform={'none'}>
-              01
+              02
             </Text>
           </View>
         </View>

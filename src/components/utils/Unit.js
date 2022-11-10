@@ -58,6 +58,21 @@ const unit = {
       }
     }
   },
+  tabSizeCalc: (value, tabValue) => {
+    if (Platform.OS === 'ios') {
+      if (containerWidth > 900) {
+        return tabValue;
+      } else {
+        return value;
+      }
+    } else {
+      if (containerWidth > 900) {
+        return tabValue;
+      } else {
+        return value;
+      }
+    }
+  },
 
   //   fontSize: (multi?) => (multi ? initialScale * 16 * multi : initialScale * 16),
   //   windowHeight: (multi?: number) =>

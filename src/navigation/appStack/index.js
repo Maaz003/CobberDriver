@@ -23,6 +23,7 @@ import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
 import PaymentScreen from '@containers/appContainers/PaymentScreen';
+import R from '@components/utils/R';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
@@ -40,10 +41,10 @@ const AppStack = () => {
             headerShown: false,
             swipeEnabled: user?.inRide === 'scheduleEnded' ? false : true,
             drawerType: 'slide',
-          }}
-          drawerStyle={{
-            backgroundColor: 'black',
-            width: '10%',
+            drawerStyle: {
+              backgroundColor: 'black',
+              width: R.unit.width(0.7),
+            },
           }}
           initialRouteName={
             user?.inRide === 'scheduleEnded' ? 'ScheduledRides' : 'HomeScreen'

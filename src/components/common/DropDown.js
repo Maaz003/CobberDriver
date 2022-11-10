@@ -166,7 +166,9 @@ export default React.memo(DropDown);
 
 const styles = StyleSheet.create({
   inputFieldLayout: {
-    paddingVertical: R.unit.inputContainerVerticalPadding(7),
+    paddingVertical: R.unit.inputContainerVerticalPadding(
+      R.unit.tabSizeCalc(7, 12),
+    ),
     borderWidth: R.unit.scale(1),
     borderRadius: R.unit.scale(80),
     borderColor: R.color.white,

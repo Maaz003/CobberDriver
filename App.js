@@ -29,7 +29,7 @@ const App = () => {
 
   let persistor = persistStore(store);
   useEffect(() => {
-    SplashScreen.hide();
+    // SplashScreen.hide();
   });
 
   useEffect(() => {

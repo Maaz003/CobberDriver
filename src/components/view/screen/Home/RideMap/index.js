@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: R.color.white,
     paddingHorizontal: R.unit.scale(16),
     width: R.unit.width(1),
-    height: 180,
+    height: R.unit.width(1) > 900 ? 300 : 180,
     flex: 1,
   },
 });

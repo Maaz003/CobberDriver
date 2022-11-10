@@ -22,6 +22,11 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+		<string>telprompt</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,38 +44,18 @@
 	<string>App uses for perfomance</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App uses for perfomance</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>LSApplicationQueriesSchemes</key> 
-<array> 
-  <string>tel</string> 
-  <string>telprompt</string> 
-</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>App uses for perfomance</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>App uses for perfomance</string>
-
+	<string>App uses for perfomance</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App uses for perfomance</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App uses for perfomance</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Nunito-Black.ttf</string>
@@ -146,5 +131,20 @@
 		<string>Sequel100Wide-55.ttf</string>
 		<string>Sequel100Wide-65.ttf</string>
 	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

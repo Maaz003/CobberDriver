@@ -123,7 +123,6 @@ const CustomDrawer = props => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          // paddingBottom: Platform.OS === 'ios' ? 60 : 40,
         }}>
         <View>
           <TouchableOpacity

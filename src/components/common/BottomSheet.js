@@ -6,7 +6,6 @@ import R from '@components/utils/R';
 function SwipeSheet(props) {
   const {
     children,
-    maxHeight,
     initalHeight = 0.1,
     onSwipeBottomSheet,
     containerStyles,
