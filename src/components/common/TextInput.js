@@ -224,7 +224,7 @@ const TextInput = props => {
 const styles = StyleSheet.create({
   fieldSet: {
     width: Dimensions.get('window').width * 0.9,
-    paddingVertical: R.unit.inputContainerVerticalPadding(12),
+    paddingVertical: R.unit.inputContainerVerticalPadding(12, 1),
     backgroundColor: R.color.black,
     alignItems: 'center',
     justifyContent: 'center',

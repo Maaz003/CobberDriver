@@ -22,7 +22,7 @@ import RideRequestsScreen from '@containers/appContainers/homeModule/RidesReques
 import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
-import PaymentScreen from '@containers/appContainers/paymentScreen';
+import PaymentScreen from '@containers/appContainers/PaymentScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();

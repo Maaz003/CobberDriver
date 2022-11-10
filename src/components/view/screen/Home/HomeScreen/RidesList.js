@@ -11,16 +11,6 @@ function RidesList() {
   const common = useSelector(state => state.common);
 
   return (
-    // <View
-    //   style={{
-    //     position: 'absolute',
-    //     bottom: -40,
-    //     left: 0,
-    //     right: 0,
-    //     height: 100,
-    //     backgroundColor: 'red',
-    //     width: '100%',
-    //   }}>
     <BottomSheet onSwipeBottomSheet={() => null} initalHeight={0.11}>
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
@@ -56,7 +46,6 @@ function RidesList() {
         </View>
       </View>
     </BottomSheet>
-    // </View>
   );
 }
 const styles = StyleSheet.create({

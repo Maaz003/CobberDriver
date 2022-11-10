@@ -36,6 +36,25 @@ function LoginScreen(props) {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        console.log(common?.onBoard);
+        if (common?.onBoard) {
+          BackHandler.exitApp();
+          return true;
+        }
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => backHandler.remove();
+    }, [common?.onBoard]),
+  );
+
   const onSubmit = async () => {
     setIsLoading(true);
     const reqData = {

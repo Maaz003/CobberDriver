@@ -51,6 +51,7 @@ const unit = {
       }
     } else {
       if (flag) {
+        console.log('G');
         return flag;
       } else {
         return value;
