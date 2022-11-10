@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import navigationService from '../navigationService';
 import {useSelector} from 'react-redux';
-import Contact from '@containers/appContainers/contactScreen/Contactus';
+import Contact from '@containers/appContainers/ContactScreen/Contactus';
 import CustomDrawer from '@components/layout/customDrawer';
 import Profile from '@containers/appContainers/ProfileModule/profile';
 import History from '@containers/appContainers/HistoryModule/historyScreen';
