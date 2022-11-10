@@ -182,7 +182,6 @@ function LoginScreen(props) {
           width={'100%'}
           size={'lg'}
           variant={'h6'}
-          font={'PoppinsMedium'}
           color={'black'}
           borderRadius={100}
           borderColor={R.color.mainColor}

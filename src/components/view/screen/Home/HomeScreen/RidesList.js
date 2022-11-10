@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
@@ -10,7 +10,12 @@ import {useSelector} from 'react-redux';
 function RidesList() {
   const common = useSelector(state => state.common);
 
-  console.log('R', R.unit.width(1));
+  const [active, setActive] = useState(0);
+
+  const tabs = [
+    {index: 0, title: 'Instant'},
+    {index: 1, title: 'Schedule'},
+  ];
 
   return (
     <BottomSheet
@@ -38,6 +43,39 @@ function RidesList() {
             </Text>
           </View>
         </View>
+
+        {/* <View style={[R.styles.rowView, styles.tabsContainer]}>
+          {tabs?.map((item, index) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setActive(item.index)}
+                style={{
+                  height: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '50%',
+                  backgroundColor:
+                    index === active
+                      ? R.color.mainColor
+                      : R.color.charcoalShade2,
+                }}>
+                <Text
+                  variant={index === active ? 'body2' : 'body3'}
+                  font={'PoppinsSemiBold'}
+                  color={
+                    index === active
+                      ? R.color.charcoalShade2
+                      : R.color.mainColor
+                  }
+                  align={'center'}
+                  transform={'none'}>
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View> */}
 
         <View style={styles.scrollViewContainer}>
           <BottomSheetScrollView
@@ -78,6 +116,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     borderRadius: R.unit.scale(12),
     paddingBottom: R.unit.scale(152),
+  },
+  tabsContainer: {
+    width: '100%',
+    height: 50,
+    marginTop: R.unit.scale(30),
   },
 });
 
