@@ -25,7 +25,7 @@ function PrivacyPolicyScreen(props) {
         <View style={styles.formView}>
           <Text
             variant={'h4'}
-            font={'bold'}
+            font={'PoppinsMedium'}
             color={R.color.black}
             align={'right'}
             transform={'none'}>

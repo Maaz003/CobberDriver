@@ -26,7 +26,7 @@ function FaqsCollapsible(props) {
             />
             <Text
               variant={'body1'}
-              font={'semiBold'}
+              font={'PoppinsSemiBold'}
               color={isActive ? R.color.black : R.color.black}
               align={'right'}
               transform={'none'}>
@@ -44,7 +44,7 @@ function FaqsCollapsible(props) {
         <View style={styles.content}>
           <Text
             variant={'body2'}
-            font={'regular'}
+            font={'PoppinsRegular'}
             color={R.color.black}
             align={'left'}
             transform={'none'}>
