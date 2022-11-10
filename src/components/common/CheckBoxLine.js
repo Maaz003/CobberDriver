@@ -14,7 +14,7 @@ const CheckBoxLine = props => {
   } = props;
   return (
     <View style={[R.styles.twoItemsRow, styles.policyView, containerStyles]}>
-      <CheckBox onPress={onPress} id={'abcd'} alreadySelected={selected} />
+      <CheckBox onPress={onPress} id={'abcd'} selected={selected} />
       <View
         style={{
           flexDirection: 'row',

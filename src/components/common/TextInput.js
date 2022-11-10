@@ -2,10 +2,8 @@ import React, {useState} from 'react';
 import {
   View,
   TouchableOpacity,
-  Dimensions,
   StyleSheet,
   TextInput as TextInputc,
-  I18nManager,
   Platform,
 } from 'react-native';
 
@@ -15,33 +13,28 @@ import R from '@components/utils/R';
 
 const TextInput = props => {
   const [showPassword, setShowPassword] = useState(false);
-  const [value, setValue] = useState('');
 
   const handleChangeText = text => {
-    setValue(text);
     if (props.onChangeText) {
       props.onChangeText(text);
     }
   };
   const {
     placeholder = 'Type here...',
-    height,
     width = 0.94,
     color = R.color.black,
     // inputHeight = R.unit.height(1) > 1000 ? 100 : 50,
     inputHeight,
     widthInPercent,
-    inputWidth = width - 0.01,
+    // inputWidth = width - 0.01,
     inputContainerStyles,
     gutterTop = 0,
     gutterBottom = 0,
     backgroundColor = R.color.black,
-    elevation = 0,
     borderColor = R.color.white,
-    borderWidth = 1,
-    borderBottomWidth,
+    borderWidth = 0.75,
     placeholdercolor = R.color.white,
-    borderRadius = 80,
+    borderRadius = 50,
     multiline = false,
     numberOfLines,
     formError,
@@ -83,7 +76,6 @@ const TextInput = props => {
           styles.fieldSet,
           {
             borderColor: borderColor,
-            elevation: elevation,
             backgroundColor: backgroundColor,
             width: widthInPercent ? widthInPercent : R.unit.width(width),
           },
@@ -92,15 +84,6 @@ const TextInput = props => {
           },
           borderWidth && {
             borderWidth: R.unit.scale(borderWidth),
-          },
-          borderBottomWidth && {
-            borderBottomWidth: R.unit.scale(borderBottomWidth),
-          },
-          height && {
-            height: height,
-          },
-          props.alignItems && {
-            alignItems: props.alignItems,
           },
           inputContainerStyles,
         ]}>
@@ -112,7 +95,7 @@ const TextInput = props => {
               {
                 color: iconColor,
                 fontSize: R.unit.scale(18, 0.6),
-                paddingLeft: iconName && R.unit.width(0.14),
+                paddingLeft: iconName && R.unit.scale(14),
               },
             ]}
           />
@@ -123,7 +106,6 @@ const TextInput = props => {
             <TextInputc
               style={[
                 {
-                  width: R.unit.width(inputWidth),
                   color: color,
                 },
                 fontSize && {
@@ -145,13 +127,13 @@ const TextInput = props => {
                 setShowPassword(!showPassword);
               }}
               style={{
-                paddingHorizontal: Dimensions.get('window').width * 0.04,
+                paddingHorizontal: R.unit.width(0.04),
                 position: 'absolute',
                 right: 0,
                 height:
                   Platform.OS === 'android'
-                    ? Dimensions.get('window').height * 0.0725
-                    : Dimensions.get('window').height * 0.0525,
+                    ? R.unit.height(0.0725)
+                    : R.unit.height(0.0525),
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -169,7 +151,6 @@ const TextInput = props => {
           <TextInputc
             style={[
               {
-                width: R.unit.width(inputWidth),
                 color: color,
               },
               Platform.OS === 'android'
@@ -223,7 +204,6 @@ const TextInput = props => {
 };
 const styles = StyleSheet.create({
   fieldSet: {
-    width: Dimensions.get('window').width * 0.9,
     paddingVertical: R.unit.inputContainerVerticalPadding(12, 1),
     backgroundColor: R.color.black,
     alignItems: 'center',
@@ -231,11 +211,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   inputBox: {
+    flex: 1,
     paddingHorizontal: R.unit.scale(8, 0.6),
-    paddingRight: R.unit.scale(32, 0.6),
+    paddingRight: R.unit.scale(36, 0.6),
     fontSize: R.unit.scale(14, 0.3),
     fontFamily: 'Poppins-Regular',
-    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
 });
 export default TextInput;

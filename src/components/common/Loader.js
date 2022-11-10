@@ -1,6 +1,6 @@
 import R from '@components/utils/R';
 import React from 'react';
-import {View, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 
 const Loader = props => {
   const {size = 'small', color = R.color.gray} = props;
