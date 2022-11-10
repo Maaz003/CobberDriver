@@ -11,7 +11,6 @@ import History from '@containers/appContainers/historyModule/historyScreen';
 import {ChatScreen} from '@components/common/Chats';
 import EditProfileField from '@containers/appContainers/profileModule/editProfileField';
 import FAQScreen from '@containers/appContainers/FAQScreen';
-import PaymentScreen from '@containers/appContainers/PaymentScreen';
 import PrivacyPolicyScreen from '@containers/appContainers/PrivacyPolicyScreen';
 import HomeScreen from '@containers/appContainers/homeModule/HomeScreen';
 import OnGoingRideScreen from '@containers/appContainers/homeModule/OnGoingRideScreen';
@@ -23,6 +22,7 @@ import RideRequestsScreen from '@containers/appContainers/homeModule/RidesReques
 import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
+import PaymentScreen from '@containers/appContainers/paymentScreen';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();

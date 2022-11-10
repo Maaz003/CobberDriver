@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   Platform,
   SafeAreaView,
   StatusBar,
   TouchableNativeFeedback,
-  Image,
   ImageBackground,
 } from 'react-native';
+import {Image} from 'react-native-compressor';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Text from '@components/common/Text';
 import TextInput from '@components/common/TextInput';
 import R from '@components/utils/R';
@@ -173,7 +173,7 @@ function Step2Screen(props) {
         style={{flex: 0, backgroundColor: 'green'}}
         barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
       />
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{
           ...R.styles.container,
           ...styles.mainLayout,
@@ -229,7 +229,7 @@ function Step2Screen(props) {
 
           <TextInput
             secureText={false}
-            placeholder={`Vehcile Model`}
+            placeholder={`Vehicle Model`}
             onChangeText={text => {
               setAuthUser({...authUser, model: text});
             }}
@@ -311,14 +311,13 @@ function Step2Screen(props) {
                               color={R.color.white}
                             />
                             <Text
-                              variant={'body2'}
+                              variant={'body4'}
                               gutterTop={10}
                               font={'PoppinsRegular'}
                               color={R.color.mainColor}
-                              align={'left'}
+                              align={'center'}
                               transform={'none'}>
-                              {item.title}
-                              Front Picture
+                              {item.title} {'Front Picture'}
                             </Text>
                           </>
                         )}
@@ -363,11 +362,11 @@ function Step2Screen(props) {
                               color={R.color.white}
                             />
                             <Text
-                              variant={'body2'}
+                              variant={'body4'}
                               gutterTop={10}
                               font={'PoppinsRegular'}
                               color={R.color.mainColor}
-                              align={'left'}
+                              align={'center'}
                               transform={'none'}>
                               {item.title} Back Picture
                             </Text>
@@ -426,7 +425,7 @@ function Step2Screen(props) {
             </View>
           </TouchableNativeFeedback>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <PictureOptionsModals
         isVisibleModal={isModal}
         uploadPicture={uploadPicture}

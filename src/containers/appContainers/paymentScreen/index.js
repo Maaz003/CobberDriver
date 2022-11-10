@@ -13,6 +13,7 @@ function PaymentScreen(props) {
   const headerProps = {
     isSubHeader: true,
     mainHeading: 'Payment',
+    headerColor: R.color.white,
     isBack: type === 'product' ? true : false,
   };
 

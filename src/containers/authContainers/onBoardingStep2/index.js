@@ -1,38 +1,27 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {onBoardPresent} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
 import {NextArrow, OnBoardStep1} from '@components/utils/Svg';
 import R from '@components/utils/R';
 
-const originalWidth = 463;
-const originalHeight = 170;
-const aspectRatio = originalWidth / originalHeight;
-const windowWidth = Dimensions.get('window').width;
-
 function OnBoardingStep2(props) {
   const {navigation} = props;
+  const dispatch = useDispatch();
 
   const onNext = () => {
     navigation.navigate('Login');
+    dispatch(onBoardPresent(true));
   };
 
   const onSkip = () => {
     navigation.navigate('Login');
+    dispatch(onBoardPresent(true));
   };
 
   return (
-    <View
-      style={{
-        ...R.styles.container,
-        ...R.styles.columnView,
-        ...styles.mainLayout,
-      }}>
+    <View style={[R.styles.container, R.styles.columnView, styles.mainLayout]}>
       <View style={styles.textView}>
         <Text
           variant={'h1'}
@@ -105,11 +94,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: R.unit.height(0.5),
     paddingHorizontal: R.unit.scale(16),
-  },
-  pictureView: {
-    height: R.unit.height(0.5),
-    width: '100%',
-    justifyContent: 'flex-end',
   },
   imageStyles: {
     width: '100%',

@@ -2,7 +2,6 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   Platform,
   SafeAreaView,
   StatusBar,
@@ -10,11 +9,12 @@ import {
   Image as Imagec,
   TouchableOpacity,
 } from 'react-native';
-import {URL} from '@config/apiUrl';
-import {Get} from '@axios/AxiosInterceptorFunction';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CountryFlag from 'react-native-country-flag';
 import Geocoder from 'react-native-geocoding';
 import {Image} from 'react-native-compressor';
+import {URL} from '@config/apiUrl';
+import {Get} from '@axios/AxiosInterceptorFunction';
 import ImagePicker from 'react-native-image-crop-picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {GOOGLE_GEOCODE} from '@env';
@@ -253,6 +253,8 @@ function Step1Screen(props) {
           currentLoc = {coordinates: tempArr};
         }
 
+        let pictureObject = {path: photo, mime: picture.mime};
+
         const reqData = {
           displayName: authUser?.name,
           role: 'driver',
@@ -262,7 +264,7 @@ function Step1Screen(props) {
           email: authUser?.email,
           currentLocation: currentLoc,
           contact: authUser?.phoneNumber,
-          picture: picture,
+          picture: pictureObject,
           state: authUser?.state,
         };
         navigation.navigate('Step2', {
@@ -273,12 +275,9 @@ function Step1Screen(props) {
   };
 
   return (
-    <SafeAreaView>
-      <StatusBar
-        style={{flex: 0, backgroundColor: 'green'}}
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
-      />
-      <ScrollView
+    <SafeAreaView style={{backgroundColor: R.color.black}}>
+      <StatusBar barStyle={'light-content'} />
+      <KeyboardAwareScrollView
         style={{
           ...R.styles.container,
           ...styles.mainLayout,
@@ -309,6 +308,7 @@ function Step1Screen(props) {
             gutterBottom={10}
             color={R.color.mainColor}
             align={'left'}
+            lineHeight={Platform.OS === 'ios' ? 56 : 40}
             transform={'none'}>
             Driver Account
           </Text>
@@ -489,7 +489,7 @@ function Step1Screen(props) {
             </View>
           </TouchableNativeFeedback>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

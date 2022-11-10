@@ -125,7 +125,11 @@ const App = () => {
     };
 
     const getLocationAccess = async () => {
-      let granted = await requestLocationPermission();
+      if (Platform.OS === 'android') {
+        let granted = await requestLocationPermission();
+      } else {
+        let granted = await requestLocationPermissionIOS();
+      }
     };
 
     useEffect(() => {

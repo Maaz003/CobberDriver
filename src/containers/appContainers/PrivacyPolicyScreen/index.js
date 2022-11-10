@@ -1,19 +1,14 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import R from '@components/utils/R';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import Text from '@components/common/Text';
 
 function PrivacyPolicyScreen(props) {
   const {navigation} = props;
-  const dispatch = useDispatch();
-
-  const common = useSelector(state => state.common);
-
   const headerProps = {
     isSubHeader: true,
-    mainHeading: 'Help',
+    mainHeading: 'Privacy',
   };
 
   return (

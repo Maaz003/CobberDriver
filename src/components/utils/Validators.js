@@ -56,10 +56,16 @@ export const requestLocationPermissionIOS = async () => {
     if (granted === 'granted') {
       return true;
     } else {
+      Alert.alert(
+        'Location Permission',
+        `You haven't enabled location access. For enabling location go to user settings and grant location access`,
+        [{text: 'OK', onPress: () => RNExitApp.exitApp()}],
+        {cancelable: false},
+      );
       return false;
     }
   } catch (err) {
-    // console.warn(err);
+    // console.log('UO', err);
   }
 };
 

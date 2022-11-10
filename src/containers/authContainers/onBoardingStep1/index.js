@@ -1,16 +1,11 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {NextArrow, OnBoardStep1} from '@components/utils/Svg';
 import R from '@components/utils/R';
 import {useDispatch} from 'react-redux';
 import {onBoardPresent} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
 import {firstTimePop} from '@store/auth/authSlice';
-
-const originalWidth = 428;
-const originalHeight = 407;
-const aspectRatio = originalWidth / originalHeight;
-const windowWidth = Dimensions.get('window').width;
 
 function OnBoardingStep1(props) {
   const dispatch = useDispatch();
@@ -24,19 +19,11 @@ function OnBoardingStep1(props) {
   const onSkip = () => {
     navigation.navigate('Login');
     dispatch(firstTimePop(true));
+    dispatch(onBoardPresent(true));
   };
 
-  useEffect(() => {
-    dispatch(onBoardPresent('1'));
-  }, []);
-
   return (
-    <View
-      style={{
-        ...R.styles.container,
-        ...R.styles.columnView,
-        ...styles.mainLayout,
-      }}>
+    <View style={[R.styles.container, R.styles.columnView, styles.mainLayout]}>
       <View style={styles.textView}>
         <Text
           variant={'h1'}
@@ -105,13 +92,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: R.unit.height(0.5),
     paddingHorizontal: R.unit.scale(16),
-  },
-  pictureView: {
-    height: '50%',
-    width: '100%',
-    justifyContent: 'flex-end',
-    aspectRatio,
-    width: windowWidth,
   },
   imageStyles: {
     width: '100%',

@@ -166,8 +166,7 @@ export default React.memo(DropDown);
 
 const styles = StyleSheet.create({
   inputFieldLayout: {
-    paddingVertical:
-      R.unit.height(1) > 900 ? R.unit.scale(12) : R.unit.scale(7),
+    paddingVertical: R.unit.inputContainerVerticalPadding(7),
     borderWidth: R.unit.scale(1),
     borderRadius: R.unit.scale(80),
     borderColor: R.color.white,
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   inputFieldText: {
     color: R.color.white,
     paddingHorizontal: R.unit.scale(7, 0.3),
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'Poppins-Regular',
     fontSize: R.unit.scale(14, 0.3),
     width: R.unit.width(0.92),
   },
@@ -187,10 +186,10 @@ const styles = StyleSheet.create({
   rowTextStyle: {
     color: R.color.mainColor,
     fontSize: R.unit.scale(16),
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Poppins-Regular',
   },
   iconView: {
-    width: R.unit.height(1) > 900 ? R.unit.scale(50) : R.unit.scale(30),
+    // width: R.unit.height(1) > 900 ? R.unit.scale(50) : R.unit.scale(30),
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',

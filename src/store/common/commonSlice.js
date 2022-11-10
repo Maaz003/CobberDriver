@@ -192,8 +192,7 @@ const initialState = {
   status: 'idle',
   error: false,
   errorMessage: '',
-  isStep1: false,
-  isStep2: false,
+  onBoard: false,
   authCoordinates: undefined,
   mapRef: undefined,
   slideRef: undefined,
@@ -213,11 +212,7 @@ const commonSlice = createSlice({
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;
-      if (action.payload.pagePresent === '1') {
-        state.isStep1 = true;
-      } else {
-        state.isStep2 = true;
-      }
+      state.onBoard = action.payload.pagePresent;
     },
 
     [authLocationCoords.fulfilled]: (state, action) => {

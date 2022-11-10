@@ -171,52 +171,6 @@ export const FONTSSTYLE = {
   },
 };
 
-// export const FONTSSTYLE = {
-//   black: {
-//     fontFamily: 'Nunito-Black',
-//   },
-//   blackItalic: {
-//     fontFamily: 'Nunito-BlackItalic',
-//   },
-//   bold: {
-//     fontFamily: 'Nunito-Bold',
-//   },
-//   boldItalic: {
-//     fontFamily: 'Nunito-BoldItalic',
-//   },
-//   extraBold: {
-//     fontFamily: 'Nunito-ExtraBold',
-//   },
-//   extraBoldItalic: {
-//     fontFamily: 'Nunito-ExtraBoldItalic',
-//   },
-//   italic: {
-//     fontFamily: 'Nunito-Italic',
-//   },
-//   lightItalic: {
-//     fontFamily: 'Roboto-LightItalic',
-//   },
-//   medium: {
-//     fontFamily: 'Nunito-Medium',
-//   },
-//   mediumItalic: {
-//     fontFamily: 'Nunito-MediumItalic',
-//   },
-//   regular: {
-//     fontFamily: 'Nunito-Regular',
-//   },
-//   semiBold: {
-//     fontFamily: 'Nunito-SemiBold',
-//   },
-//   semiBoldItalic: {
-//     fontFamily: 'Nunito-ThinItalic',
-//   },
-//   underline: {
-//     fontFamily: 'Nunito-Light',
-//     textDecorationLine: 'underline',
-//   },
-// };
-
 const Button = props => {
   const sizes = {
     sm: R.unit.scale(28),

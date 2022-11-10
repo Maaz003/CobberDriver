@@ -133,6 +133,5 @@ const styles = StyleSheet.create({
     width: R.unit.width(1),
     height: 180,
     flex: 1,
-    borderRadius: R.unit.scale(100),
   },
 });
