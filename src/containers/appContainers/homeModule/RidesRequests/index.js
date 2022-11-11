@@ -81,7 +81,7 @@ export default RideRequestsScreen;
 const styles = StyleSheet.create({
   mainLayout: {
     backgroundColor: R.color.white,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     flex: 1,
     marginTop: R.unit.scale(16),
   },

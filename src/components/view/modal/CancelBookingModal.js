@@ -218,6 +218,7 @@ function CancelBookingModal(props) {
                       borderColor={R.color.gray}
                       borderRadius={10}
                       height={148}
+                      inputHeight={148}
                     />
                   )}
                 </View>
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   contentView: {
     marginTop: R.unit.scale(16),
     width: '100%',
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     alignItems: 'center',
     flex: 1,
   },
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
     borderTopWidth: R.unit.scale(0.75),
     justifyContent: 'flex-end',
     width: '100%',
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     paddingTop: R.unit.scale(16),
     paddingBottom: R.unit.scale(Platform.OS === 'ios' ? 0 : 16),
     backgroundColor: R.color.white,

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentView: {
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     width: '100%',
     justifyContent: 'center',
   },

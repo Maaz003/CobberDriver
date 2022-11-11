@@ -311,13 +311,17 @@ function RideDetailsScreen(props) {
             <View style={{...styles.svgView, height: R.unit.scale(22)}}>
               <DimensionIcon height="100%" width="100%" />
             </View>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
               <Text
                 variant={'body3'}
                 font={'InterRegular'}
                 color={R.color.gray4}
                 align={'left'}
-                style={{marginLeft: R.unit.scale(8)}}
+                style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
                 Length : 30
               </Text>
@@ -326,7 +330,7 @@ function RideDetailsScreen(props) {
                 font={'InterRegular'}
                 color={R.color.gray4}
                 align={'left'}
-                style={{marginLeft: R.unit.scale(8)}}
+                style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
                 Width : 30
               </Text>
@@ -335,7 +339,7 @@ function RideDetailsScreen(props) {
                 font={'InterRegular'}
                 color={R.color.gray4}
                 align={'left'}
-                style={{marginLeft: R.unit.scale(8)}}
+                style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
                 Depth : 340
               </Text>
@@ -344,7 +348,7 @@ function RideDetailsScreen(props) {
                 font={'InterRegular'}
                 color={R.color.gray4}
                 align={'left'}
-                style={{marginLeft: R.unit.scale(8)}}
+                style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
                 Weight : 130
               </Text>
@@ -517,7 +521,7 @@ export default RideDetailsScreen;
 const styles = StyleSheet.create({
   mainLayout: {
     backgroundColor: R.color.white,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     flex: 1,
   },
   contentView: {

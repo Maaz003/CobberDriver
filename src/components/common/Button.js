@@ -85,7 +85,6 @@ const Button = props => {
           <Text
             font={font}
             variant={variant}
-            gutterTop={5}
             color={disabled ? R.color.gray4 : color}
             align={'center'}
             style={[textStyles]}>

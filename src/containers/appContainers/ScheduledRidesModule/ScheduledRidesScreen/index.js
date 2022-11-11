@@ -74,7 +74,7 @@ function ScheduledRidesScreen(props) {
                   },
                 ]}>
                 <Text
-                  variant={'body3'}
+                  variant={'body4'}
                   font={'PoppinsRegular'}
                   gutterTop={2}
                   color={item?.id === tab ? R.color.black : R.color.white}
@@ -106,18 +106,16 @@ export default ScheduledRidesScreen;
 const styles = StyleSheet.create({
   container: {
     width: R.unit.width(1),
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     backgroundColor: R.color.lightSilver,
   },
   tabLayout: {
-    width: R.unit.width(1),
-    padding: R.unit.scale(5),
     alignItems: 'center',
     marginTop: R.unit.scale(10),
-    paddingHorizontal: R.unit.scale(20),
+    width: '100%',
   },
   tab: {
-    padding: R.unit.scale(7),
+    padding: R.unit.scale(5),
     paddingHorizontal: R.unit.scale(20),
     borderRadius: R.unit.scale(30),
     borderWidth: 1,

@@ -12,6 +12,7 @@ import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
 import {openCall} from '@components/utils/ReuseableFunctions';
+import {a} from '@react-spring/native';
 
 function RideInProgressCard(props) {
   const {type = undefined, data = undefined, navigation} = props;
@@ -24,7 +25,6 @@ function RideInProgressCard(props) {
   useEffect(() => {
     if (data) {
       if (data.type === 'schedule') {
-        ///SCHEDULE
         switch (data.rideStatus) {
           case 'pickupstarted':
             setButtonText('Complete Pickup');
@@ -36,8 +36,7 @@ function RideInProgressCard(props) {
             setButtonText('Complete DropOff');
             break;
         }
-      } //INSTANT
-      else {
+      } else {
         switch (data.rideStatus) {
           case 'notstarted':
             setButtonText('Start Ride');
@@ -65,23 +64,39 @@ function RideInProgressCard(props) {
     dispatch(scheduledRides(tempArr));
   };
 
+  const updateRideSession = async (
+    rideSessionStatus,
+    inRideStatus,
+    popUpText,
+  ) => {
+    const dataRide = {
+      data: {...data, rideStatus: rideSessionStatus, type: type},
+      inRide: inRideStatus,
+    };
+    if (type !== 'instant') {
+      updateRideStatus(rideSessionStatus);
+    }
+    const popUpStatuses = {
+      notstarted: 'PickUp Started',
+      pickupstarted: 'PickUp Completed',
+      pickupended: 'DropOff Started',
+      dropoffstarted: 'DropOff Completed',
+    };
+    PopUp({
+      heading: popUpText ? popUpText : popUpStatuses[data.rideStatus],
+      bottomOffset: 0.7,
+      visibilityTime: 3000,
+      position: 'top',
+    });
+    await dispatch(rideSession(dataRide));
+  };
+
   const onSubmit = async () => {
     if (type === 'instant') {
       if (data.rideStatus === 'notstarted') {
-        const dataRide = {
-          data: {...data, rideStatus: 'pickupstarted', type: type},
-          inRide: 'started',
-        };
-        dispatch(rideSession(dataRide));
-        PopUp({
-          heading: 'Ride Started',
-          bottomOffset: 0.7,
-          visibilityTime: 3000,
-          position: 'top',
-        });
+        updateRideSession('pickupstarted', 'started', 'Ride Started');
       } else {
-        const dataRide = {data: {...data, type: type}, inRide: 'ended'};
-        dispatch(rideSession(dataRide));
+        updateRideSession('dropoffended', 'ended', 'DropOff Completed');
         navigation.reset({
           index: 0,
           routes: [{name: 'RideCompleted'}],
@@ -89,44 +104,11 @@ function RideInProgressCard(props) {
       }
     } else {
       if (data.rideStatus === 'pickupstarted') {
-        const dataRide = {
-          data: {...data, rideStatus: 'pickupended', type: type},
-          inRide: 'scheduleEnded',
-        };
-        updateRideStatus('pickupended');
-        PopUp({
-          heading: 'PickUp Completed',
-          bottomOffset: 0.7,
-          visibilityTime: 3000,
-          position: 'top',
-        });
-        await dispatch(rideSession(dataRide));
+        updateRideSession('pickupended', 'scheduleEnded');
       } else if (data.rideStatus === 'pickupended') {
-        const dataRide = {
-          data: {...data, rideStatus: 'dropoffstarted', type: type},
-          inRide: 'scheduleEnded',
-        };
-        updateRideStatus('dropoffstarted');
-        await dispatch(rideSession(dataRide));
-        PopUp({
-          heading: 'DropOff Started',
-          bottomOffset: 0.7,
-          visibilityTime: 3000,
-          position: 'top',
-        });
+        updateRideSession('dropoffstarted', 'scheduleEnded');
       } else if (data.rideStatus === 'dropoffstarted') {
-        const dataRide = {
-          data: {...data, rideStatus: 'dropoffended', type: type},
-          inRide: 'ended',
-        };
-        updateRideStatus('dropoffended');
-        await dispatch(rideSession(dataRide));
-        PopUp({
-          heading: 'DropOff Ended',
-          bottomOffset: 0.7,
-          visibilityTime: 3000,
-          position: 'top',
-        });
+        updateRideSession('dropoffended', 'ended');
       }
     }
   };

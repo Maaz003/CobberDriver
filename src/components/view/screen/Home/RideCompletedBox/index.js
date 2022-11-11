@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '95%',
     padding: R.unit.scale(24),
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     borderRadius: R.unit.scale(10),
     backgroundColor: 'rgba(0,0,0,0.85)',
     marginVertical: R.unit.scale(26),

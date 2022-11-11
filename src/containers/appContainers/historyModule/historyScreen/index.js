@@ -86,7 +86,7 @@ export default History;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     backgroundColor: R.color.lightSilver,
   },
   tabLayout: {

@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: R.color.blackShade2,
     width: '100%',
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     paddingVertical: R.unit.scale(35),
     borderTopRightRadius: R.unit.scale(20),
     borderTopLeftRadius: R.unit.scale(20),

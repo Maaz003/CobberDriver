@@ -13,8 +13,9 @@ const DropDown = props => {
     gutterBottom = 0,
     errorMTop = 8,
     errorMBottom = 0,
-    bgColor = R.color.black,
+    bgColor = R.color.blackShade3,
     borderColor = R.color.white,
+    widthInPercent,
     width = 0.94,
     containerStyles,
     inputFieldStyles,
@@ -65,7 +66,7 @@ const DropDown = props => {
             borderColor: borderColor,
           },
           width && {
-            width: R.unit.width(width),
+            width: widthInPercent ? widthInPercent : R.unit.width(width),
           },
           containerStyles,
         ]}

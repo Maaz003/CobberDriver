@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     marginTop: R.unit.scale(24),
     backgroundColor: 'white',
     width: '100%',
-    paddingHorizontal: R.unit.scale(8),
+    paddingHorizontal: R.unit.scale(5),
   },
   pressableView: {
     width: '30%',

@@ -3,8 +3,6 @@ import {
   View,
   StyleSheet,
   Platform,
-  SafeAreaView,
-  StatusBar,
   TouchableNativeFeedback,
   Image as Imagec,
   TouchableOpacity,
@@ -30,6 +28,7 @@ import Toast from '@components/utils/Toast';
 import PopUp from '@components/common/PopUp';
 import {useIsFocused} from '@react-navigation/native';
 import {vehiclesList} from '@store/common/commonSlice';
+import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
 
 function Step1Screen(props) {
   const {navigation} = props;
@@ -188,10 +187,6 @@ function Step1Screen(props) {
   );
 
   const onSubmit = async () => {
-    // navigation.navigate('Step2', {
-    //   step1Data: {},
-    // });
-
     if (picture === undefined) {
       Toast.show({
         title: 'Picture not uploaded',
@@ -275,13 +270,9 @@ function Step1Screen(props) {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: R.color.black}}>
-      <StatusBar barStyle={'light-content'} />
+    <AuthBoiler>
       <KeyboardAwareScrollView
-        style={{
-          ...R.styles.container,
-          ...styles.mainLayout,
-        }}
+        style={R.styles.container}
         keyboardShouldPersistTaps={'always'}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -289,8 +280,8 @@ function Step1Screen(props) {
           flexGrow: 1,
           justifyContent: 'space-between',
           alignItems: 'center',
-          flexDirection: 'column',
           paddingBottom: R.unit.scale(50),
+          width: '100%',
         }}>
         <View style={styles.formView}>
           <Text
@@ -368,6 +359,7 @@ function Step1Screen(props) {
             color={R.color.white}
             value={authUser?.name}
             gutterBottom={24}
+            widthInPercent={'100%'}
             iconName={'user'}
             iconType={'FontAwesome'}
             formError={errorField?.name}
@@ -380,8 +372,8 @@ function Step1Screen(props) {
               setAuthUser({...authUser, email: text});
             }}
             color={R.color.white}
+            widthInPercent={'100%'}
             value={authUser?.email}
-            width={0.94}
             gutterBottom={24}
             iconName={'envelope'}
             iconType={'FontAwesome'}
@@ -393,6 +385,7 @@ function Step1Screen(props) {
             zIndexInverse={2000}
             zIndexIOS={10}
             arrayData={countriesDialCode}
+            widthInPercent={'100%'}
             placeholder={'Select Country'}
             loaderParentCall={countryDropDown}
             schema={{
@@ -414,6 +407,7 @@ function Step1Screen(props) {
             arrayData={filteredStates}
             placeholder={'Select State'}
             loaderParentCall={stateDropDown}
+            widthInPercent={'100%'}
             schema={{
               label: 'title',
               value: 'value',
@@ -490,20 +484,18 @@ function Step1Screen(props) {
           </TouchableNativeFeedback>
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </AuthBoiler>
   );
 }
 export default Step1Screen;
 
 const styles = StyleSheet.create({
-  mainLayout: {
-    backgroundColor: R.color.black,
-  },
   formView: {
     width: '100%',
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(50),
+    paddingHorizontal: R.unit.scale(10),
   },
   footerImage: {
     marginTop: R.unit.scale(50),
@@ -520,6 +512,7 @@ const styles = StyleSheet.create({
     borderWidth: R.unit.scale(1),
     paddingHorizontal: R.unit.scale(10),
     paddingVertical: R.unit.scale(12),
+    backgroundColor: R.color.blackShade3,
   },
   phoneNumberField: {
     flex: 1,
@@ -552,7 +545,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     flexDirection: 'row',
-    // marginTop: R.unit.scale(24),
     width: '100%',
+    paddingHorizontal: R.unit.scale(10),
   },
 });

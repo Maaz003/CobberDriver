@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
   Dimensions,
-  SafeAreaView,
-  ScrollView,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Post} from '@axios/AxiosInterceptorFunction';
 import {URL, apiHeader} from '@config/apiUrl';
 import Text from '@components/common/Text';
@@ -16,6 +16,7 @@ import R from '@components/utils/R';
 import {Footer} from '@components/utils/Svg';
 import OTPInput from '@components/common/OTP';
 import Icon from '@components/common/Icon';
+import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
 
 const originalWidth = 463;
 const originalHeight = 155;
@@ -29,9 +30,14 @@ function OTPVerifyScreen(props) {
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [isPinReady, setIsPinReady] = useState(false);
   const maximumCodeLength = 4;
+
+  useEffect(() => {
+    if (isPinReady) {
+      Keyboard.dismiss();
+    }
+  }, [isPinReady]);
 
   const onSubmit = async () => {
     // navigation.navigate('VerfiySucess');
@@ -40,22 +46,32 @@ function OTPVerifyScreen(props) {
     if (!code || code?.length < 4) {
       setCodeError(true);
     } else {
-      const reqData = {
-        user,
-        otp: code,
-      };
-      const verifyOTPUrl = URL('auth/verify/otp');
-      const response = await Post(verifyOTPUrl, reqData);
+      try {
+        const reqData = {
+          user,
+          otp: code,
+        };
+        const verifyOTPUrl = URL('auth/verify/otp');
+        const response = await Post(verifyOTPUrl, reqData);
 
-      if (response !== undefined) {
+        if (response !== undefined) {
+          Toast.show({
+            title: 'Account Created Successfully',
+            message: 'Login and get your goods delivered successfully',
+          });
+          navigation.navigate('VerfiySucess');
+        } else {
+          setIsLoading(false);
+        }
+      } catch (error) {
         Toast.show({
-          title: 'Account Created Successfully',
-          message: 'Login and get your goods delivered successfully',
+          title: 'Account Creation Failed',
+          message: `${error}`,
+          type: 'danger',
         });
-        navigation.navigate('VerfiySucess');
       }
+
       setCodeError(false);
-      setIsLoading(false);
     }
     setIsLoading(false);
   };
@@ -67,12 +83,9 @@ function OTPVerifyScreen(props) {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView
-        style={{
-          ...R.styles.container,
-          ...styles.mainLayout,
-        }}
+    <AuthBoiler>
+      <KeyboardAwareScrollView
+        style={R.styles.container}
         keyboardShouldPersistTaps="always"
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -98,7 +111,7 @@ function OTPVerifyScreen(props) {
             </TouchableOpacity>
           </View>
           <Text
-            variant={R.unit.height(1) > 850 ? 'h5' : 'h6'}
+            variant={R.unit.tabSizeCalc('h6', 'h5')}
             font={'Sequel451'}
             gutterBottom={5}
             color={R.color.white}
@@ -107,12 +120,11 @@ function OTPVerifyScreen(props) {
             Enter your
           </Text>
           <Text
-            variant={R.unit.height(1) > 850 ? 'largeTitle' : 'h2'}
+            variant={R.unit.tabSizeCalc('h2', 'largeTitle')}
             font={'Sequel451'}
             gutterBottom={10}
             color={R.color.mainColor}
             align={'left'}
-            lineHeight={70}
             letterSpacing={2}
             transform={'none'}>
             Verification {`\n`}
@@ -137,7 +149,7 @@ function OTPVerifyScreen(props) {
           <Button
             value="Verify"
             bgColor={R.color.mainColor}
-            disabled={code?.length < 4}
+            disabled={!isPinReady}
             width={'100%'}
             size={'lg'}
             variant={'body1'}
@@ -182,22 +194,19 @@ function OTPVerifyScreen(props) {
             viewBox={`0 0 ${originalWidth} ${originalHeight}`}
           />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </KeyboardAwareScrollView>
+    </AuthBoiler>
   );
 }
 export default OTPVerifyScreen;
 
 const styles = StyleSheet.create({
-  mainLayout: {
-    backgroundColor: R.color.black,
-    paddingTop: R.unit.scale(0),
-  },
   formView: {
     width: '100%',
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(30),
+    paddingHorizontal: R.unit.scale(10),
   },
   footerImage: {
     width: '100%',
@@ -206,34 +215,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  otpInputContainerStyles: {
-    marginTop: R.unit.scale(30),
-    height: R.unit.scale(150),
-    alignItems: 'center',
-    backgroundColor: 'purple',
-  },
-  otpInputStyles: {
-    fontSize: R.unit.scale(30),
-    color: R.color.white,
-    marginHorizontal: R.unit.scale(10),
-    fontFamily: 'Nunito-Bold',
-    height: 300,
-    paddingHorizontal: 20,
-    color: R.color.mainColor,
-    backgroundColor: R.color.black,
-    borderBottomWidth: 1,
-    borderBottomColor: R.color.mainColor,
-  },
   headerView: {
     zIndex: 99999,
-    width: R.unit.width(0.97),
+    width: '100%',
     paddingVertical: R.unit.scale(10),
-    marginBottom: R.unit.scale(90),
+    marginBottom: R.unit.tabSizeCalc(R.unit.scale(40), R.unit.scale(90)),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: R.unit.scale(5),
   },
   iconView: {
     backgroundColor: R.color.charcoalShade2,

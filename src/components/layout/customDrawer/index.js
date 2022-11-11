@@ -5,11 +5,11 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import Text from '@components/common/Text';
 import {imageUrl} from '@config/apiUrl';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import {
@@ -168,7 +168,7 @@ const CustomDrawer = props => {
             <View style={styles.nameView}>
               <Text
                 variant={'body3'}
-                font={'regular'}
+                font={'PoppinsMedium'}
                 color={R.color.white}
                 align={'left'}
                 transform={'capitalize'}>
@@ -176,7 +176,7 @@ const CustomDrawer = props => {
               </Text>
               <Text
                 variant={'h2'}
-                font={'semiBold'}
+                font={'PoppinsSemiBold'}
                 color={R.color.white}
                 align={'left'}
                 transform={'capitalize'}>

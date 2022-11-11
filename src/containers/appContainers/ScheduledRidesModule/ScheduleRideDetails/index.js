@@ -19,6 +19,7 @@ import {
   WalletReqIcon,
 } from '@components/utils/Svg';
 import {openDirections} from '@components/utils/ReuseableFunctions';
+import PopUp from '@components/common/PopUp';
 
 function ScheduleRideDetailsScreen(props) {
   const {navigation} = props;
@@ -72,30 +73,36 @@ function ScheduleRideDetailsScreen(props) {
     setIsModal(!isModal);
   };
 
+  const updateSessionStatus = async (rideSessionStatus, inRideStatus) => {
+    const dataRide = {
+      data: {...data, rideStatus: rideSessionStatus, type: type},
+      inRide: inRideStatus,
+    };
+    const popUpStatuses = {
+      pickupstarted: 'PickUp Started',
+      pickupended: 'PickUp Completed',
+      dropoffstarted: 'DropOff Started',
+      dropoffended: 'DropOff Completed',
+    };
+    PopUp({
+      heading: popUpStatuses[rideSessionStatus],
+      bottomOffset: 0.7,
+      visibilityTime: 3000,
+      position: 'top',
+    });
+    await dispatch(rideSession(dataRide));
+  };
+
   const startScheduleRide = () => {
-    let dataRide;
     if (rideStatus === 'notstarted') {
-      dataRide = {
-        data: {...data, rideStatus: 'pickupstarted', type: type},
-        inRide: 'accepted',
-      };
+      updateSessionStatus('pickupstarted', 'accepted');
     } else if (rideStatus === 'pickupended') {
-      dataRide = {
-        data: {...data, rideStatus: 'dropoffstarted', type: type},
-        inRide: 'accepted',
-      };
+      updateSessionStatus('dropoffstarted', 'accepted');
     } else if (rideStatus === 'dropoffstarted') {
-      dataRide = {
-        data: {...data, rideStatus: 'dropoffended', type: type},
-        inRide: 'accepted',
-      };
+      updateSessionStatus('dropoffended', 'accepted');
     } else if (rideStatus === 'dropoffended') {
-      dataRide = {
-        data: {...data, rideStatus: 'dropoffended', type: type},
-        inRide: 'ended',
-      };
+      updateSessionStatus('dropoffended', 'ended');
     }
-    dispatch(rideSession(dataRide));
   };
 
   return (
@@ -455,7 +462,7 @@ export default ScheduleRideDetailsScreen;
 const styles = StyleSheet.create({
   mainLayout: {
     backgroundColor: R.color.white,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     flex: 1,
   },
   contentView: {

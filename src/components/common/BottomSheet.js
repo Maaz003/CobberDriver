@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: R.color.charcoalShade2,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
   },
   notch: {
     width: R.unit.scale(40),

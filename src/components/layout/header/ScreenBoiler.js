@@ -8,8 +8,6 @@ export default function ScreenBoiler(props) {
   const {navigation, children, headerProps, backPress} = props;
   const {isSubHeader, isMainHeader, headerColor = R.color.white} = headerProps;
 
-  console.log('object', isMainHeader);
-
   return (
     <>
       <SafeAreaView

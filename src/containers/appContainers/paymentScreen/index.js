@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   formView: {
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     width: '100%',
     justifyContent: 'center',
     marginTop: R.unit.scale(32),

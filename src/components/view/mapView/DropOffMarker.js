@@ -22,8 +22,8 @@ function DropOffMarker(props) {
       pinColor={R.color.blackLightShade}>
       <View style={R.styles.columnView}>
         <Text
-          variant={'body6'}
-          font={'bold'}
+          variant={'body5'}
+          font={'PoppinsMedium'}
           color={R.color.charcoalShade}
           style={{
             backgroundColor: R.color.mainColor,

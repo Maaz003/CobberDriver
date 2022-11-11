@@ -1,14 +1,6 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  TouchableNativeFeedback,
-} from 'react-native';
+import {View, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
 import {URL} from '@config/apiUrl';
 import {Post} from '@axios/AxiosInterceptorFunction';
 import Text from '@components/common/Text';
@@ -18,6 +10,7 @@ import FormValidation from '@components/utils/FormValidation';
 import Icon from '@components/common/Icon';
 import Loader from '@components/common/Loader';
 import PopUp from '@components/common/PopUp';
+import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
 
 function Step3Screen(props) {
   const {navigation} = props;
@@ -165,17 +158,9 @@ function Step3Screen(props) {
   };
 
   return (
-    <SafeAreaView>
-      <StatusBar
-        style={{flex: 0, backgroundColor: 'green'}}
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
-      />
-
+    <AuthBoiler>
       <KeyboardAwareScrollView
-        style={{
-          ...R.styles.container,
-          ...styles.mainLayout,
-        }}
+        style={R.styles.container}
         keyboardShouldPersistTaps={'always'}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -215,6 +200,7 @@ function Step3Screen(props) {
             color={R.color.white}
             value={authUser?.password}
             gutterBottom={24}
+            widthInPercent={'100%'}
             iconName={'locked'}
             iconType={'Fontisto'}
             formError={errorField?.password}
@@ -228,7 +214,7 @@ function Step3Screen(props) {
             }}
             color={R.color.white}
             value={authUser?.confirmPassword}
-            width={0.94}
+            widthInPercent={'100%'}
             gutterBottom={24}
             iconName={'locked'}
             iconType={'Fontisto'}
@@ -309,26 +295,25 @@ function Step3Screen(props) {
           <Loader size={'large'} color={R.color.mainColor} />
         </View>
       )}
-    </SafeAreaView>
+    </AuthBoiler>
   );
 }
 export default Step3Screen;
 
 const styles = StyleSheet.create({
-  mainLayout: {
-    backgroundColor: R.color.black,
-  },
   formView: {
     width: '100%',
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(50),
+    paddingHorizontal: R.unit.scale(10),
   },
   nextButtonLayout: {
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexDirection: 'row',
     width: '100%',
+    paddingHorizontal: R.unit.scale(10),
   },
   loaderContainer: {
     justifyContent: 'center',

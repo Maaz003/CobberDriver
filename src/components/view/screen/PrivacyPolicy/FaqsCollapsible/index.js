@@ -95,7 +95,7 @@ const styles = ScaledSheet.create({
   },
   content: {
     paddingTop: R.unit.scale(10),
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
   },
   placeEditView: {
     justifyContent: 'space-between',

@@ -64,7 +64,6 @@ const App = () => {
           style={{
             ...R.styles.popUpContainer,
             backgroundColor: props.props.bgColor,
-            // width: '100%',
           }}>
           <View
             style={{
@@ -73,12 +72,12 @@ const App = () => {
             }}>
             <View>{props.props.leftIcon}</View>
             <Text
-              variant={'body3'}
+              variant={'body4'}
               font={'PoppinsMedium'}
               color={props.props.textColor}
               align={'left'}
               numberOfLines={3}
-              style={{marginLeft: R.unit.scale(8), width: '80%'}}
+              style={{marginLeft: R.unit.scale(8), width: '90%'}}
               transform={'none'}>
               {props.text1}
             </Text>

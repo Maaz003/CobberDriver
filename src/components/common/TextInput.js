@@ -30,7 +30,7 @@ const TextInput = props => {
     inputContainerStyles,
     gutterTop = 0,
     gutterBottom = 0,
-    backgroundColor = R.color.black,
+    backgroundColor = R.color.blackShade3,
     borderColor = R.color.white,
     borderWidth = 0.75,
     placeholdercolor = R.color.white,
@@ -47,6 +47,7 @@ const TextInput = props => {
     fontSize,
     eyeColor = R.color.white,
     returnKeyType,
+    onBlur,
   } = props;
 
   return (
@@ -180,6 +181,7 @@ const TextInput = props => {
             multiline={multiline}
             numberOfLines={numberOfLines || 1}
             editable={props.disable ? false : true}
+            onBlur={onBlur}
             keyboardShouldPersistTaps="always"
             textAlignVertical={numberOfLines > 1 ? 'top' : 'center'}
             returnKeyType={returnKeyType}

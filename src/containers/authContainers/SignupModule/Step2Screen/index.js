@@ -2,13 +2,9 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  Platform,
-  SafeAreaView,
-  StatusBar,
   TouchableNativeFeedback,
   ImageBackground,
 } from 'react-native';
-import {Image} from 'react-native-compressor';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Text from '@components/common/Text';
 import TextInput from '@components/common/TextInput';
@@ -20,6 +16,7 @@ import Toast from '@components/utils/Toast';
 import DropDown from '@components/common/DropDown';
 import {useSelector} from 'react-redux';
 import {useCallback} from 'react';
+import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
 
 function Step2Screen(props) {
   const {navigation} = props;
@@ -113,10 +110,6 @@ function Step2Screen(props) {
   );
 
   const onSubmit = async () => {
-    // navigation.navigate('Step3', {
-    //   step2Data: {},
-    // });
-
     let res = options?.every(
       item =>
         item?.backPicture !== undefined && item?.frontPicture !== undefined,
@@ -168,17 +161,9 @@ function Step2Screen(props) {
   };
 
   return (
-    <SafeAreaView>
-      <StatusBar
-        style={{flex: 0, backgroundColor: 'green'}}
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : ' light-content'}
-      />
+    <AuthBoiler>
       <KeyboardAwareScrollView
-        style={{
-          ...R.styles.container,
-          ...styles.mainLayout,
-        }}
-        keyboardShouldPersistTaps={'always'}
+        style={R.styles.container}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -220,6 +205,7 @@ function Step2Screen(props) {
               value: 'name',
             }}
             search={true}
+            widthInPercent={'100%'}
             value={authUser?.vehicle}
             gutterBottom={24}
             formError={errorField?.vehicle}
@@ -235,7 +221,7 @@ function Step2Screen(props) {
             }}
             color={R.color.white}
             value={authUser?.model}
-            width={0.94}
+            widthInPercent={'100%'}
             gutterBottom={24}
             iconName={'truck'}
             iconType={'MaterialCommunityIcons'}
@@ -243,13 +229,13 @@ function Step2Screen(props) {
           />
           <TextInput
             secureText={false}
-            placeholder={`Vehcile Color`}
+            placeholder={`Vehicle Color`}
             onChangeText={text => {
               setAuthUser({...authUser, color: text});
             }}
             color={R.color.white}
             value={authUser?.color}
-            width={0.94}
+            widthInPercent={'100%'}
             gutterBottom={24}
             iconName={'truck'}
             iconType={'MaterialCommunityIcons'}
@@ -266,7 +252,7 @@ function Step2Screen(props) {
                   color={R.color.white}
                   align={'left'}
                   transform={'none'}>
-                  Driver {item.title} Pictures
+                  {item.title} Pictures
                 </Text>
 
                 <View
@@ -430,26 +416,25 @@ function Step2Screen(props) {
         isVisibleModal={isModal}
         uploadPicture={uploadPicture}
       />
-    </SafeAreaView>
+    </AuthBoiler>
   );
 }
 export default Step2Screen;
 
 const styles = StyleSheet.create({
-  mainLayout: {
-    backgroundColor: R.color.black,
-  },
   formView: {
     width: '100%',
     flex: 1,
     justifyContent: 'center',
     marginTop: R.unit.scale(50),
+    paddingHorizontal: R.unit.scale(10),
   },
   nextButtonLayout: {
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexDirection: 'row',
     width: '100%',
+    paddingHorizontal: R.unit.scale(10),
   },
   touchableBox: {
     backgroundColor: R.color.blackShade2,

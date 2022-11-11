@@ -62,8 +62,8 @@ function RideMap(props) {
           title={'User'}>
           <View style={R.styles.columnView}>
             <Text
-              variant={'body6'}
-              font={'bold'}
+              variant={'body5'}
+              font={'PoppinsMedium'}
               color={R.color.charcoalShade}
               style={{
                 backgroundColor: R.color.mainColor,
@@ -91,8 +91,8 @@ function RideMap(props) {
           title={'User'}>
           <View style={R.styles.columnView}>
             <Text
-              variant={'body6'}
-              font={'bold'}
+              variant={'body5'}
+              font={'PoppinsMedium'}
               color={R.color.charcoalShade}
               style={{
                 backgroundColor: R.color.mainColor,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   mapView: {
     backgroundColor: R.color.white,
-    paddingHorizontal: R.unit.scale(16),
+    paddingHorizontal: R.unit.scale(10),
     width: R.unit.width(1),
     height: R.unit.width(1) > 900 ? 300 : 180,
     flex: 1,
