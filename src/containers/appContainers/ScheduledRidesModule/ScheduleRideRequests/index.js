@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
@@ -48,7 +48,7 @@ function ScheduleRideRequestsScreen(props) {
 
   const finishRide = () => {
     const dataRide = {data: undefined, inRide: 'finished'};
-    dispatch(rideSession(dataRide));
+    dispatch(createRideSession(dataRide));
   };
 
   return (

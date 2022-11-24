@@ -10,7 +10,9 @@ function MediaDisplay(props) {
     return (
       <View style={styles.slide}>
         <Image
-          source={item}
+          source={{
+            uri: item,
+          }}
           resizeMode={'cover'}
           style={{width: '100%', height: '100%'}}
         />

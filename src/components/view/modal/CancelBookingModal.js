@@ -11,7 +11,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {tempRidesSet} from '@store/common/commonSlice';
 import {reportData} from '@components/constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
@@ -76,7 +76,7 @@ function CancelBookingModal(props) {
       let objFound = commonTemparr.find(item => item.id === itemId);
       objFound.isCancelled = true;
       const dataRide = {data: undefined, inRide: 'finished'};
-      await dispatch(rideSession(dataRide));
+      await dispatch(createRideSession(dataRide));
       await dispatch(tempRidesSet(commonTemparr));
     }
   };

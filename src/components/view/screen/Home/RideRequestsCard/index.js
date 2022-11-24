@@ -11,11 +11,16 @@ import Button from '@components/common/Button';
 import Divider from '@components/common/Divider';
 import navigationService from '@navigation/navigationService';
 import moment from 'moment';
+import {imageUrl} from '@config/apiUrl';
 
 function RideRequestsCard(props) {
   const {item, index, arr, screenType} = props;
 
+  console.log('ITEM', JSON.stringify(item, null, 2));
   const [disabled, setDisabled] = useState(false);
+  const {displayName, photo} = item?.customer;
+
+  const image = imageUrl(photo);
 
   const onNavigate = () => {
     navigationService.navigate(
@@ -41,7 +46,7 @@ function RideRequestsCard(props) {
     <View style={styles.notificationCard}>
       <View style={[R.styles.twoItemsRow, {alignItems: 'flex-start'}]}>
         <Image
-          source={R.image.dummyUser()}
+          source={{uri: image}}
           resizeMode={'contain'}
           style={styles.image}
         />
@@ -53,15 +58,15 @@ function RideRequestsCard(props) {
             align={'left'}
             gutterTop={5}
             numberOfLines={2}
-            transform={'none'}>
-            {item.name}{' '}
+            transform={'capitalize'}>
+            {displayName}{' '}
             <Text
               variant={'body3'}
               font={'InterRegular'}
               color={R.color.blackShade3}
               align={'left'}
               transform={'none'}>
-              has requested a ride
+              has requested a schedule ride
             </Text>
           </Text>
         </View>
@@ -106,7 +111,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.location?.pickUpLocation}
+          {item?.pickUpAddress}
         </Text>
         <View style={styles.dot} />
         <Text
@@ -131,7 +136,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {item.location?.dropOffLocation}
+          {item?.dropOffAddress}
         </Text>
         <View style={styles.dot} />
         <Text

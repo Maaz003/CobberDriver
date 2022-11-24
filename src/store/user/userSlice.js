@@ -214,24 +214,27 @@ export const scheduledRideTime = createAsyncThunk(
   },
 );
 
-export const rideSession = createAsyncThunk('user/rideSession', async data => {
-  try {
-    return {
-      status: 'success',
-      error: false,
-      message: 'Success!',
-      isData: data.inRide,
-      rideData: data.data,
-    };
-  } catch (error) {
-    return {
-      status: 'failed',
-      error: true,
-      message: 'Oops! Something went wrong!',
-      isData: undefined,
-    };
-  }
-});
+export const createRideSession = createAsyncThunk(
+  'user/createRideSession',
+  async data => {
+    try {
+      return {
+        status: 'success',
+        error: false,
+        message: 'Success!',
+        isData: data.inRide,
+        rideData: data.data,
+      };
+    } catch (error) {
+      return {
+        status: 'failed',
+        error: true,
+        message: 'Oops! Something went wrong!',
+        isData: undefined,
+      };
+    }
+  },
+);
 
 export const clearUser = createAsyncThunk('user/clearUser', async data => {
   try {
@@ -360,7 +363,7 @@ const userSlice = createSlice({
       state.error = false;
       state.locationLoader = action.payload.isData;
     },
-    [rideSession.fulfilled]: (state, action) => {
+    [createRideSession.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;

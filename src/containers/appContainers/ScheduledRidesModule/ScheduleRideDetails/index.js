@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import MediaDisplay from '@components/view/screen/Home/MediaDisplay';
@@ -90,7 +90,7 @@ function ScheduleRideDetailsScreen(props) {
       visibilityTime: 3000,
       position: 'top',
     });
-    await dispatch(rideSession(dataRide));
+    await dispatch(createRideSession(dataRide));
   };
 
   const startScheduleRide = () => {

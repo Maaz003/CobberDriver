@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
+import {imageUrl, apiHeader, URL} from '@config/apiUrl';
+import {Patch} from '@axios/AxiosInterceptorFunction';
 import {useDispatch, useSelector} from 'react-redux';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
@@ -26,18 +28,47 @@ function RideDetailsScreen(props) {
   const isFocused = useIsFocused();
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
+  const user = useSelector(state => state.user);
   const {type = undefined, data = undefined} = props.route.params;
+  const {customer, images} = data;
   const {
-    name,
-    picture,
-    productImages,
-    isScheduled,
-    scheduledTime,
-    location,
-    cost,
+    _id: rideId,
+    pickUpLocation,
+    dropOffLocation,
+    pickUpTime,
+    dropOffTime,
+    weight,
+    length,
+    depth,
+    width,
+    pickUpAddress,
+    dropOffAddress,
+    isSchedule,
   } = data;
+  const {displayName, photo, city, country, ratingsAverage} = customer;
+
+  // console.log(JSON.stringify(user?.userToken, null, 2));
+
+  const picture = imageUrl(photo);
+  let productImages = images?.map(item => {
+    return imageUrl(item);
+  });
   const [isModal, setIsModal] = useState(false);
   const [isRideAccepted, setIsRideAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const location = {
+    pickUpLocation: pickUpAddress,
+    dropOffLocation: dropOffAddress,
+    pickUpLoc: {
+      latitude: pickUpLocation?.coordinates[1],
+      longitude: pickUpLocation?.coordinates[0],
+    },
+    dropOffLoc: {
+      latitude: dropOffLocation?.coordinates[1],
+      longitude: dropOffLocation?.coordinates[1],
+    },
+  };
 
   useEffect(() => {
     if (schedule?.scheduledRides.length > 0) {
@@ -65,7 +96,7 @@ function RideDetailsScreen(props) {
   };
 
   const rejectRide = async () => {
-    if (isScheduled) {
+    if (isSchedule) {
       let tempArr = JSON.parse(JSON.stringify(common.tempRides));
       let obj = tempArr.find(item => item.requestedRides);
       obj.requestedRides.find(item => item.id === data.id).isRejected = true;
@@ -83,7 +114,7 @@ function RideDetailsScreen(props) {
   };
 
   const acceptRide = async () => {
-    if (isScheduled) {
+    if (isSchedule) {
       let tempArr =
         schedule?.scheduledRides.length > 0
           ? [...schedule?.scheduledRides]
@@ -99,17 +130,42 @@ function RideDetailsScreen(props) {
         position: 'top',
       });
     } else {
+      setIsLoading(true);
+      let {
+        pickUpLocation,
+        dropOffLocation,
+        pickUpAddress,
+        dropOffAddress,
+        ...rideSessionData
+      } = data;
+      rideSessionData = {...rideSessionData, location};
       const dataRide = {
-        data: {...data, rideStatus: 'notstarted', type: type},
+        data: {...rideSessionData, rideStatus: 'notstarted', type: type},
         inRide: 'accepted',
       };
-      await dispatch(rideSession(dataRide));
-      PopUp({
-        heading: 'Ride Accepted',
-        bottomOffset: 0.7,
-        visibilityTime: 3000,
-        position: 'top',
-      });
+      // console.log('dataRide', JSON.stringify(dataRide, null, 2));
+
+      const acceptRideUrl = URL(`rides/${rideId}`);
+      const header = apiHeader(user?.userToken, false);
+      const reqBody = {
+        status: 'accepted',
+      };
+
+      console.log('RIDE UR', acceptRideUrl, header, reqBody);
+      const response = Patch(acceptRideUrl, reqBody, header);
+      console.log('RESPONSE', response?.data);
+      if (response !== undefined) {
+        setIsLoading(false);
+        // await dispatch(createRideSession(dataRide));
+        // PopUp({
+        //   heading: 'Ride Accepted',
+        //   bottomOffset: 0.7,
+        //   visibilityTime: 3000,
+        //   position: 'top',
+        // });
+      } else {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -140,7 +196,11 @@ function RideDetailsScreen(props) {
           <MediaDisplay productImages={productImages} />
 
           <View style={R.styles.twoItemsRow}>
-            <Image source={picture} resizeMode={'cover'} style={styles.image} />
+            <Image
+              source={{uri: picture}}
+              resizeMode={'cover'}
+              style={styles.image}
+            />
             <View>
               <Text
                 variant={'h5'}
@@ -149,7 +209,7 @@ function RideDetailsScreen(props) {
                 align={'left'}
                 lineHeight={30}
                 transform={'none'}>
-                {name}
+                {displayName}
               </Text>
               <View style={{flexDirection: 'row'}}>
                 <View style={styles.tag}>
@@ -159,10 +219,10 @@ function RideDetailsScreen(props) {
                     color={R.color.black}
                     align={'left'}
                     transform={'none'}>
-                    {data?.isScheduled ? 'Scheduled' : 'Instant'}
+                    {isSchedule ? 'Scheduled' : 'Instant'}
                   </Text>
                 </View>
-                {data?.isScheduled && (
+                {isSchedule && (
                   <View style={styles.tag}>
                     <Text
                       variant={'body4'}
@@ -192,7 +252,7 @@ function RideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              5.0
+              {ratingsAverage.toFixed(1)}
             </Text>
             <View style={styles.dot} />
             <Text
@@ -201,7 +261,7 @@ function RideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              New York
+              {city}
             </Text>
 
             <View style={styles.dot} />
@@ -211,11 +271,11 @@ function RideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              USA
+              {country}
             </Text>
           </View>
 
-          {data?.isScheduled && (
+          {isSchedule && (
             <>
               <Divider lineStyles={styles.lineStyles} />
               <Text
@@ -249,9 +309,7 @@ function RideDetailsScreen(props) {
                   align={'left'}
                   style={{marginLeft: R.unit.scale(8)}}
                   transform={'none'}>
-                  {moment(scheduledTime.pickUpTime).format(
-                    'ddd, DD MMM hh:mm a',
-                  )}
+                  {moment(pickUpTime).format('ddd, DD MMM hh:mm a')}
                 </Text>
               </View>
 
@@ -277,9 +335,7 @@ function RideDetailsScreen(props) {
                   align={'left'}
                   style={{marginLeft: R.unit.scale(8)}}
                   transform={'none'}>
-                  {moment(scheduledTime.dropOffTime).format(
-                    'ddd, DD MMM hh:mm a',
-                  )}
+                  {moment(dropOffTime).format('ddd, DD MMM hh:mm a')}
                 </Text>
               </View>
             </>
@@ -288,7 +344,7 @@ function RideDetailsScreen(props) {
           <Divider
             lineStyles={{
               ...styles.lineStyles,
-              marginTop: R.unit.scale(data?.isScheduled ? 12 : 0),
+              marginTop: R.unit.scale(isSchedule ? 12 : 0),
             }}
           />
 
@@ -323,7 +379,7 @@ function RideDetailsScreen(props) {
                 align={'left'}
                 style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
-                Length : 30
+                Length : {length} m
               </Text>
               <Text
                 variant={'body3'}
@@ -332,7 +388,7 @@ function RideDetailsScreen(props) {
                 align={'left'}
                 style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
-                Width : 30
+                Width : {width} m
               </Text>
               <Text
                 variant={'body3'}
@@ -341,7 +397,7 @@ function RideDetailsScreen(props) {
                 align={'left'}
                 style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
-                Depth : 340
+                Depth : {depth} m
               </Text>
               <Text
                 variant={'body3'}
@@ -350,7 +406,7 @@ function RideDetailsScreen(props) {
                 align={'left'}
                 style={{marginLeft: R.unit.scale(5)}}
                 transform={'none'}>
-                Weight : 130
+                Weight : {weight} lbs
               </Text>
             </View>
           </View>
@@ -391,7 +447,7 @@ function RideDetailsScreen(props) {
             align={'left'}
             numberOfLines={3}
             transform={'none'}>
-            {location.pickUpLocation}
+            {pickUpAddress}
           </Text>
 
           <HoverText
@@ -418,7 +474,7 @@ function RideDetailsScreen(props) {
             numberOfLines={3}
             align={'left'}
             transform={'none'}>
-            {location.dropOffLocation}
+            {dropOffAddress}
           </Text>
 
           <HoverText
@@ -509,7 +565,7 @@ function RideDetailsScreen(props) {
 
       <CancelBookingModal
         isVisibleModal={isModal}
-        isScheduled={isScheduled}
+        isScheduled={isSchedule}
         itemId={data?.id}
         cancellationComplete={() => setIsRideAccepted(false)}
       />
@@ -538,6 +594,7 @@ const styles = StyleSheet.create({
   locationView: {
     marginTop: R.unit.scale(16),
     marginBottom: R.unit.scale(16),
+    flexWrap: 'wrap',
   },
   dot: {
     height: R.unit.scale(4),

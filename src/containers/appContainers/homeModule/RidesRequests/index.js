@@ -10,12 +10,14 @@ function RideRequestsScreen(props) {
   const {navigation} = props;
   const isFocused = useIsFocused();
   const {data, screenType = 'Rides'} = props.route.params;
-  const [filteredArray, setFilteredArray] = useState(data);
+  const [filteredArray, setFilteredArray] = useState(data?.requestedRides);
+
+  console.log('DATA', JSON.stringify(data, null, 2));
 
   useEffect(() => {
     if (data) {
-      if (data.length > 0) {
-        setFilteredArray(data);
+      if (data?.requestedRides?.length > 0) {
+        setFilteredArray(data?.requestedRides);
       } else {
         setFilteredArray([]);
       }

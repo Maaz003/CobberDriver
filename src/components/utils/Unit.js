@@ -41,8 +41,6 @@ const unit = {
     }
   },
   inputContainerVerticalPadding: (value, flag) => {
-    console.log('FLAG', flag, 'containerWidth', containerWidth);
-
     if (Platform.OS === 'ios') {
       if (containerWidth > 900) {
         return value + 5;

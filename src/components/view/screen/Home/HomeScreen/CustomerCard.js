@@ -6,13 +6,29 @@ import LocationPoint from '@components/view/cards/LocationPoint';
 import Button from '@components/common/Button';
 import navigationService from '../../../../../navigation/navigationService';
 import {useIsFocused} from '@react-navigation/native';
+import {imageUrl} from '@config/apiUrl';
 
 function CustomerCard(props) {
   const {item} = props;
+  const rideData = item?.isScheduled ? item?.initialRideRequest : item;
   const isFocused = useIsFocused();
-  const [rideData, setRideData] = useState(undefined);
   const [showControls, setShowControls] = useState(true);
   const [allCompleted, setAllCompleted] = useState(false);
+  const customer = rideData?.customer;
+  const location = {
+    pickUpLat: rideData?.pickUpLocation?.coordinates[1],
+    pickUpLong: rideData?.pickUpLocation?.coordinates[0],
+    pickUpLocation: rideData?.pickUpAddress,
+    dropOffLat: rideData?.dropOffLocation?.coordinates[1],
+    dropOffLong: rideData?.dropOffLocation?.coordinates[0],
+    dropOffLocation: rideData?.dropOffAddress,
+  };
+
+  const scheduleTime = item.isScheduled && {
+    pickUpTime: item?.slots?.pickupStartTime,
+    dropOffTime: item?.slots?.dropOffEndTime,
+  };
+  const photo = imageUrl(customer?.photo);
 
   useEffect(() => {
     if (!item.isScheduled) {
@@ -38,18 +54,10 @@ function CustomerCard(props) {
     }
   }, [isFocused, item]);
 
-  useEffect(() => {
-    if (item.requestedRides) {
-      setRideData(item.requestedRides[0]);
-    } else {
-      setRideData(item);
-    }
-  }, [item]);
-
-  const acceptRide = () => {
-    if (rideData?.isScheduled) {
+  const viewDetails = () => {
+    if (item?.isScheduled) {
       navigationService.navigate('RideRequests', {
-        data: item.requestedRides,
+        data: item,
       });
     } else {
       navigationService.navigate('RideDetails', {
@@ -63,7 +71,7 @@ function CustomerCard(props) {
     <View style={styles.mainLayout}>
       <View style={R.styles.twoItemsRow}>
         <Image
-          source={rideData?.picture}
+          source={{uri: photo}}
           resizeMode={'cover'}
           style={styles.image}
         />
@@ -74,8 +82,8 @@ function CustomerCard(props) {
             color={R.color.black}
             align={'left'}
             numberOfLines={1}
-            transform={'none'}>
-            {rideData?.name}
+            transform={'capitalize'}>
+            {customer?.displayName}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.tag}>
@@ -85,10 +93,10 @@ function CustomerCard(props) {
                 color={R.color.black}
                 align={'left'}
                 transform={'none'}>
-                {rideData?.isScheduled ? 'Scheduled' : 'Instant'}
+                {item?.isScheduled ? 'Scheduled' : 'Instant'}
               </Text>
             </View>
-            {rideData?.isScheduled && (
+            {item?.isScheduled && (
               <View style={styles.tag}>
                 <Text
                   variant={'body4'}
@@ -106,7 +114,7 @@ function CustomerCard(props) {
                 style={{
                   ...styles.tag,
                   backgroundColor:
-                    item.isCompleted || allCompleted
+                    item.status === 'completed' || allCompleted
                       ? R.color.mainColor
                       : R.color.cancelColor,
                 }}>
@@ -114,13 +122,13 @@ function CustomerCard(props) {
                   variant={'body4'}
                   font={'InterMedium'}
                   color={
-                    item.isCompleted || allCompleted
+                    item.status === 'completed' || allCompleted
                       ? R.color.blackShade2
                       : R.color.white
                   }
                   align={'left'}
                   transform={'none'}>
-                  {item.isCompleted || allCompleted
+                  {item.status === 'completed' || allCompleted
                     ? 'Completed'
                     : item.isRejected
                     ? 'Rejected'
@@ -132,10 +140,7 @@ function CustomerCard(props) {
         </View>
       </View>
 
-      <LocationPoint
-        location={rideData?.location}
-        scheduledTime={rideData?.scheduledTime}
-      />
+      <LocationPoint location={location} scheduledTime={scheduleTime} />
 
       {showControls && (
         <Button
@@ -149,7 +154,7 @@ function CustomerCard(props) {
           borderRadius={10}
           gutterTop={10}
           borderColor={R.color.mainColor}
-          onPress={acceptRide}
+          onPress={viewDetails}
           rippleColor={R.color.gray5}
         />
       )}

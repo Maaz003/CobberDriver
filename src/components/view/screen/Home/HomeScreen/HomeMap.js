@@ -45,7 +45,7 @@ function HomeMap() {
         customMapStyle={mapStyles}
         mapForwardRef={mapRef}
         loadingEnabled={false}
-        mapViewStyles={{height: R.unit.height(0.9)}}
+        mapViewStyles={{height: R.unit.height(1)}}
         mapReady={() => null}>
         <PickUpMarker
           pickUpLat={pickUpLat}

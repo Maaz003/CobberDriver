@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {tempRidesSet} from '@store/common/commonSlice';
 import Text from '@components/common/Text';
+import {imageUrl} from '@config/apiUrl';
 import R from '@components/utils/R';
 import Button from '@components/common/Button';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,11 +17,15 @@ function RideCompletedBox(props) {
   const user = useSelector(state => state.user);
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
+  const rideSession = user?.rideSession;
+  const {displayName, photo} = rideSession?.customer;
+
+  console.log('SSSSS', JSON.stringify(rideSession, null, 2));
 
   const rideComplete = () => {
-    if (user?.rideSession?.type === 'schedule') {
+    if (rideSession?.type === 'schedule') {
       let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
-      let obj = tempArr?.find(item => item.id === user?.rideSession?.id);
+      let obj = tempArr?.find(item => item.id === rideSession?.id);
       obj.isCompleted = true;
       let flag = schedule?.scheduledRides?.every(
         item => item.rideStatus === 'dropoffended',
@@ -39,7 +44,7 @@ function RideCompletedBox(props) {
         inRide: flag ? 'finished' : 'scheduleEnded',
       };
       dispatch(scheduledRides(tempArr));
-      dispatch(rideSession(dataRide));
+      dispatch(createRideSession(dataRide));
       PopUp({
         heading: 'Ride Completed',
         bottomOffset: 0.7,
@@ -48,13 +53,11 @@ function RideCompletedBox(props) {
       });
     } else {
       let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
-      let objFound = commonTemparr.find(
-        item => item.id === user?.rideSession?.id,
-      );
+      let objFound = commonTemparr.find(item => item.id === rideSession?.id);
       objFound.isCompleted = true;
       dispatch(tempRidesSet(commonTemparr));
       const dataRide = {data: undefined, inRide: 'finished'};
-      dispatch(rideSession(dataRide));
+      dispatch(createRideSession(dataRide));
       PopUp({
         heading: 'Ride Completed',
         bottomOffset: 0.7,
@@ -83,11 +86,11 @@ function RideCompletedBox(props) {
         gutterTop={10}
         gutterBottom={20}
         transform={'none'}>
-        Final Cost: ${user?.rideSession?.cost}
+        Final Cost: ${rideSession?.fare}
       </Text>
       <View style={R.styles.twoItemsRow}>
         <Image
-          source={user?.rideSession?.picture}
+          source={{uri: imageUrl(photo)}}
           resizeMode={'cover'}
           style={styles.image}
         />
@@ -97,7 +100,7 @@ function RideCompletedBox(props) {
           color={R.color.white}
           align={'left'}
           transform={'none'}>
-          {user?.rideSession?.name}
+          {displayName}
         </Text>
       </View>
 
@@ -106,7 +109,7 @@ function RideCompletedBox(props) {
         dropOffTextColor={R.color.white}
         ellipseColor={R.color.black}
         containerStyles={{paddingVertical: 0}}
-        location={user?.rideSession?.location}
+        location={rideSession?.location}
       />
 
       <Button

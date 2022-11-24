@@ -3,7 +3,7 @@ import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
-import {rideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
@@ -12,15 +12,18 @@ import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
 import {openCall} from '@components/utils/ReuseableFunctions';
-import {a} from '@react-spring/native';
+import {imageUrl} from '@config/apiUrl';
 
 function RideInProgressCard(props) {
   const {type = undefined, data = undefined, navigation} = props;
-  const {name, picture, location} = data;
+  const {customer, location} = data;
+  const {displayName, photo} = customer;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
+
+  console.log(JSON.stringify(data, null, 2));
 
   useEffect(() => {
     if (data) {
@@ -70,10 +73,10 @@ function RideInProgressCard(props) {
     popUpText,
   ) => {
     const dataRide = {
-      data: {...data, rideStatus: rideSessionStatus, type: type},
+      data: {...data, rideStatus: rideSessionStatus, type: data.type},
       inRide: inRideStatus,
     };
-    if (type !== 'instant') {
+    if (data.type !== 'instant') {
       updateRideStatus(rideSessionStatus);
     }
     const popUpStatuses = {
@@ -88,11 +91,11 @@ function RideInProgressCard(props) {
       visibilityTime: 3000,
       position: 'top',
     });
-    await dispatch(rideSession(dataRide));
+    await dispatch(createRideSession(dataRide));
   };
 
   const onSubmit = async () => {
-    if (type === 'instant') {
+    if (data.type === 'instant') {
       if (data.rideStatus === 'notstarted') {
         updateRideSession('pickupstarted', 'started', 'Ride Started');
       } else {
@@ -114,7 +117,7 @@ function RideInProgressCard(props) {
   };
 
   const locationIcon = () => {
-    if (type === 'instant') {
+    if (data.type === 'instant') {
       if (data?.rideStatus === 'notstarted') {
         return <View style={styles.pickupEllipse} />;
       } else {
@@ -143,7 +146,7 @@ function RideInProgressCard(props) {
   };
 
   const locationTitle = () => {
-    if (type === 'instant') {
+    if (data.type === 'instant') {
       if (data?.rideStatus === 'notstarted') {
         return (
           <Text
@@ -208,7 +211,7 @@ function RideInProgressCard(props) {
   };
 
   const locationText = () => {
-    if (type === 'instant') {
+    if (data.type === 'instant') {
       if (data?.rideStatus === 'notstarted') {
         return (
           <Text
@@ -277,7 +280,11 @@ function RideInProgressCard(props) {
       <View style={styles.notch} />
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
-          <Image source={picture} resizeMode={'cover'} style={styles.image} />
+          <Image
+            source={{uri: imageUrl(photo)}}
+            resizeMode={'cover'}
+            style={styles.image}
+          />
           <Text
             variant={'body2'}
             font={'PoppinsSemiBold'}
@@ -286,7 +293,7 @@ function RideInProgressCard(props) {
             numberOfLines={2}
             style={{top: 2, flex: 1}}
             transform={'none'}>
-            {name}
+            {displayName}
           </Text>
           <View style={[R.styles.rowView, styles.iconContainer]}>
             <TouchableOpacity

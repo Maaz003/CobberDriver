@@ -1,26 +1,77 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, TouchableOpacity, FlatList} from 'react-native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
 import BottomSheet from '@components/common/BottomSheet';
-import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import {useSelector} from 'react-redux';
+import {BottomSheetScrollView, BottomSheetFlatList} from '@gorhom/bottom-sheet';
+import {useDispatch, useSelector} from 'react-redux';
+import {newRides} from '@store/rides/ridesSlice';
+import {useIsFocused} from '@react-navigation/native';
+import Loader from '@components/common/Loader';
 
 function RidesList() {
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const common = useSelector(state => state.common);
-
+  const rides = useSelector(state => state.rides);
+  const user = useSelector(state => state.user);
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
+  const [rideRequests, setRideRequests] = useState([]);
+  const userToken = user?.userToken;
+
+  useEffect(() => {
+    getNewRides();
+  }, []);
+
+  const getNewRides = async () => {
+    setLoading(true);
+    // console.log('SUER', user?.userToken);
+    await dispatch(newRides(userToken));
+    setLoading(false);
+  };
+
+  // console.log('rides?.newRides', JSON.stringify(rides, null, 2));
+
+  // useEffect(() => {
+  //   if (active === 0) {
+  //     let updatedArr = rides?.newRides?.data?.rides?.map(item => {
+  //       return {
+  //         ...item,
+  //         isScheduled: false,
+  //       };
+  //     });
+  //     setRideRequests(updatedArr);
+  //   } else {
+  //     let updatedArr = rides?.newRides?.data?.schedulingRides?.map(item => {
+  //       return {
+  //         ...item,
+  //         isScheduled: true,
+  //       };
+  //     });
+  //     setRideRequests(updatedArr);
+  //   }
+  // }, [active]);
+
+  const tabChange = index => {
+    setActive(index);
+    getNewRides();
+  };
 
   const tabs = [
     {index: 0, title: 'Instant'},
     {index: 1, title: 'Schedule'},
   ];
 
+  const renderItem = ({item, index}) => {
+    return <CustomerCard item={item} key={index} />;
+  };
+
   return (
     <BottomSheet
       onSwipeBottomSheet={() => null}
-      initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.11}>
+      initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.13}>
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
           <Text
@@ -44,12 +95,12 @@ function RidesList() {
           </View>
         </View>
 
-        {/* <View style={[R.styles.rowView, styles.tabsContainer]}>
+        <View style={[R.styles.rowView, styles.tabsContainer]}>
           {tabs?.map((item, index) => {
             return (
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => setActive(item.index)}
+                onPress={() => tabChange(item.index)}
                 style={{
                   height: '100%',
                   justifyContent: 'center',
@@ -75,16 +126,31 @@ function RidesList() {
               </TouchableOpacity>
             );
           })}
-        </View> */}
+        </View>
 
         <View style={styles.scrollViewContainer}>
-          <BottomSheetScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.contentContainer}>
-            {common?.tempRides?.map((item, index) => {
-              return <CustomerCard item={item} key={index} />;
-            })}
-          </BottomSheetScrollView>
+          {loading ? (
+            <View
+              style={{
+                paddingTop: R.unit.height(0.24),
+              }}>
+              <Loader color={R.color.mainColor} />
+            </View>
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                paddingBottom: R.unit.height(0.44),
+              }}>
+              <BottomSheetFlatList
+                showsVerticalScrollIndicator={false}
+                data={rideRequests}
+                keyExtractor={i => i}
+                renderItem={renderItem}
+                contentContainerStyle={styles.contentContainer}
+              />
+            </View>
+          )}
         </View>
       </View>
     </BottomSheet>
@@ -111,11 +177,12 @@ const styles = StyleSheet.create({
     marginTop: R.unit.scale(32),
     borderRadius: R.unit.scale(12),
     width: '100%',
+    flexGrow: 1,
   },
   contentContainer: {
     flexGrow: 1,
     borderRadius: R.unit.scale(12),
-    paddingBottom: R.unit.scale(152),
+    // paddingBottom: R.unit.scale(152),
   },
   tabsContainer: {
     width: '100%',
