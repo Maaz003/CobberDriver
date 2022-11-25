@@ -20,7 +20,10 @@ import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import {tempRidesSet} from '@store/common/commonSlice';
 import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, DimensionIcon} from '@components/utils/Svg';
-import {openDirections} from '@components/utils/ReuseableFunctions';
+import {
+  openDirections,
+  updateRideStartSession,
+} from '@components/utils/ReuseableFunctions';
 
 function RideDetailsScreen(props) {
   const {navigation} = props;
@@ -143,29 +146,35 @@ function RideDetailsScreen(props) {
         data: {...rideSessionData, rideStatus: 'notstarted', type: type},
         inRide: 'accepted',
       };
-      // console.log('dataRide', JSON.stringify(dataRide, null, 2));
 
-      const acceptRideUrl = URL(`rides/${rideId}`);
-      const header = apiHeader(user?.userToken, false);
-      const reqBody = {
-        status: 'accepted',
-      };
-
-      console.log('RIDE UR', acceptRideUrl, header, reqBody);
-      const response = Patch(acceptRideUrl, reqBody, header);
-      console.log('RESPONSE', response?.data);
+      let response = await updateRideStartSession(
+        rideId,
+        user?.userToken,
+        'accepted',
+      );
+      console.log('RESULT', response);
       if (response !== undefined) {
         setIsLoading(false);
-        // await dispatch(createRideSession(dataRide));
-        // PopUp({
-        //   heading: 'Ride Accepted',
-        //   bottomOffset: 0.7,
-        //   visibilityTime: 3000,
-        //   position: 'top',
-        // });
+        await dispatch(createRideSession(dataRide));
+        PopUp({
+          heading: 'Ride Accepted',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
       } else {
         setIsLoading(false);
       }
+
+      // const acceptRideUrl = URL(`rides/${rideId}`);
+      // const header = apiHeader(user?.userToken, false);
+      // const reqBody = {
+      //   status: 'accepted',
+      // };
+
+      // console.log('RIDE UR', acceptRideUrl, header, reqBody);
+      // const response = Patch(acceptRideUrl, reqBody, header);
+      // console.log('RESPONSE', response?.data);
     }
   };
 
@@ -510,10 +519,11 @@ function RideDetailsScreen(props) {
                   size={'lg'}
                   color={R.color.white}
                   borderColor={R.color.mainColor}
-                  disabled={false}
                   loaderColor={R.color.white}
                   borderWidth={1}
                   borderRadius={10}
+                  loader={isLoading}
+                  disabled={isLoading}
                   iconName={'chatbubble-ellipses-outline'}
                   iconType={'Ionicons'}
                   iconColor={R.color.blackShade2}
@@ -551,10 +561,11 @@ function RideDetailsScreen(props) {
                   font={'PoppinsMedium'}
                   color={R.color.charcoalShade2}
                   borderColor={R.color.mainColor}
-                  disabled={false}
+                  disabled={isLoading}
                   loaderColor={R.color.white}
                   borderWidth={1}
                   borderRadius={10}
+                  loader={isLoading}
                   onPress={acceptRide}
                 />
               </View>

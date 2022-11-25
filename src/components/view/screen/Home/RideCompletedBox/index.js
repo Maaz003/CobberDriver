@@ -10,6 +10,7 @@ import Button from '@components/common/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import LocationPoint from '@components/view/cards/LocationPoint';
 import PopUp from '@components/common/PopUp';
+import {updateRideStartSession} from '@components/utils/ReuseableFunctions';
 
 function RideCompletedBox(props) {
   const {navigation} = props;
@@ -20,9 +21,7 @@ function RideCompletedBox(props) {
   const rideSession = user?.rideSession;
   const {displayName, photo} = rideSession?.customer;
 
-  console.log('SSSSS', JSON.stringify(rideSession, null, 2));
-
-  const rideComplete = () => {
+  const rideComplete = async () => {
     if (rideSession?.type === 'schedule') {
       let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
       let obj = tempArr?.find(item => item.id === rideSession?.id);
@@ -52,10 +51,14 @@ function RideCompletedBox(props) {
         position: 'top',
       });
     } else {
-      let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
-      let objFound = commonTemparr.find(item => item.id === rideSession?.id);
-      objFound.isCompleted = true;
-      dispatch(tempRidesSet(commonTemparr));
+      // try {
+      // const response = await updateRideStartSession(
+      //   rideSession?._id,
+      //   user?.userToken,
+      //   'completed',
+      // );
+      // console.log('RESPONSE COMPLETED', response);
+
       const dataRide = {data: undefined, inRide: 'finished'};
       dispatch(createRideSession(dataRide));
       PopUp({
@@ -64,6 +67,15 @@ function RideCompletedBox(props) {
         visibilityTime: 3000,
         position: 'top',
       });
+      // } catch (error) {
+      //   console.log('RROR CATCH');
+      //   PopUp({
+      //     heading: `Ride Not Completed ${error}`,
+      //     bottomOffset: 0.7,
+      //     visibilityTime: 3000,
+      //     position: 'top',
+      //   });
+      // }
     }
   };
 

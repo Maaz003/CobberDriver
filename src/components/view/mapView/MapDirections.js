@@ -6,7 +6,6 @@ import R from '@components/utils/R';
 
 const MapDirections = props => {
   Geocoder.init(GOOGLE_GEOCODE);
-
   const {setTime, origin, destination} = props;
 
   return (

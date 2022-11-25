@@ -11,19 +11,22 @@ import Text from '@components/common/Text';
 import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
-import {openCall} from '@components/utils/ReuseableFunctions';
+import {
+  openCall,
+  updateRideStartSession,
+} from '@components/utils/ReuseableFunctions';
 import {imageUrl} from '@config/apiUrl';
+import moment from 'moment';
 
 function RideInProgressCard(props) {
-  const {type = undefined, data = undefined, navigation} = props;
-  const {customer, location} = data;
+  const {type = undefined, data = undefined, navigation, duration} = props;
+  const {_id: rideId, customer, location} = data;
   const {displayName, photo} = customer;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
+  const user = useSelector(state => state.user);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
-
-  console.log(JSON.stringify(data, null, 2));
 
   useEffect(() => {
     if (data) {
@@ -97,13 +100,52 @@ function RideInProgressCard(props) {
   const onSubmit = async () => {
     if (data.type === 'instant') {
       if (data.rideStatus === 'notstarted') {
-        updateRideSession('pickupstarted', 'started', 'Ride Started');
+        let estimatedTimeEnd = Math.ceil(duration).toFixed(2);
+        estimatedTimeEnd = moment().add(estimatedTimeEnd, 'minutes');
+        console.log('duration', estimatedTimeEnd);
+        try {
+          const response = await updateRideStartSession(
+            rideId,
+            user?.userToken,
+            'in-ride',
+            estimatedTimeEnd,
+          );
+          if (response !== undefined) {
+            updateRideSession('pickupstarted', 'started', 'Ride Started');
+          }
+        } catch (error) {
+          console.log('ERROR', error);
+          PopUp({
+            heading: 'Error in starting ride',
+            bottomOffset: 0.7,
+            visibilityTime: 3000,
+            position: 'top',
+          });
+        }
       } else {
-        updateRideSession('dropoffended', 'ended', 'DropOff Completed');
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'RideCompleted'}],
-        });
+        try {
+          const response = await updateRideStartSession(
+            rideId,
+            user?.userToken,
+            'completed',
+          );
+          if (response !== undefined) {
+            updateRideSession('dropoffended', 'ended', 'DropOff Completed');
+          }
+          console.log('RESPONSE COMPLETED', response);
+
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'RideCompleted'}],
+          });
+        } catch (error) {
+          PopUp({
+            heading: 'Error in ending ride',
+            bottomOffset: 0.7,
+            visibilityTime: 3000,
+            position: 'top',
+          });
+        }
       }
     } else {
       if (data.rideStatus === 'pickupstarted') {
@@ -118,7 +160,8 @@ function RideInProgressCard(props) {
 
   const locationIcon = () => {
     if (data.type === 'instant') {
-      if (data?.rideStatus === 'notstarted') {
+      let pickUpStatuesInstant = ['notstarted', 'accepted'];
+      if (pickUpStatuesInstant.includes(data.rideStatus)) {
         return <View style={styles.pickupEllipse} />;
       } else {
         return (
@@ -147,7 +190,8 @@ function RideInProgressCard(props) {
 
   const locationTitle = () => {
     if (data.type === 'instant') {
-      if (data?.rideStatus === 'notstarted') {
+      let pickUpStatuesInstant = ['notstarted', 'accepted'];
+      if (pickUpStatuesInstant.includes(data.rideStatus)) {
         return (
           <Text
             variant={'body3'}
@@ -212,7 +256,9 @@ function RideInProgressCard(props) {
 
   const locationText = () => {
     if (data.type === 'instant') {
-      if (data?.rideStatus === 'notstarted') {
+      let pickUpStatuesInstant = ['notstarted', 'accepted'];
+
+      if (pickUpStatuesInstant.includes(data.rideStatus)) {
         return (
           <Text
             variant={'body2'}

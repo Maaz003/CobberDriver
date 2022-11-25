@@ -23,6 +23,7 @@ function OnGoingRideScreen(props) {
   const user = useSelector(state => state.user);
   const {rideSession} = user;
   const [origin, setOrigin] = useState(undefined);
+  const [duration, setDuration] = useState(undefined);
   const [destination, setDestination] = useState(undefined);
   const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
     coordinates;
@@ -60,12 +61,14 @@ function OnGoingRideScreen(props) {
           });
         }
       }
-      setOrigin({
-        latitude: user?.pickupLoc.latitude,
-        longitude: user?.pickupLoc.longitude,
-      });
+      if (user?.pickupLoc) {
+        setOrigin({
+          latitude: user?.pickupLoc.latitude,
+          longitude: user?.pickupLoc.longitude,
+        });
+      }
     }
-  }, [isFocused, user?.rideSession, user?.pickUpLoc]);
+  }, [isFocused, user?.rideSession, user?.pickupLoc]);
 
   useEffect(() => {
     if (!user?.locationLoader) {
@@ -203,8 +206,8 @@ function OnGoingRideScreen(props) {
           {destination && (
             <Marker
               coordinate={{
-                latitude: destination.latitude,
-                longitude: destination.longitude,
+                latitude: destination?.latitude,
+                longitude: destination?.longitude,
               }}
               tracksViewChanges={false}
               title={'User'}>
@@ -223,7 +226,7 @@ function OnGoingRideScreen(props) {
           <MapDirections
             origin={origin}
             destination={destination}
-            setTime={() => null}
+            setTime={time => setDuration(time)}
           />
         </Map>
         {user?.locationLoader && (
@@ -236,6 +239,7 @@ function OnGoingRideScreen(props) {
             type={rideSession?.type}
             data={rideSession}
             navigation={navigation}
+            duration={duration}
           />
         )}
       </View>
