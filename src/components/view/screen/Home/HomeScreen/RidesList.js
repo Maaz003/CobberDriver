@@ -9,7 +9,8 @@ import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {newRides} from '@store/rides/ridesSlice';
 import {useIsFocused} from '@react-navigation/native';
-import Loader from '@components/common/Loader';
+import TruckLoader from '@components/common/TruckLoader';
+import TruckError from '@components/common/TruckError';
 
 function RidesList() {
   const dispatch = useDispatch();
@@ -21,11 +22,6 @@ function RidesList() {
   const [active, setActive] = useState(0);
   const [rideRequests, setRideRequests] = useState([]);
   const userToken = user?.userToken;
-
-  console.log(
-    'USER LOGIN',
-    JSON.stringify(user?.user?.driverInfo?.currentRide, null, 2),
-  );
 
   useEffect(() => {
     getNewRides();
@@ -84,7 +80,6 @@ function RidesList() {
 
       await dispatch(createRideSession(dataRide));
     } else {
-      console.log('NEW RIDES GETT');
       setLoading(true);
       await dispatch(
         newRides({
@@ -134,7 +129,7 @@ function RidesList() {
   return (
     <BottomSheet
       onSwipeBottomSheet={() => null}
-      initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.13}>
+      initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.11}>
       <View style={styles.contentView}>
         <View style={R.styles.rowView}>
           <Text
@@ -193,12 +188,13 @@ function RidesList() {
 
         <View style={styles.scrollViewContainer}>
           {loading ? (
-            <View
-              style={{
-                paddingTop: R.unit.height(0.24),
-              }}>
-              <Loader color={R.color.mainColor} />
-            </View>
+            <TruckLoader
+              containerStyles={{
+                height: R.unit.height(0.5),
+                width: '100%',
+              }}
+              overlayColor={R.color.charcoalShade2}
+            />
           ) : (
             <View
               style={{
@@ -211,6 +207,20 @@ function RidesList() {
                 keyExtractor={i => i}
                 renderItem={renderItem}
                 contentContainerStyle={styles.contentContainer}
+                ListEmptyComponent={() => {
+                  return (
+                    <TruckError
+                      headingColor={R.color.lightSilverShade2}
+                      subTextColor={R.color.lightSilverShade2}
+                      heading={`You have no ${
+                        active === 0 ? 'Instant' : 'Scheduled'
+                      } rides yet`}
+                      subText={`As soon as the there is a ${
+                        active === 0 ? 'Instant' : 'Scheduled'
+                      } request it will appear in this list.`}
+                    />
+                  );
+                }}
               />
             </View>
           )}
@@ -245,7 +255,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     borderRadius: R.unit.scale(12),
-    // paddingBottom: R.unit.scale(152),
   },
   tabsContainer: {
     width: '100%',

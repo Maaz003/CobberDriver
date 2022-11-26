@@ -10,7 +10,7 @@ const TruckLoader = props => {
       style={{
         backgroundColor: overlayColor,
         ...styles.container,
-        containerStyles,
+        ...containerStyles,
       }}>
       <View style={styles.subContainer}>
         <Lottie

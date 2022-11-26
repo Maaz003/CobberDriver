@@ -45,7 +45,7 @@ function History(props) {
 
   useEffect(() => {
     getRidesHistory(true);
-  }, []);
+  }, [isFocused]);
 
   // useEffect(() => {
   //   let tempArr = tab === 0 ? [...completedRides] : [...cancelledRides];
