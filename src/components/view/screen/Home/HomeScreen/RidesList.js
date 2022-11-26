@@ -15,7 +15,6 @@ import TruckError from '@components/common/TruckError';
 function RidesList() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const common = useSelector(state => state.common);
   const rides = useSelector(state => state.rides);
   const user = useSelector(state => state.user);
   const [loading, setLoading] = useState(false);
@@ -25,7 +24,7 @@ function RidesList() {
 
   useEffect(() => {
     getNewRides();
-  }, []);
+  }, [isFocused]);
 
   const getNewRides = async () => {
     if (user?.user?.driverInfo?.isInRide) {
