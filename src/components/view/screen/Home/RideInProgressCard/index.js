@@ -19,9 +19,9 @@ import {imageUrl} from '@config/apiUrl';
 import moment from 'moment';
 
 function RideInProgressCard(props) {
-  const {type = undefined, data = undefined, navigation, duration} = props;
+  const {data = undefined, navigation, duration} = props;
   const {_id: rideId, customer, location} = data;
-  const {displayName, photo} = customer;
+  const {displayName, photo, contact} = customer;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
@@ -102,7 +102,6 @@ function RideInProgressCard(props) {
       if (data.rideStatus === 'notstarted') {
         let estimatedTimeEnd = Math.ceil(duration).toFixed(2);
         estimatedTimeEnd = moment().add(estimatedTimeEnd, 'minutes');
-        console.log('duration', estimatedTimeEnd);
         try {
           const response = await updateRideStartSession(
             rideId,
@@ -114,7 +113,6 @@ function RideInProgressCard(props) {
             updateRideSession('pickupstarted', 'started', 'Ride Started');
           }
         } catch (error) {
-          console.log('ERROR', error);
           PopUp({
             heading: 'Error in starting ride',
             bottomOffset: 0.7,
@@ -132,8 +130,6 @@ function RideInProgressCard(props) {
           if (response !== undefined) {
             updateRideSession('dropoffended', 'ended', 'DropOff Completed');
           }
-          console.log('RESPONSE COMPLETED', response);
-
           navigation.reset({
             index: 0,
             routes: [{name: 'RideCompleted'}],
@@ -345,7 +341,7 @@ function RideInProgressCard(props) {
             <TouchableOpacity
               style={styles.iconView}
               onPress={() => {
-                openCall(data.phoneNumber);
+                openCall(contact);
               }}>
               <Icon
                 type={'FontAwesome'}
@@ -407,7 +403,7 @@ function RideInProgressCard(props) {
       <CancelBookingModal
         isVisibleModal={isModal}
         title={'Ride'}
-        itemId={data?.id}
+        itemId={rideId}
         isScheduled={data?.isScheduled}
       />
     </View>

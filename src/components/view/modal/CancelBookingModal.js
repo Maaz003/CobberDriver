@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {tempRidesSet} from '@store/common/commonSlice';
+import {updateUser} from '@store/user/userSlice';
 import {reportData} from '@components/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {createRideSession} from '@store/user/userSlice';
@@ -19,18 +19,20 @@ import Icon from '@components/common/Icon';
 import Button from '@components/common/Button';
 import TextInput from '@components/common/TextInput';
 import CheckBoxLine from '@components/common/CheckBoxLine';
+import {updateRideStartSession} from '@components/utils/ReuseableFunctions';
 
 function CancelBookingModal(props) {
   const {title = 'Booking', isScheduled, itemId, cancellationComplete} = props;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
-  const common = useSelector(state => state.common);
+  const user = useSelector(state => state.user);
   const [modalVisible, setModalVisible] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
   const [text, setText] = useState('');
   const [activeIndex, setActiveIndex] = useState();
   const [showInputField, setShowInputField] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setModalVisible(!modalVisible);
@@ -72,12 +74,22 @@ function CancelBookingModal(props) {
         }
       }
     } else {
-      let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
-      let objFound = commonTemparr.find(item => item.id === itemId);
-      objFound.isCancelled = true;
-      const dataRide = {data: undefined, inRide: 'finished'};
-      await dispatch(createRideSession(dataRide));
-      await dispatch(tempRidesSet(commonTemparr));
+      setIsLoading(true);
+      let response = await updateRideStartSession(
+        itemId,
+        user?.userToken,
+        'cancelled',
+      );
+
+      if (response !== undefined) {
+        const dataRide = {data: undefined, inRide: 'finished'};
+        dispatch(updateUser(response?.user));
+        await dispatch(createRideSession(dataRide));
+        setIsLoading(false);
+        setIsBlur(false);
+      } else {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -247,7 +259,8 @@ function CancelBookingModal(props) {
                     font={'PoppinsMedium'}
                     color={R.color.blackShade2}
                     borderColor={R.color.mainColor}
-                    disabled={disabled}
+                    disabled={isLoading}
+                    loader={isLoading}
                     borderRadius={10}
                     loaderColor={R.color.white}
                     btnWrapperStyles={{marginLeft: R.unit.scale(20)}}

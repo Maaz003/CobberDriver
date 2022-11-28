@@ -40,12 +40,9 @@ function PictureOptionsModals(props) {
           let pictureObject = {path: result, mime: pickerResult.mime};
           uploadPicture(pictureObject);
         } else {
-          // console.log('EL:SE');
         }
       }
-    } catch (error) {
-      // console.log('ERR', error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

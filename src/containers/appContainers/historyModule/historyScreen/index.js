@@ -47,11 +47,6 @@ function History(props) {
     getRidesHistory(true);
   }, [isFocused]);
 
-  // useEffect(() => {
-  //   let tempArr = tab === 0 ? [...completedRides] : [...cancelledRides];
-  //   setRides(tempArr);
-  // }, [tab, completedRides, cancelledRides]);
-
   const getRidesHistory = async showLoader => {
     showLoader && setLoading(true);
     const historyUrl = URL(`rides`);
@@ -61,6 +56,7 @@ function History(props) {
       if (tab === 0) {
         let completedRes = results.filter(item => item.status === 'completed');
         setCompletedRides(completedRes);
+        setRides(completedRes);
       } else {
         let cancelledRes = results.filter(item => item.status === 'cancelled');
         setCancelledRides(cancelledRes);
@@ -75,6 +71,8 @@ function History(props) {
 
   const selectTab = index => {
     setTab(index);
+    let tempArr = index === 0 ? completedRides : cancelledRides;
+    setRides(tempArr);
   };
 
   const onRefresh = useCallback(() => {
@@ -124,8 +122,8 @@ function History(props) {
             showsVerticalScrollIndicator={false}
             style={{width: '100%'}}
             renderItem={renderItem}
-            data={tab === 0 ? completedRides : cancelledRides}
-            // data={rides}
+            // data={tab === 0 ? completedRides : cancelledRides}
+            data={rides}
             bounces={false}
             refreshControl={
               <RefreshControl

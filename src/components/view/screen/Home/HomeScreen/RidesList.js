@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, FlatList} from 'react-native';
+import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
 import BottomSheet from '@components/common/BottomSheet';
-import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
-import {useDispatch, useSelector} from 'react-redux';
 import {newRides} from '@store/rides/ridesSlice';
-import {useIsFocused} from '@react-navigation/native';
 import TruckLoader from '@components/common/TruckLoader';
 import TruckError from '@components/common/TruckError';
 
@@ -109,7 +109,7 @@ function RidesList() {
         setRideRequests(updatedArr);
       }
     }
-  }, [active]);
+  }, [active, rides?.newRides]);
 
   const tabChange = index => {
     setActive(index);

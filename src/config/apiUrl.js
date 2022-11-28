@@ -1,6 +1,6 @@
 // export const apiUrl = 'https://lac-app-backend.herokuapp.com';
-// export const apiUrl = 'https://090d-119-155-153-170.in.ngrok.io';
-export const apiUrl = 'https://cobber-backend.herokuapp.com'; // DEPLOYMENT(STAGING) purpose=
+export const apiUrl = 'https://6972-119-155-153-170.in.ngrok.io';
+// export const apiUrl = 'https://cobber-backend.herokuapp.com'; // DEPLOYMENT(STAGING) purpose=
 
 export const imageUrl = pic => `${apiUrl}/api/v1/images/${pic}`;
 

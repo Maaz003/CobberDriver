@@ -27,20 +27,7 @@ let Get = async (route, token, showAlert = true) => {
           message: error?.message,
           type: 'danger',
         });
-      }
-      // else if (
-      //   error?.response?.data?.message?.error[0] ===
-      //   'You currently have in progress ride'
-      // ) {
-      //   console.log('eLS RAN');
-      //   toast.show({
-      //     title: 'Oops!',
-      //     message: error?.response?.data?.message?.error[0],
-      //     type: 'danger',
-      //   });
-      //   throw 'EMRRRR ASSADASD';
-      // }
-      else {
+      } else {
         toast.show({
           title: 'Oops!',
           message: error?.response?.data?.message?.error[0],
@@ -94,10 +81,8 @@ let Post = async (route, data, headers, showAlert = true) => {
  */
 let Patch = async (route, data, headers, showAlert = true) => {
   try {
-    console.log('PATCH', route, data, headers);
     return await axios.patch(route, data, headers);
   } catch (error) {
-    console.log('ERROR', error);
     let networkError = error.message === 'Network Error';
     if (showAlert == true) {
       if (networkError === true) {

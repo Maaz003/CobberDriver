@@ -40,7 +40,6 @@ function LoginScreen(props) {
   useFocusEffect(
     useCallback(() => {
       const backAction = () => {
-        console.log(common?.onBoard);
         if (common?.onBoard) {
           BackHandler.exitApp();
           return true;

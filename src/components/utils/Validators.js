@@ -64,9 +64,7 @@ export const requestLocationPermissionIOS = async () => {
       );
       return false;
     }
-  } catch (err) {
-    // console.log('UO', err);
-  }
+  } catch (err) {}
 };
 
 export const statusLocationPermission = async () => {

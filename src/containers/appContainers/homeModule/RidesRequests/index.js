@@ -12,8 +12,6 @@ function RideRequestsScreen(props) {
   const {data, screenType = 'Rides'} = props.route.params;
   const [filteredArray, setFilteredArray] = useState(data?.requestedRides);
 
-  console.log('DATA', JSON.stringify(data, null, 2));
-
   useEffect(() => {
     if (data) {
       if (data?.requestedRides?.length > 0) {

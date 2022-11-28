@@ -16,10 +16,8 @@ import {imageUrl} from '@config/apiUrl';
 function RideRequestsCard(props) {
   const {item, index, arr, screenType} = props;
 
-  console.log('ITEM', JSON.stringify(item, null, 2));
   const [disabled, setDisabled] = useState(false);
   const {displayName, photo} = item?.customer;
-
   const image = imageUrl(photo);
 
   const onNavigate = () => {

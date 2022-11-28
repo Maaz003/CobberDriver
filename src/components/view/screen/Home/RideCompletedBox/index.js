@@ -3,6 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import {createRideSession} from '@store/user/userSlice';
 import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {tempRidesSet} from '@store/common/commonSlice';
+import {updateUser} from '@store/user/userSlice';
 import Text from '@components/common/Text';
 import {imageUrl} from '@config/apiUrl';
 import R from '@components/utils/R';
@@ -10,7 +11,6 @@ import Button from '@components/common/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import LocationPoint from '@components/view/cards/LocationPoint';
 import PopUp from '@components/common/PopUp';
-import {updateRideStartSession} from '@components/utils/ReuseableFunctions';
 
 function RideCompletedBox(props) {
   const {navigation} = props;
@@ -51,31 +51,17 @@ function RideCompletedBox(props) {
         position: 'top',
       });
     } else {
-      // try {
-      // const response = await updateRideStartSession(
-      //   rideSession?._id,
-      //   user?.userToken,
-      //   'completed',
-      // );
-      // console.log('RESPONSE COMPLETED', response);
-
+      let updateObj = JSON.parse(JSON.stringify(user.user));
+      updateObj.driverInfo.isInRide = false;
+      await dispatch(updateUser(updateObj));
       const dataRide = {data: undefined, inRide: 'finished'};
-      dispatch(createRideSession(dataRide));
+      await dispatch(createRideSession(dataRide));
       PopUp({
         heading: 'Ride Completed',
         bottomOffset: 0.7,
         visibilityTime: 3000,
         position: 'top',
       });
-      // } catch (error) {
-      //   console.log('RROR CATCH');
-      //   PopUp({
-      //     heading: `Ride Not Completed ${error}`,
-      //     bottomOffset: 0.7,
-      //     visibilityTime: 3000,
-      //     position: 'top',
-      //   });
-      // }
     }
   };
 

@@ -24,6 +24,8 @@ import {
   openDirections,
   updateRideStartSession,
 } from '@components/utils/ReuseableFunctions';
+import TruckError from '@components/common/TruckError';
+import TruckLoader from '@components/common/TruckLoader';
 
 function RideDetailsScreen(props) {
   const {navigation} = props;
@@ -49,8 +51,6 @@ function RideDetailsScreen(props) {
     isSchedule,
   } = data;
   const {displayName, photo, city, country, ratingsAverage} = customer;
-
-  // console.log(JSON.stringify(user?.userToken, null, 2));
 
   const picture = imageUrl(photo);
   let productImages = images?.map(item => {
@@ -108,11 +108,19 @@ function RideDetailsScreen(props) {
         data: obj.requestedRides,
       });
     } else {
-      let tempArr = JSON.parse(JSON.stringify(common.tempRides));
-      let objFound = tempArr.find(item => item.id === data.id);
-      objFound.isRejected = true;
-      await dispatch(tempRidesSet(tempArr));
-      navigation.navigate('Home');
+      setIsLoading(true);
+      let response = await updateRideStartSession(
+        rideId,
+        user?.userToken,
+        'decline',
+      );
+      if (response !== undefined) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
+      }
+      setIsLoading(false);
     }
   };
 
@@ -152,7 +160,6 @@ function RideDetailsScreen(props) {
         user?.userToken,
         'accepted',
       );
-      console.log('RESULT', response);
       if (response !== undefined) {
         setIsLoading(false);
         await dispatch(createRideSession(dataRide));
@@ -165,21 +172,13 @@ function RideDetailsScreen(props) {
       } else {
         setIsLoading(false);
       }
-
-      // const acceptRideUrl = URL(`rides/${rideId}`);
-      // const header = apiHeader(user?.userToken, false);
-      // const reqBody = {
-      //   status: 'accepted',
-      // };
-
-      // console.log('RIDE UR', acceptRideUrl, header, reqBody);
-      // const response = Patch(acceptRideUrl, reqBody, header);
-      // console.log('RESPONSE', response?.data);
     }
   };
 
   return (
     <ScreenBoiler props={props} headerProps={headerProps} backPress={backPress}>
+      {isLoading && <TruckLoader />}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[R.styles.container, styles.mainLayout]}
@@ -561,11 +560,9 @@ function RideDetailsScreen(props) {
                   font={'PoppinsMedium'}
                   color={R.color.charcoalShade2}
                   borderColor={R.color.mainColor}
-                  disabled={isLoading}
                   loaderColor={R.color.white}
                   borderWidth={1}
                   borderRadius={10}
-                  loader={isLoading}
                   onPress={acceptRide}
                 />
               </View>

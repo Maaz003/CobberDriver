@@ -101,9 +101,9 @@ export const updateRideStartSession = async (
   status,
   timeEnd,
 ) => {
+  const header = apiHeader(token, false);
   if (status === 'in-ride') {
     const startRideUrl = URL(`rides/start/${rideId}`);
-    const header = apiHeader(token, false);
     const reqBody = {
       estimatedRideEnd: timeEnd,
     };
@@ -112,23 +112,24 @@ export const updateRideStartSession = async (
   }
   if (status === 'completed') {
     const complete = URL(`rides/complete/${rideId}`);
-    const header = apiHeader(token, false);
     const reqBody = {
       status: 'completed',
     };
     const response = await Patch(complete, reqBody, header);
     return response?.data;
   }
-  const acceptRideUrl = URL(`rides/${rideId}`);
-  const header = apiHeader(token, false);
+  if (status === 'decline') {
+    const declineUrl = URL(`rides/decline/${rideId}`);
+    const response = await Patch(declineUrl, undefined, header);
+    return response?.data;
+  }
+
+  const respondRideUrl = URL(`rides/${rideId}`);
   const reqBody = {
     status: status,
   };
-  const response = await Patch(acceptRideUrl, reqBody, header);
+  const response = await Patch(respondRideUrl, reqBody, header);
   return response?.data;
-  // if (response !== undefined) {
-  //   return response?.data;
-  // }
 };
 
 export default {
