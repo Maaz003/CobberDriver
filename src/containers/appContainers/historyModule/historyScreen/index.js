@@ -53,14 +53,11 @@ function History(props) {
     const response = await Get(historyUrl, userToken);
     let results = response?.data?.data.slice(0);
     if (results.length > 0) {
-      if (tab === 0) {
-        let completedRes = results.filter(item => item.status === 'completed');
-        setCompletedRides(completedRes);
-        setRides(completedRes);
-      } else {
-        let cancelledRes = results.filter(item => item.status === 'cancelled');
-        setCancelledRides(cancelledRes);
-      }
+      let completedRes = results.filter(item => item.status === 'completed');
+      setCompletedRides(completedRes);
+      setRides(completedRes);
+      let cancelledRes = results.filter(item => item.status === 'cancelled');
+      setCancelledRides(cancelledRes);
     }
     showLoader && setLoading(false);
   };
