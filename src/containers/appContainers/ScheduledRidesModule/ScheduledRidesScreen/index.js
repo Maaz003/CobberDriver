@@ -5,26 +5,40 @@ import {
   TouchableOpacity,
   StyleSheet,
   BackHandler,
+  FlatList,
+  RefreshControl,
 } from 'react-native';
+import {URL} from '@config/apiUrl';
+import {Get} from '@axios/AxiosInterceptorFunction';
 import Text from '@components/common/Text';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import R from '@components/utils/R';
 import {useSelector} from 'react-redux';
 import ScheduleCard from '@components/view/screen/ScheduledRide/ScheduleCard';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import TruckLoader from '@components/common/TruckLoader';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 function ScheduledRidesScreen(props) {
   const {navigation} = props;
+  const isFocused = useIsFocused();
   const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
+  const userToken = user?.userToken;
   const [rides, setRides] = useState(new Array(schedule?.scheduledRides));
+  const [upcomingRides, setUpcomingRides] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [tab, setTab] = useState(0);
 
   const headerProps = {
     isSubHeader: true,
     mainHeading: 'Scheduled Rides',
     headerColor: R.color.white,
   };
-  const [tab, setTab] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,12 +57,39 @@ function ScheduledRidesScreen(props) {
     {id: 2, name: 'Upcoming'},
   ];
 
+  useEffect(() => {
+    getScheduledRides(true);
+  }, [isFocused]);
+
+  const getScheduledRides = async showLoader => {
+    showLoader && setLoading(true);
+    const scheduledRidesUrl = URL(`scheduling-rides/driver?status=upcoming`);
+    const response = await Get(scheduledRidesUrl, userToken);
+    let results = response?.data?.data.slice(0);
+    if (results.length > 0) {
+      setRides(results);
+    }
+    showLoader && setLoading(false);
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getScheduledRides(false);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  const renderItem = ({item, index}) => {
+    return <ScheduleCard key={index} item={item} rideDay={item.createdAt} />;
+  };
+
   const selectTab = index => {
     setTab(index);
   };
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
+      {loading && <TruckLoader />}
+
       <ScrollView
         style={styles.container}
         contentContainerStyle={{
@@ -86,17 +127,41 @@ function ScheduledRidesScreen(props) {
             );
           })}
         </View>
-        {rides[0]?.length > 0 && (
-          <>
-            {rides?.map((item, index, arr) => {
-              let rideDay;
-              item.forEach((item, index, arr) => {
-                rideDay = arr[arr.length - 1].scheduledTime.pickUpTime;
-              });
-              return <ScheduleCard key={index} item={item} rideDay={rideDay} />;
-            })}
-          </>
-        )}
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={{width: '100%'}}
+          renderItem={renderItem}
+          data={rides}
+          bounces={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressBackgroundColor={R.color.mainColor}
+              colors={[R.color.blackShade2, R.color.white]}
+              tintColor={R.color.mainColor}
+            />
+          }
+          contentContainerStyle={{
+            paddingBottom: Platform.OS === 'ios' ? 50 : 100,
+            alignItems: 'center',
+            flexGrow: 1,
+            paddingHorizontal: 0,
+          }}
+          ListEmptyComponent={() => {
+            return (
+              <TruckError
+                heading={`You have no ${
+                  tab === 0 ? 'completed' : 'cancelled'
+                } rides yet`}
+                subText={`As soon as the there is a ${
+                  tab === 0 ? 'completed' : 'cancelled'
+                } request it will appear in this list.`}
+              />
+            );
+          }}
+        />
       </ScrollView>
     </ScreenBoiler>
   );

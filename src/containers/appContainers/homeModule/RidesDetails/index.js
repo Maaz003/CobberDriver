@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
-import {imageUrl, apiHeader, URL} from '@config/apiUrl';
-import {Patch} from '@axios/AxiosInterceptorFunction';
+import {imageUrl} from '@config/apiUrl';
 import {useDispatch, useSelector} from 'react-redux';
 import {createRideSession} from '@store/user/userSlice';
-import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
@@ -23,8 +21,8 @@ import {ClockReqIcon, DimensionIcon} from '@components/utils/Svg';
 import {
   openDirections,
   updateRideStartSession,
+  updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
-import TruckError from '@components/common/TruckError';
 import TruckLoader from '@components/common/TruckLoader';
 
 function RideDetailsScreen(props) {
@@ -34,7 +32,7 @@ function RideDetailsScreen(props) {
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
   const user = useSelector(state => state.user);
-  const {type = undefined, data = undefined} = props.route.params;
+  const {type = undefined, data = undefined, mainRideId} = props.route.params;
   const {customer, images} = data;
   const {
     _id: rideId,
@@ -51,6 +49,8 @@ function RideDetailsScreen(props) {
     isSchedule,
   } = data;
   const {displayName, photo, city, country, ratingsAverage} = customer;
+
+  console.log('DATA', JSON.stringify(data, null, 2), mainRideId);
 
   const picture = imageUrl(photo);
   let productImages = images?.map(item => {
@@ -126,20 +126,34 @@ function RideDetailsScreen(props) {
 
   const acceptRide = async () => {
     if (isSchedule) {
-      let tempArr =
-        schedule?.scheduledRides.length > 0
-          ? [...schedule?.scheduledRides]
-          : [];
-      tempArr.push(data);
-      setIsRideAccepted(true);
-      await dispatch(scheduledRides(tempArr));
-      PopUp({
-        heading:
-          'Ride Accepted.For more details go to schedules section in drawer',
-        bottomOffset: 0.7,
-        visibilityTime: 7000,
-        position: 'top',
-      });
+      setIsLoading(true);
+      const reqBody = {
+        rideId: mainRideId,
+        scheduledRideId: rideId,
+        status: 'accepted',
+      };
+      const response = await updateScheduleRideStartSession(
+        'scheduling-rides/confirm/accept',
+        user?.userToken,
+        reqBody,
+      );
+
+      console.log('LINK', JSON.stringify(response?.results, null, 2));
+
+      if (!!response?.data) {
+        setIsLoading(false);
+        PopUp({
+          heading:
+            'Ride Accepted For more details go to schedules section in drawer',
+          bottomOffset: 0.7,
+          visibilityTime: 7000,
+          position: 'top',
+        });
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
+      } else setIsLoading(false);
     } else {
       setIsLoading(true);
       let {

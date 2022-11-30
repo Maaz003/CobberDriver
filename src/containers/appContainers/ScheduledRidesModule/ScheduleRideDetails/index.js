@@ -3,6 +3,7 @@ import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
 import {createRideSession} from '@store/user/userSlice';
+import {imageUrl} from '@config/apiUrl';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import MediaDisplay from '@components/view/screen/Home/MediaDisplay';
@@ -24,19 +25,49 @@ import PopUp from '@components/common/PopUp';
 function ScheduleRideDetailsScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
-  const {type = undefined, data = undefined, screenType} = props.route.params;
   const {
-    name,
-    picture,
-    productImages,
-    isScheduled,
-    scheduledTime,
-    location,
+    type = undefined,
+    data = undefined,
+    screenType,
+    mainRideId,
+  } = props.route.params;
+  const {
+    images,
+    isSchedule,
     rideStatus,
     isCompleted,
+    pickUpAddress,
+    dropOffAddress,
+    pickUpLocation,
+    dropOffLocation,
+    pickUpTime,
+    dropOffTime,
+    fare,
+    weight,
+    length,
+    depth,
+    width,
+    customer,
   } = data;
+  const {displayName, photo, city, country, ratingsAverage} = customer;
+
   const [isModal, setIsModal] = useState(false);
   const [buttonText, setButtonText] = useState('');
+
+  console.log('ITEM TALK TO HUI', JSON.stringify(data, null, 2), mainRideId);
+
+  const location = {
+    pickUpLocation: pickUpAddress,
+    dropOffLocation: dropOffAddress,
+    pickUpLoc: {
+      latitude: pickUpLocation?.coordinates[1],
+      longitude: pickUpLocation?.coordinates[0],
+    },
+    dropOffLoc: {
+      latitude: dropOffLocation?.coordinates[1],
+      longitude: dropOffLocation?.coordinates[1],
+    },
+  };
 
   useEffect(() => {
     if (!isCompleted) {
@@ -128,9 +159,13 @@ function ScheduleRideDetailsScreen(props) {
             transform={'none'}>
             Ride Details
           </Text>
-          <MediaDisplay productImages={productImages} />
+          <MediaDisplay productImages={images} />
           <View style={R.styles.twoItemsRow}>
-            <Image source={picture} resizeMode={'cover'} style={styles.image} />
+            <Image
+              source={{uri: imageUrl(photo)}}
+              resizeMode={'cover'}
+              style={styles.image}
+            />
             <View>
               <Text
                 variant={'h5'}
@@ -139,7 +174,7 @@ function ScheduleRideDetailsScreen(props) {
                 align={'left'}
                 lineHeight={30}
                 transform={'none'}>
-                {name}
+                {displayName}
               </Text>
               <View style={{flexDirection: 'row'}}>
                 <View style={styles.tag}>
@@ -149,21 +184,19 @@ function ScheduleRideDetailsScreen(props) {
                     color={R.color.black}
                     align={'left'}
                     transform={'none'}>
-                    {data?.isScheduled ? 'Scheduled' : 'Instant'}
+                    {'Scheduled'}
                   </Text>
                 </View>
-                {data?.isScheduled && (
-                  <View style={styles.tag}>
-                    <Text
-                      variant={'body4'}
-                      font={'InterMedium'}
-                      color={R.color.black}
-                      align={'left'}
-                      transform={'none'}>
-                      {'Sharing'}
-                    </Text>
-                  </View>
-                )}
+                <View style={styles.tag}>
+                  <Text
+                    variant={'body4'}
+                    font={'InterMedium'}
+                    color={R.color.black}
+                    align={'left'}
+                    transform={'none'}>
+                    {'Sharing'}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
@@ -181,7 +214,7 @@ function ScheduleRideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              5.0
+              {ratingsAverage}
             </Text>
             <View style={styles.dot} />
             <Text
@@ -190,7 +223,7 @@ function ScheduleRideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              Morphettville
+              {city}
             </Text>
 
             <View style={styles.dot} />
@@ -200,7 +233,7 @@ function ScheduleRideDetailsScreen(props) {
               color={R.color.charcoalShade}
               align={'left'}
               transform={'none'}>
-              Austrailia
+              {country}
             </Text>
           </View>
 
@@ -237,7 +270,7 @@ function ScheduleRideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              {moment(scheduledTime.pickUpTime).format('ddd, DD MMM hh:mm a')}
+              {moment(pickUpTime).format('ddd, DD MMM hh:mm a')}
             </Text>
           </View>
 
@@ -263,7 +296,7 @@ function ScheduleRideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              {moment(scheduledTime.dropOffTime).format('ddd, DD MMM hh:mm a')}
+              {moment(dropOffTime).format('ddd, DD MMM hh:mm a')}
             </Text>
           </View>
 
@@ -289,14 +322,14 @@ function ScheduleRideDetailsScreen(props) {
               align={'left'}
               style={{marginLeft: R.unit.scale(8)}}
               transform={'none'}>
-              ${data.cost}
+              ${fare}
             </Text>
           </View>
 
           <Divider
             lineStyles={{
               ...styles.lineStyles,
-              marginTop: R.unit.scale(data?.isScheduled ? 12 : 0),
+              marginTop: R.unit.scale(isSchedule ? 12 : 0),
             }}
           />
           <Text
@@ -325,33 +358,48 @@ function ScheduleRideDetailsScreen(props) {
             <View style={{...styles.svgView, height: R.unit.scale(22)}}>
               <DimensionIcon height="100%" width="100%" />
             </View>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Length : 30
-            </Text>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Width : 30
-            </Text>
-            <Text
-              variant={'body3'}
-              font={'InterRegular'}
-              color={R.color.gray4}
-              align={'left'}
-              style={{marginLeft: R.unit.scale(8)}}
-              transform={'none'}>
-              Depth : 30
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(5)}}
+                transform={'none'}>
+                Length : {length} m
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(5)}}
+                transform={'none'}>
+                Width : {width} m
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(5)}}
+                transform={'none'}>
+                Depth : {depth} m
+              </Text>
+              <Text
+                variant={'body3'}
+                font={'InterRegular'}
+                color={R.color.gray4}
+                align={'left'}
+                style={{marginLeft: R.unit.scale(5)}}
+                transform={'none'}>
+                Weight : {weight} lbs
+              </Text>
+            </View>
           </View>
           <Text
             variant={'h4'}
@@ -450,7 +498,7 @@ function ScheduleRideDetailsScreen(props) {
       </ScrollView>
       <CancelBookingModal
         isVisibleModal={isModal}
-        isScheduled={isScheduled}
+        isScheduled={isSchedule}
         itemId={data?.id}
         cancellationComplete={() => setIsRideAccepted(false)}
       />

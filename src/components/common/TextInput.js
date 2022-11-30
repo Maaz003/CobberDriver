@@ -157,9 +157,9 @@ const TextInput = props => {
               Platform.OS === 'android'
                 ? styles.inputBox
                 : [styles.inputBox, {paddingBottom: 0}],
-              props.numberOfLines > 1 && {
-                textAlignVertical: 'top',
-              },
+              // props.numberOfLines > 1 && {
+              //   textAlignVertical: 'top',
+              // },
               props.inputHeight && {
                 height: inputHeight,
               },

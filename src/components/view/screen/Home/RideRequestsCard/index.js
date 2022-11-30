@@ -14,8 +14,7 @@ import moment from 'moment';
 import {imageUrl} from '@config/apiUrl';
 
 function RideRequestsCard(props) {
-  const {item, index, arr, screenType} = props;
-
+  const {item, index, arr, screenType, mainRideId} = props;
   const [disabled, setDisabled] = useState(false);
   const {displayName, photo} = item?.customer;
   const image = imageUrl(photo);
@@ -26,6 +25,7 @@ function RideRequestsCard(props) {
       {
         type: 'schedule',
         data: item,
+        mainRideId: mainRideId,
       },
     );
   };
@@ -155,7 +155,7 @@ function RideRequestsCard(props) {
           color={R.color.gray6}
           align={'left'}
           transform={'none'}>
-          14:31
+          {moment(item?.createdAt).format('HH:mm')}
         </Text>
         <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
           <Button

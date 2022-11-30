@@ -27,6 +27,8 @@ function RideInProgressCard(props) {
   const user = useSelector(state => state.user);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startRideLoader, setStartRideLoader] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -100,6 +102,8 @@ function RideInProgressCard(props) {
   const onSubmit = async () => {
     if (data.type === 'instant') {
       if (data.rideStatus === 'notstarted') {
+        setStartRideLoader(true);
+
         let estimatedTimeEnd = Math.ceil(duration).toFixed(2);
         estimatedTimeEnd = moment().add(estimatedTimeEnd, 'minutes');
         try {
@@ -111,6 +115,7 @@ function RideInProgressCard(props) {
           );
           if (response !== undefined) {
             updateRideSession('pickupstarted', 'started', 'Ride Started');
+            setStartRideLoader(false);
           }
         } catch (error) {
           PopUp({
@@ -120,7 +125,9 @@ function RideInProgressCard(props) {
             position: 'top',
           });
         }
+        setStartRideLoader(false);
       } else {
+        setIsLoading(true);
         try {
           const response = await updateRideStartSession(
             rideId,
@@ -129,12 +136,14 @@ function RideInProgressCard(props) {
           );
           if (response !== undefined) {
             updateRideSession('dropoffended', 'ended', 'DropOff Completed');
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'RideCompleted'}],
+            });
           }
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'RideCompleted'}],
-          });
+          setIsLoading(false);
         } catch (error) {
+          setIsLoading(false);
           PopUp({
             heading: 'Error in ending ride',
             bottomOffset: 0.7,
@@ -334,7 +343,7 @@ function RideInProgressCard(props) {
             align={'left'}
             numberOfLines={2}
             style={{top: 2, flex: 1}}
-            transform={'none'}>
+            transform={'capitalize'}>
             {displayName}
           </Text>
           <View style={[R.styles.rowView, styles.iconContainer]}>
@@ -385,6 +394,13 @@ function RideInProgressCard(props) {
           borderRadius={10}
           borderColor={R.color.mainColor}
           onPress={onSubmit}
+          loader={
+            data.rideStatus === 'notstarted' ? startRideLoader : isLoading
+          }
+          loaderColor={R.color.black}
+          disabled={
+            data.rideStatus === 'notstarted' ? startRideLoader : isLoading
+          }
         />
         {data.rideStatus === 'notstarted' && (
           <Button
@@ -397,6 +413,9 @@ function RideInProgressCard(props) {
             borderRadius={10}
             borderColor={R.color.mainColor}
             onPress={cancelRide}
+            loader={isLoading}
+            loaderColor={R.color.black}
+            disabled={isLoading}
           />
         )}
       </View>

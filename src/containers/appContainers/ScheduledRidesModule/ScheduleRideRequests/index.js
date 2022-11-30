@@ -12,35 +12,15 @@ function ScheduleRideRequestsScreen(props) {
   const {navigation} = props;
   const {data} = props.route.params;
   const dispatch = useDispatch();
-  const [filteredArray, setFilteredArray] = useState(data);
   const [showEndButton, setShowEndButton] = useState(false);
-
-  useEffect(() => {
-    if (data) {
-      if (data.length > 0) {
-        setFilteredArray(data);
-      } else {
-        setFilteredArray([]);
-      }
-    }
-
-    if (data.every(item => item.rideStatus === 'ended')) {
-      setShowEndButton(true);
-    } else {
-      setShowEndButton(false);
-    }
-  }, [data]);
-
-  const onRemove = id => {
-    let updatedArr = filteredArray.filter(item => item.id !== id);
-    setFilteredArray(updatedArr);
-  };
 
   const headerProps = {
     isMainHeader: true,
     isSubHeader: false,
     mainHeading: 'Payment',
   };
+
+  console.log('DATA AZZZZ', JSON.stringify(data, null, 2));
 
   const backPress = () => {
     navigation.goBack();
@@ -72,14 +52,28 @@ function ScheduleRideRequestsScreen(props) {
               transform={'none'}>
               Ride Requests
             </Text>
-            {filteredArray?.map((item, index, arr) => {
+
+            <View style={styles.moreRequestsSection}>
+              <View style={{backgroundColor: 'red', padding: 10}}>
+                <Text
+                  variant={'h4'}
+                  font={'InterRegular'}
+                  color={R.color.blackShade3}
+                  align={'right'}
+                  transform={'capitalize'}>
+                  Ride Requests
+                </Text>
+              </View>
+            </View>
+
+            {data?.rides?.map((item, index, arr) => {
               return (
                 <RideRequestsCard
                   item={item}
                   index={index}
                   arr={arr}
                   key={index}
-                  onRemove={onRemove}
+                  mainRideId={data?._id}
                   screenType={'History'}
                 />
               );
@@ -163,5 +157,8 @@ const styles = StyleSheet.create({
     borderWidth: R.unit.scale(0.75),
     borderRadius: R.unit.scale(10),
     marginRight: R.unit.scale(8),
+  },
+  moreRequestsSection: {
+    width: '100%',
   },
 });

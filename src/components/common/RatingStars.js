@@ -8,6 +8,7 @@ const Stars = props => {
     ratingCallBack,
     fullStarColor = R.color.mainColor,
     emptyStarColor = R.color.white,
+    containerStyles,
   } = props;
 
   const [starsCount, setStarsCount] = useState(0);
@@ -24,7 +25,11 @@ const Stars = props => {
       starSize={starSize}
       rating={starsCount}
       emptyStarColor={emptyStarColor}
-      containerStyle={{padding: 0, width: R.unit.scale(180)}}
+      containerStyle={{
+        padding: 0,
+        width: R.unit.scale(180),
+        ...containerStyles,
+      }}
       fullStarColor={fullStarColor}
       selectedStar={rating => ratingStars(rating)}
     />

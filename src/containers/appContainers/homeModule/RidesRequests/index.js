@@ -12,20 +12,17 @@ function RideRequestsScreen(props) {
   const {data, screenType = 'Rides'} = props.route.params;
   const [filteredArray, setFilteredArray] = useState(data?.requestedRides);
 
-  useEffect(() => {
-    if (data) {
-      if (data?.requestedRides?.length > 0) {
-        setFilteredArray(data?.requestedRides);
-      } else {
-        setFilteredArray([]);
-      }
-    }
-  }, [data, isFocused]);
+  console.log('DTA', JSON.stringify(data, null, 2));
 
-  const onRemove = id => {
-    let updatedArr = filteredArray.filter(item => item.id !== id);
-    setFilteredArray(updatedArr);
-  };
+  // useEffect(() => {
+  //   if (data) {
+  //     if (data?.requestedRides?.length > 0) {
+  //       setFilteredArray(data?.requestedRides);
+  //     } else {
+  //       setFilteredArray([]);
+  //     }
+  //   }
+  // }, [data, isFocused]);
 
   const headerProps = {
     isMainHeader: true,
@@ -58,14 +55,14 @@ function RideRequestsScreen(props) {
               transform={'none'}>
               Ride Requests
             </Text>
-            {filteredArray?.map((item, index, arr) => {
+            {data?.requestedRides?.map((item, index, arr) => {
               return (
                 <RideRequestsCard
                   item={item}
                   index={index}
                   arr={arr}
+                  mainRideId={data?._id}
                   key={index}
-                  onRemove={onRemove}
                   screenType={screenType}
                 />
               );

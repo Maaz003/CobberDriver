@@ -132,10 +132,18 @@ export const updateRideStartSession = async (
   return response?.data;
 };
 
+export const updateScheduleRideStartSession = async (url, token, reqBody) => {
+  const header = apiHeader(token, false);
+  const respondRideUrl = URL(url);
+  const response = await Patch(respondRideUrl, reqBody, header);
+  return response?.data;
+};
+
 export default {
   stringTrim,
   timeFormatSchedule,
   calculateDelta,
   openDirections,
   updateRideStartSession,
+  updateScheduleRideStartSession,
 };

@@ -119,7 +119,6 @@ function History(props) {
             showsVerticalScrollIndicator={false}
             style={{width: '100%'}}
             renderItem={renderItem}
-            // data={tab === 0 ? completedRides : cancelledRides}
             data={rides}
             bounces={false}
             refreshControl={

@@ -51,6 +51,7 @@ let Post = async (route, data, headers, showAlert = true) => {
   try {
     return await axios.post(route, data, headers);
   } catch (error) {
+    console.log('ERROR', error?.response?.data?.messages);
     let networkError = error.message === 'Network Error';
     if (showAlert == true) {
       if (networkError === true) {

@@ -39,6 +39,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     paddingHorizontal: R.unit.scale(5),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   pressableView: {
     width: '30%',

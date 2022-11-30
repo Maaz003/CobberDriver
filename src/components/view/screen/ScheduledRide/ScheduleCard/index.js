@@ -4,9 +4,11 @@ import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import moment from 'moment';
 import navigationService from '@navigation/navigationService';
+import {imageUrl} from '@config/apiUrl';
 
 function ScheduleCard(props) {
   const {item, rideDay} = props;
+  console.log('SLT', JSON.stringify(item, null, 2));
   return (
     <Pressable
       style={({pressed}) => [
@@ -33,19 +35,19 @@ function ScheduleCard(props) {
       </Text>
       <View
         style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
-        {item.map((item, index) => {
+        {item?.rides?.map((item, index) => {
+          const {displayName, photo} = item?.customer;
           return (
             <View style={{marginRight: R.unit.scale(20)}} key={index}>
-              <Image source={item.picture} style={styles.image} />
+              <Image source={{uri: imageUrl(photo)}} style={styles.image} />
               <Text
-                variant={'body4'}
-                font={'bold'}
+                variant={'body3'}
+                font={'PoppinsMedium'}
                 gutterTop={2}
                 color={R.color.black}
-                align={'left'}
-                numberOfLines={1}
-                transform={'none'}>
-                {item?.name}
+                align={'center'}
+                transform={'capitalize'}>
+                {displayName}
               </Text>
             </View>
           );
