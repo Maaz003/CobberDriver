@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux';
 import ScheduleCard from '@components/view/screen/ScheduledRide/ScheduleCard';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import TruckLoader from '@components/common/TruckLoader';
+import TruckError from '@components/common/TruckError';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -61,13 +62,17 @@ function ScheduledRidesScreen(props) {
     getScheduledRides(true);
   }, [isFocused]);
 
+  console.log('RSASADSADSAD', JSON.stringify(rides, null, 2));
+
   const getScheduledRides = async showLoader => {
     showLoader && setLoading(true);
     const scheduledRidesUrl = URL(`scheduling-rides/driver?status=upcoming`);
     const response = await Get(scheduledRidesUrl, userToken);
-    let results = response?.data?.data.slice(0);
-    if (results.length > 0) {
-      setRides(results);
+    if (response?.data?.data.length > 0) {
+      setRides(response?.data?.data);
+    } else {
+      setLoading(false);
+      setRides([]);
     }
     showLoader && setLoading(false);
   };
@@ -95,6 +100,7 @@ function ScheduledRidesScreen(props) {
         contentContainerStyle={{
           paddingBottom: Platform.OS === 'ios' ? 50 : 100,
           alignItems: 'center',
+          flexGrow: 1,
         }}>
         <View style={[R.styles.rowView, styles.tabLayout]}>
           {tabContent?.map((item, index) => {
@@ -153,10 +159,10 @@ function ScheduledRidesScreen(props) {
             return (
               <TruckError
                 heading={`You have no ${
-                  tab === 0 ? 'completed' : 'cancelled'
+                  tab === 0 ? 'completed' : tab === 1 ? 'cancelled' : 'upcoming'
                 } rides yet`}
                 subText={`As soon as the there is a ${
-                  tab === 0 ? 'completed' : 'cancelled'
+                  tab === 0 ? 'completed' : tab === 1 ? 'cancelled' : 'upcoming'
                 } request it will appear in this list.`}
               />
             );

@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import {imageUrl} from '@config/apiUrl';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
@@ -13,7 +12,6 @@ import RideMap from '@components/view/screen/Home/RideMap';
 import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
-import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import {
   ClockReqIcon,
   DimensionIcon,
@@ -26,16 +24,14 @@ import {
 import PopUp from '@components/common/PopUp';
 import TruckLoader from '@components/common/TruckLoader';
 
-function ScheduleRideDetailsScreen(props) {
+function NewScheduleRideDetailsScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
-  const {type = undefined, data = undefined, mainRideId} = props.route.params;
+  const {data = undefined, mainRideId} = props.route.params;
+  const user = useSelector(state => state.user);
   const {
     _id: rideId,
     images,
-    isSchedule,
-    rideStatus,
-    isCompleted,
     pickUpAddress,
     dropOffAddress,
     pickUpLocation,
@@ -48,15 +44,10 @@ function ScheduleRideDetailsScreen(props) {
     depth,
     width,
     customer,
-    status,
   } = data;
   const {displayName, photo, city, country, ratingsAverage} = customer;
-  const user = useSelector(state => state.user);
-  const [isModal, setIsModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [buttonText, setButtonText] = useState('');
 
-  console.log('ITEM TALK TO BARAY', rideStatus, status);
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = {
     pickUpLocation: pickUpAddress,
@@ -71,27 +62,6 @@ function ScheduleRideDetailsScreen(props) {
     },
   };
 
-  useEffect(() => {
-    if (status !== 'completed') {
-      switch (rideStatus) {
-        case 'notstarted':
-          setButtonText('Start Pickup');
-          break;
-        case 'pickupended':
-          setButtonText('Start DropOff');
-          break;
-        case 'dropoffstarted':
-          setButtonText('Complete DropOff');
-          break;
-        case 'dropoffended':
-          setButtonText('Complete Ride');
-          break;
-      }
-    } else {
-      setButtonText('Ride Completed');
-    }
-  }, []);
-
   const headerProps = {
     isMainHeader: true,
     isSubHeader: false,
@@ -102,86 +72,53 @@ function ScheduleRideDetailsScreen(props) {
     navigation.goBack();
   };
 
-  const openModal = () => {
-    setIsModal(!isModal);
-  };
+  const acceptRide = async flag => {
+    try {
+      setIsLoading(true);
+      let reqBody = {
+        rideId: mainRideId,
+        scheduledRideId: rideId,
+        ...(flag === 'accept' && {
+          status: 'accepted',
+        }),
+      };
 
-  const updateRideSessionStatus = async (rideSessionStatus, inRideStatus) => {
-    let {
-      pickUpLocation,
-      dropOffLocation,
-      pickUpAddress,
-      dropOffAddress,
-      ...rideSessionData
-    } = data;
-    rideSessionData = {...rideSessionData, location};
-    const dataRide = {
-      data: {
-        ...rideSessionData,
-        rideStatus: rideSessionStatus,
-        mainRideId: mainRideId,
-        type: type,
-      },
-      inRide: inRideStatus,
-    };
-    const popUpStatuses = {
-      pickupstarted: 'PickUp Started',
-      pickupended: 'PickUp Completed',
-      dropoffstarted: 'DropOff Started',
-      dropoffended: 'DropOff Completed',
-    };
-    PopUp({
-      heading: popUpStatuses[rideSessionStatus],
-      bottomOffset: 0.7,
-      visibilityTime: 3000,
-      position: 'top',
-    });
-    await dispatch(createRideSession(dataRide));
-  };
+      let url =
+        flag === 'accept'
+          ? 'scheduling-rides/confirm/accept'
+          : 'scheduling-rides/scheduled/decline-request';
 
-  const startScheduleRide = async () => {
-    if (rideStatus === 'notstarted') {
-      let result = await updateRideSession('pickupstarted');
-      if (result !== undefined) {
-        updateRideSessionStatus('pickupstarted', 'accepted');
+      console.log('SASASADSDASAD', url, reqBody);
+
+      let response = await updateScheduleRideStartSession(
+        url,
+        user?.userToken,
+        reqBody,
+      );
+
+      console.log('ACCEPT RIDE RES', JSON.stringify(response, null, 2));
+      if (response !== undefined) {
+        navigation.navigate('ScheduleRides');
+        PopUp({
+          heading: `Ride ${flag === 'accept' ? 'Accepted' : 'Declined'}`,
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
       }
-    } else if (rideStatus === 'pickupended') {
-      let result = await updateRideSession('dropoffstarted');
-      if (result !== undefined) {
-        updateRideSessionStatus('dropoffstarted', 'accepted');
-      }
-    } else if (rideStatus === 'dropoffstarted') {
-      let result = await updateRideSession('dropoffended');
-      if (result !== undefined) {
-        updateRideSessionStatus('dropoffended', 'accepted');
-      }
-    } else if (rideStatus === 'dropoffended') {
-      let result = await updateRideSession('dropoffended');
-      if (result !== undefined) {
-        updateRideSessionStatus('dropoffended', 'ended');
-      }
+    } catch (error) {
+      console.log('ERROR', error);
+      setIsLoading(false);
     }
-  };
-
-  const updateRideSession = async status => {
-    setIsLoading(true);
-    let reqBody = {
-      rideId: mainRideId,
-      scheduledRideId: rideId,
-      status,
-    };
-    let response = await updateScheduleRideStartSession(
-      'scheduling-rides/confirm/rideStatus',
-      user?.userToken,
-      reqBody,
-    );
-    setIsLoading(false);
-    return response;
   };
 
   return (
     <ScreenBoiler props={props} headerProps={headerProps} backPress={backPress}>
       {isLoading && <TruckLoader />}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[R.styles.container, styles.mainLayout]}
@@ -373,7 +310,7 @@ function ScheduleRideDetailsScreen(props) {
           <Divider
             lineStyles={{
               ...styles.lineStyles,
-              marginTop: R.unit.scale(isSchedule ? 12 : 0),
+              marginTop: R.unit.scale(12),
             }}
           />
           <Text
@@ -505,51 +442,43 @@ function ScheduleRideDetailsScreen(props) {
             onPress={() => openDirections('Dropoff', location)}
           />
           <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
-            {rideStatus === 'notstarted' && (
-              <Button
-                bgColor={R.color.white}
-                width={'16%'}
-                size={'lg'}
-                color={R.color.white}
-                borderColor={R.color.gray}
-                disabled={false}
-                loaderColor={R.color.white}
-                borderWidth={0.5}
-                borderRadius={10}
-                iconName={'close'}
-                iconType={'Ionicons'}
-                iconColor={R.color.blackShade2}
-                onPress={openModal}
-                rippleColor={R.color.gray}
-              />
-            )}
+            <Button
+              bgColor={R.color.white}
+              width={'16%'}
+              size={'lg'}
+              color={R.color.white}
+              borderColor={R.color.gray}
+              // disabled={false}
+              loaderColor={R.color.white}
+              borderWidth={0.5}
+              borderRadius={10}
+              iconName={'close'}
+              iconType={'Ionicons'}
+              iconColor={R.color.blackShade2}
+              onPress={() => acceptRide('reject')}
+              rippleColor={R.color.gray}
+            />
 
             <Button
-              value={buttonText}
+              value={'Accept'}
               bgColor={R.color.mainColor}
-              width={rideStatus !== 'notstarted' ? '100%' : '82%'}
+              width={'82%'}
               size={'lg'}
               color={R.color.blackShade2}
               borderColor={R.color.mainColor}
-              disabled={isCompleted ? true : false}
-              loaderColor={R.color.white}
+              // disabled={is}
+              // loaderColor={R.color.white}
               borderWidth={1}
               borderRadius={10}
-              onPress={startScheduleRide}
+              onPress={() => acceptRide('accept')}
             />
           </View>
         </View>
       </ScrollView>
-      <CancelBookingModal
-        isVisibleModal={isModal}
-        isScheduled={isSchedule}
-        itemId={data?.id}
-        cancellationComplete={() => setIsRideAccepted(false)}
-      />
     </ScreenBoiler>
   );
 }
-export default ScheduleRideDetailsScreen;
+export default NewScheduleRideDetailsScreen;
 
 const styles = StyleSheet.create({
   mainLayout: {

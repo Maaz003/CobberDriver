@@ -137,10 +137,8 @@ function RideDetailsScreen(props) {
         user?.userToken,
         reqBody,
       );
-
-      console.log('LINK', JSON.stringify(response?.results, null, 2));
-
-      if (!!response?.data) {
+      console.log('ADSSADSAD WISLOM', response);
+      if (!!response?.results) {
         setIsLoading(false);
         PopUp({
           heading:

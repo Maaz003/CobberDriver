@@ -1,32 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
-import Button from '@components/common/Button';
 
-function ScheduleRideRequestsScreen(props) {
+function NewScheduleRideRequestsScreen(props) {
   const {navigation} = props;
   const {data} = props.route.params;
-  const dispatch = useDispatch();
-  const [showEndButton, setShowEndButton] = useState(false);
 
   const headerProps = {
     isMainHeader: true,
     isSubHeader: false,
-    mainHeading: 'Payment',
   };
 
   const backPress = () => {
     navigation.goBack();
-  };
-
-  const finishRide = () => {
-    const dataRide = {data: undefined, inRide: 'finished'};
-    dispatch(createRideSession(dataRide));
   };
 
   return (
@@ -48,42 +37,10 @@ function ScheduleRideRequestsScreen(props) {
               color={R.color.blackShade3}
               align={'left'}
               transform={'none'}>
-              Schedule Rides
+              New Requests
             </Text>
 
-            {data?.requestedRides?.length !== 0 && (
-              <View style={styles.moreRequestsControlSection}>
-                <TouchableOpacity
-                  style={styles.moreRequestsControlButton}
-                  activeOpacity={0.6}
-                  onPress={() =>
-                    navigation.navigate('NewScheduleRideRequests', {
-                      data: data,
-                    })
-                  }>
-                  <Text
-                    variant={'body3'}
-                    font={'PoppinsRegular'}
-                    color={R.color.blackShade3}
-                    align={'right'}
-                    transform={'capitalize'}>
-                    New Requests
-                  </Text>
-                </TouchableOpacity>
-                <View style={styles.badge}>
-                  <Text
-                    variant={'body4'}
-                    font={'PoppinsSemiBold'}
-                    color={R.color.white}
-                    align={'center'}
-                    transform={'capitalize'}>
-                    {data?.requestedRides?.length}
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            {data?.rides?.map((item, index, arr) => {
+            {data?.requestedRides?.map((item, index, arr) => {
               return (
                 <RideRequestsCard
                   item={item}
@@ -91,34 +48,17 @@ function ScheduleRideRequestsScreen(props) {
                   arr={arr}
                   key={index}
                   mainRideId={data?._id}
-                  screenType={'History'}
+                  screenType={'NewRequests'}
                 />
               );
             })}
-
-            {showEndButton && (
-              <Button
-                value={'Complete Ride'}
-                bgColor={R.color.cancelColor}
-                width={'100%'}
-                size={'lg'}
-                gutterTop={30}
-                color={R.color.white}
-                borderColor={R.color.cancelColor}
-                disabled={false}
-                loaderColor={R.color.white}
-                borderWidth={1}
-                borderRadius={10}
-                onPress={finishRide}
-              />
-            )}
           </View>
         </ScrollView>
       </View>
     </ScreenBoiler>
   );
 }
-export default ScheduleRideRequestsScreen;
+export default NewScheduleRideRequestsScreen;
 
 const styles = StyleSheet.create({
   mainLayout: {

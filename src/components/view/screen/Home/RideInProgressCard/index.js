@@ -14,13 +14,14 @@ import PopUp from '@components/common/PopUp';
 import {
   openCall,
   updateRideStartSession,
+  updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
 import {imageUrl} from '@config/apiUrl';
 import moment from 'moment';
 
 function RideInProgressCard(props) {
   const {data = undefined, navigation, duration} = props;
-  const {_id: rideId, customer, location} = data;
+  const {_id: rideId, customer, location, mainRideId} = data;
   const {displayName, photo, contact} = customer;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
@@ -29,6 +30,8 @@ function RideInProgressCard(props) {
   const [isModal, setIsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [startRideLoader, setStartRideLoader] = useState(false);
+
+  console.log('mainRideId', mainRideId);
 
   useEffect(() => {
     if (data) {
@@ -72,7 +75,7 @@ function RideInProgressCard(props) {
     dispatch(scheduledRides(tempArr));
   };
 
-  const updateRideSession = async (
+  const updateRideSessionStatus = async (
     rideSessionStatus,
     inRideStatus,
     popUpText,
@@ -81,9 +84,9 @@ function RideInProgressCard(props) {
       data: {...data, rideStatus: rideSessionStatus, type: data.type},
       inRide: inRideStatus,
     };
-    if (data.type !== 'instant') {
-      updateRideStatus(rideSessionStatus);
-    }
+    // if (data.type !== 'instant') {
+    //   updateRideStatus(rideSessionStatus);
+    // }
     const popUpStatuses = {
       notstarted: 'PickUp Started',
       pickupstarted: 'PickUp Completed',
@@ -97,6 +100,40 @@ function RideInProgressCard(props) {
       position: 'top',
     });
     await dispatch(createRideSession(dataRide));
+  };
+
+  const updateRideSession = async status => {
+    setIsLoading(true);
+    let reqBody = {
+      rideId: mainRideId,
+      scheduledRideId: rideId,
+      status,
+    };
+    let response = await updateScheduleRideStartSession(
+      'scheduling-rides/confirm/rideStatus',
+      user?.userToken,
+      reqBody,
+    );
+    if (response === undefined) setIsLoading(false);
+    setIsLoading(false);
+    return response;
+  };
+
+  const completeScheduleRide = async () => {
+    // setIsLoading(true);
+    let reqBody = {
+      rideId: mainRideId,
+      scheduledRideId: rideId,
+      status: 'completed',
+    };
+    let response = await updateScheduleRideStartSession(
+      'scheduling-rides/confirm/complete',
+      user?.userToken,
+      reqBody,
+    );
+    if (response === undefined) setIsLoading(false);
+    // setIsLoading(false);
+    return response;
   };
 
   const onSubmit = async () => {
@@ -154,11 +191,22 @@ function RideInProgressCard(props) {
       }
     } else {
       if (data.rideStatus === 'pickupstarted') {
-        updateRideSession('pickupended', 'scheduleEnded');
+        let result = await updateRideSession('pickupended');
+        if (result !== undefined) {
+          updateRideSessionStatus('pickupended', 'scheduleEnded');
+        }
       } else if (data.rideStatus === 'pickupended') {
-        updateRideSession('dropoffstarted', 'scheduleEnded');
+        let result = await updateRideSession('dropoffstarted');
+        if (result !== undefined) {
+          updateRideSessionStatus('dropoffstarted', 'scheduleEnded');
+        }
       } else if (data.rideStatus === 'dropoffstarted') {
-        updateRideSession('dropoffended', 'ended');
+        let result = await updateRideSession('dropoffended');
+        let result2 = await completeScheduleRide();
+        console.log('RESULT 2 RESPONSE', result2);
+        if (result !== undefined && result2 !== undefined) {
+          updateRideSessionStatus('dropoffended', 'ended');
+        }
       }
     }
   };

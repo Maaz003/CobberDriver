@@ -186,6 +186,8 @@ function OnGoingRideScreen(props) {
     }
   };
 
+  console.log('RIDE SESSION', JSON.stringify(rideSession, null, 2));
+
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>

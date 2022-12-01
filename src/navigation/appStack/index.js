@@ -22,6 +22,9 @@ import RideRequestsScreen from '@containers/appContainers/HomeModule/RidesReques
 import ScheduledRidesScreen from '@containers/appContainers/ScheduledRidesModule/ScheduledRidesScreen';
 import ScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideRequests';
 import ScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/ScheduleRideDetails';
+import NewScheduleRideRequestsScreen from '@containers/appContainers/ScheduledRidesModule/NewScheduleRideRequests';
+import NewScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRidesModule/NewScheduleRideDetails';
+
 import PaymentScreen from '@containers/appContainers/PaymentScreen';
 import R from '@components/utils/R';
 
@@ -123,6 +126,14 @@ const AppStack = () => {
         <Stack.Screen
           name="ScheduleRideDetails"
           component={ScheduleRideDetailsScreen}
+        />
+        <Stack.Screen
+          name="NewScheduleRideRequests"
+          component={NewScheduleRideRequestsScreen}
+        />
+        <Stack.Screen
+          name="NewScheduleRideDetails"
+          component={NewScheduleRideDetailsScreen}
         />
       </Stack.Navigator>
     );

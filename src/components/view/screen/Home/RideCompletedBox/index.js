@@ -23,6 +23,7 @@ function RideCompletedBox(props) {
   const schedule = useSelector(state => state.schedule);
   const common = useSelector(state => state.common);
   const rideSession = user?.rideSession;
+  const {_id: rideId, mainRideId} = rideSession;
   const {
     _id: customerId,
     displayName,
@@ -39,39 +40,74 @@ function RideCompletedBox(props) {
     if (reviews?.ratings > 0) setDisabled(false);
   }, [reviews?.ratings]);
 
-  // console.log('disabled', reviews.ratings);
+  // console.log('disabled', JSON.stringify(rideSession, null, 2));
 
   const completeRide = async () => {
     if (rideSession?.type === 'schedule') {
-      let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
-      let obj = tempArr?.find(item => item.id === rideSession?.id);
-      obj.isCompleted = true;
-      let flag = schedule?.scheduledRides?.every(
-        item => item.rideStatus === 'dropoffended',
-      );
-      if (flag) {
-        let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
-        let index = commonTemparr.findIndex(item => item.requestedRides);
-        let requestedRides = commonTemparr[index];
-        requestedRides?.requestedRides.forEach(item => {
-          item.isCompleted = true;
-        });
-        dispatch(tempRidesSet(commonTemparr));
-      }
-      const dataRide = {
-        data: undefined,
-        inRide: flag ? 'finished' : 'scheduleEnded',
-      };
-      dispatch(scheduledRides(tempArr));
-      dispatch(createRideSession(dataRide));
+      completeScheduleRide();
+      // let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
+      // let obj = tempArr?.find(item => item.id === rideSession?.id);
+      // obj.isCompleted = true;
+      // let flag = schedule?.scheduledRides?.every(
+      //   item => item.rideStatus === 'dropoffended',
+      // );
+      // if (flag) {
+      //   let commonTemparr = JSON.parse(JSON.stringify(common.tempRides));
+      //   let index = commonTemparr.findIndex(item => item.requestedRides);
+      //   let requestedRides = commonTemparr[index];
+      //   requestedRides?.requestedRides.forEach(item => {
+      //     item.isCompleted = true;
+      //   });
+      //   dispatch(tempRidesSet(commonTemparr));
+      // }
+      // const dataRide = {
+      //   data: undefined,
+      //   inRide: flag ? 'finished' : 'scheduleEnded',
+      // };
+      // dispatch(scheduledRides(tempArr));
+      // dispatch(createRideSession(dataRide));
+      // PopUp({
+      //   heading: 'Ride Completed',
+      //   bottomOffset: 0.7,
+      //   visibilityTime: 3000,
+      //   position: 'top',
+      // });
+    } else {
+      completeInstantRide();
+    }
+  };
+
+  const completeScheduleRide = async () => {
+    setIsLoading(true);
+    const reviewUrl = URL('reviews/schedule-ride');
+    const reqBody = {
+      reviewMessage: reviews?.reviewText,
+      rating: reviews?.ratings,
+      ride: rideId,
+      scheduleRide: mainRideId,
+      // driver: user?.user?._id,
+      // customer: customerId,
+      reviewOn: 'customer',
+    };
+    const headers = apiHeader(user?.userToken, false);
+    console.log('rwe', reqBody, headers);
+    const response = await Post(reviewUrl, reqBody, headers);
+    console.log('SCHEDUL:ER IDE COME', response?.data);
+    if (response !== undefined) {
+      // let updateObj = JSON.parse(JSON.stringify(user.user));
+      // updateObj.driverInfo.isInRide = false;
+      // await dispatch(updateUser(updateObj));
+      const dataRide = {data: undefined, inRide: 'finished'};
+      await dispatch(createRideSession(dataRide));
       PopUp({
-        heading: 'Ride Completed',
+        heading: 'Schedule Ride Completed',
         bottomOffset: 0.7,
         visibilityTime: 3000,
         position: 'top',
       });
+      setIsLoading(false);
     } else {
-      completeInstantRide();
+      setIsLoading(false);
     }
   };
 

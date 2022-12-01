@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import R from '@components/utils/R';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import {imageUrl} from '@config/apiUrl';
 
 function MediaDisplay(props) {
   const {productImages} = props;
@@ -11,7 +12,7 @@ function MediaDisplay(props) {
       <View style={styles.slide}>
         <Image
           source={{
-            uri: item,
+            uri: imageUrl(item),
           }}
           resizeMode={'cover'}
           style={{width: '100%', height: '100%'}}

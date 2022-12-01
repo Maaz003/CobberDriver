@@ -8,7 +8,6 @@ import {imageUrl} from '@config/apiUrl';
 
 function ScheduleCard(props) {
   const {item, rideDay} = props;
-  console.log('SLT', JSON.stringify(item, null, 2));
   return (
     <Pressable
       style={({pressed}) => [
@@ -33,12 +32,16 @@ function ScheduleCard(props) {
         transform={'none'}>
         {moment(rideDay).format('ddd, Do MMM hh:mm:a')}
       </Text>
-      <View
-        style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
+      <View style={styles.ridesContainer}>
         {item?.rides?.map((item, index) => {
           const {displayName, photo} = item?.customer;
           return (
-            <View style={{marginRight: R.unit.scale(20)}} key={index}>
+            <View
+              style={{
+                marginRight: R.unit.scale(20),
+                marginBottom: R.unit.scale(10),
+              }}
+              key={index}>
               <Image source={{uri: imageUrl(photo)}} style={styles.image} />
               <Text
                 variant={'body3'}
@@ -60,10 +63,10 @@ export default ScheduleCard;
 
 const styles = StyleSheet.create({
   mainLayout: {
-    width: R.unit.width(0.85),
+    width: R.unit.width(0.93),
     marginTop: R.unit.scale(20),
-    borderRadius: R.unit.scale(20),
-    paddingHorizontal: R.unit.scale(20),
+    borderRadius: R.unit.scale(8),
+    paddingHorizontal: R.unit.scale(12),
     paddingVertical: R.unit.scale(10),
     shadowColor: R.color.black,
     shadowOffset: {
@@ -80,5 +83,11 @@ const styles = StyleSheet.create({
     borderRadius: R.unit.scale(100),
     borderWidth: R.unit.scale(2),
     borderColor: R.color.mainColor,
+  },
+  ridesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
 });
