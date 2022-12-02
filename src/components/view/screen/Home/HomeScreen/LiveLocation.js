@@ -38,7 +38,6 @@ function LiveLocation(props) {
         CurrentLocation({actionCall: dispatch, flag: true});
         dispatch(pinLocation(false));
       } else {
-        // openSettings().catch(() => console.warn('cannot open settings'));
         Toast.show({
           type: 'danger',
           title: 'Location Permission Error',
@@ -46,7 +45,6 @@ function LiveLocation(props) {
             'In order to fetch current location. Go to settings and change access',
           duration: 2000,
         });
-        // fetchLocationPermissionIOS();
       }
     }
   };
