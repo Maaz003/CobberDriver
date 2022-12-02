@@ -97,6 +97,12 @@ function CancelBookingModal(props) {
         const dataRide = {data: undefined, inRide: 'finished'};
         dispatch(updateUser(response?.user));
         await dispatch(createRideSession(dataRide));
+        PopUp({
+          heading: 'Ride Cancelled Successfully',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
         setIsLoading(false);
         setIsBlur(false);
       } else {

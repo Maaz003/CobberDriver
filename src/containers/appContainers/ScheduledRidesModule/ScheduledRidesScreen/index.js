@@ -18,6 +18,7 @@ import ScheduleCard from '@components/view/screen/ScheduledRide/ScheduleCard';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import TruckLoader from '@components/common/TruckLoader';
 import TruckError from '@components/common/TruckError';
+import Toast from '@components/utils/Toast';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -62,22 +63,33 @@ function ScheduledRidesScreen(props) {
   }, [isFocused]);
 
   const getScheduledRides = async showLoader => {
-    showLoader && setLoading(true);
-    const scheduledRidesUrl = URL(`scheduling-rides/driver`);
-    const response = await Get(scheduledRidesUrl, userToken);
-    let results = response?.data?.data;
-    if (response !== undefined) {
-      if (results.length > 0) {
-        setRides(results);
-        let status = tab === 0 ? ['completed'] : ['pending', 'in-ride'];
-        let updatedArray = results.filter(item => status.includes(item.status));
-        setHistory(updatedArray);
-      } else {
-        setLoading(false);
-        setRides([]);
+    try {
+      showLoader && setLoading(true);
+      const scheduledRidesUrl = URL(`scheduling-rides/driver`);
+      const response = await Get(scheduledRidesUrl, userToken);
+      let results = response?.data?.data;
+      if (response !== undefined) {
+        if (results.length > 0) {
+          setRides(results);
+          let status = tab === 0 ? ['completed'] : ['pending', 'in-ride'];
+          let updatedArray = results.filter(item =>
+            status.includes(item.status),
+          );
+          setHistory(updatedArray);
+        } else {
+          setLoading(false);
+          setRides([]);
+        }
       }
+      showLoader && setLoading(false);
+    } catch (error) {
+      Toast.show({
+        title: 'Oops! Something went wrong. Try again later',
+        // message: 'Oops',
+        type: 'danger',
+      });
+      setLoading(false);
     }
-    showLoader && setLoading(false);
   };
 
   const onRefresh = useCallback(() => {

@@ -81,6 +81,7 @@ function LoginScreen(props) {
         email: '',
         password: '',
       });
+
       const response = await Post(loginURL, reqData);
       const user = response?.data;
       // setIsLoading(false);

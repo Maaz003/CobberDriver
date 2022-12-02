@@ -21,7 +21,7 @@ import moment from 'moment';
 
 function RideInProgressCard(props) {
   const {data = undefined, navigation, duration} = props;
-  const {_id: rideId, customer, location, mainRideId} = data;
+  const {_id: rideId, customer, location, mainRideId, isSchedule} = data;
   const {displayName, photo, contact} = customer;
   const dispatch = useDispatch();
   const schedule = useSelector(state => state.schedule);
@@ -125,7 +125,6 @@ function RideInProgressCard(props) {
     if (data.type === 'instant') {
       if (data.rideStatus === 'notstarted') {
         setStartRideLoader(true);
-
         let estimatedTimeEnd = Math.ceil(duration).toFixed(2);
         estimatedTimeEnd = moment().add(estimatedTimeEnd, 'minutes');
         try {
@@ -136,7 +135,7 @@ function RideInProgressCard(props) {
             estimatedTimeEnd,
           );
           if (response !== undefined) {
-            updateRideSession('pickupstarted', 'started', 'Ride Started');
+            updateRideSessionStatus('pickupstarted', 'started', 'Ride Started');
             setStartRideLoader(false);
           }
         } catch (error) {
@@ -157,7 +156,11 @@ function RideInProgressCard(props) {
             'completed',
           );
           if (response !== undefined) {
-            updateRideSession('dropoffended', 'ended', 'DropOff Completed');
+            updateRideSessionStatus(
+              'dropoffended',
+              'ended',
+              'DropOff Completed',
+            );
             navigation.reset({
               index: 0,
               routes: [{name: 'RideCompleted'}],

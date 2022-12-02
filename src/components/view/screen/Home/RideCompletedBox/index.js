@@ -2,8 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import {createRideSession} from '@store/user/userSlice';
 import {URL, apiHeader} from '@config/apiUrl';
-import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
-import {tempRidesSet} from '@store/common/commonSlice';
 import {Post} from '@axios/AxiosInterceptorFunction';
 import {updateUser} from '@store/user/userSlice';
 import Text from '@components/common/Text';
@@ -21,14 +19,8 @@ function RideCompletedBox(props) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const rideSession = user?.rideSession;
-  const {_id: rideId, mainRideId} = rideSession;
-  const {
-    _id: customerId,
-    displayName,
-    photo,
-    city,
-    country,
-  } = rideSession?.customer;
+  const {_id: rideId, mainRideId, isSchedule} = rideSession;
+  const {displayName, photo, city, country} = rideSession?.customer;
   const {pickUpLocation, dropOffLocation} = rideSession?.location;
   const [reviews, setReviews] = useState({ratings: 0, reviewText: ''});
   const [disabled, setDisabled] = useState(true);
@@ -39,32 +31,34 @@ function RideCompletedBox(props) {
   }, [reviews?.ratings]);
 
   const completeRide = async () => {
-    if (rideSession?.type === 'schedule') {
-      completeScheduleRide();
-    } else {
-      completeInstantRide();
-    }
-  };
-
-  const completeScheduleRide = async () => {
     setIsLoading(true);
-    const reviewUrl = URL('reviews/schedule-ride');
+    const reviewUrl = URL(
+      isSchedule ? 'reviews/schedule-ride' : 'reviews/ride',
+    );
+
     const reqBody = {
       reviewMessage: reviews?.reviewText,
-      rating: reviews?.ratings,
-      scheduleRide: mainRideId,
+      rating: Number(reviews?.ratings),
       ride: rideId,
-      // driver: user?.user?._id,
-      // customer: customerId,
       reviewOn: 'customer',
+      ...(isSchedule && {
+        scheduleRide: mainRideId,
+      }),
     };
     const headers = apiHeader(user?.userToken, false);
     const response = await Post(reviewUrl, reqBody, headers);
+
     if (response !== undefined) {
+      if (!isSchedule) {
+        let updateObj = JSON.parse(JSON.stringify(user.user));
+        updateObj.driverInfo.isInRide = false;
+        await dispatch(updateUser(updateObj));
+      }
+
       const dataRide = {data: undefined, inRide: 'finished'};
       await dispatch(createRideSession(dataRide));
       PopUp({
-        heading: 'Schedule Ride Completed',
+        heading: `${isSchedule ? 'Schedule' : 'Instant'} Ride Completed`,
         bottomOffset: 0.7,
         visibilityTime: 3000,
         position: 'top',
@@ -73,35 +67,6 @@ function RideCompletedBox(props) {
     } else {
       setIsLoading(false);
     }
-  };
-
-  const completeInstantRide = async () => {
-    setIsLoading(true);
-    const reviewUrl = URL('reviews/ride');
-    const reqBody = {
-      reviewMessage: reviews?.reviewText,
-      rating: reviews?.ratings,
-      driver: user?.user?._id,
-      customer: customerId,
-      ride: rideSession?._id,
-      reviewOn: 'customer',
-    };
-    const headers = apiHeader(user?.userToken, false);
-    const response = await Post(reviewUrl, reqBody, headers);
-    if (response !== undefined) {
-      let updateObj = JSON.parse(JSON.stringify(user.user));
-      updateObj.driverInfo.isInRide = false;
-      await dispatch(updateUser(updateObj));
-      const dataRide = {data: undefined, inRide: 'finished'};
-      await dispatch(createRideSession(dataRide));
-      PopUp({
-        heading: 'Ride Completed',
-        bottomOffset: 0.7,
-        visibilityTime: 3000,
-        position: 'top',
-      });
-    }
-    setIsLoading(false);
   };
 
   return (

@@ -31,7 +31,6 @@ function RideDetailsScreen(props) {
   const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
   const {type = undefined, data = undefined, mainRideId} = props.route.params;
-  const {customer, images} = data;
   const {
     _id: rideId,
     pickUpLocation,
@@ -45,13 +44,10 @@ function RideDetailsScreen(props) {
     pickUpAddress,
     dropOffAddress,
     isSchedule,
+    customer,
+    images,
   } = data;
   const {displayName, photo, city, country, ratingsAverage} = customer;
-
-  const picture = imageUrl(photo);
-  let productImages = images?.map(item => {
-    return imageUrl(item);
-  });
   const [isModal, setIsModal] = useState(false);
   const [isRideAccepted, setIsRideAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -230,11 +226,11 @@ function RideDetailsScreen(props) {
             Ride Details
           </Text>
 
-          <MediaDisplay productImages={productImages} />
+          <MediaDisplay productImages={images} />
 
           <View style={R.styles.twoItemsRow}>
             <Image
-              source={{uri: picture}}
+              source={{uri: imageUrl(photo)}}
               resizeMode={'cover'}
               style={styles.image}
             />
