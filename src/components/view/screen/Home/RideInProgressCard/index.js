@@ -31,8 +31,6 @@ function RideInProgressCard(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [startRideLoader, setStartRideLoader] = useState(false);
 
-  console.log('mainRideId', mainRideId);
-
   useEffect(() => {
     if (data) {
       if (data.type === 'schedule') {
@@ -68,13 +66,6 @@ function RideInProgressCard(props) {
     openCancelModal();
   };
 
-  const updateRideStatus = status => {
-    let tempArr = JSON.parse(JSON.stringify(schedule?.scheduledRides));
-    let obj = tempArr?.find(item => item.id === data.id);
-    obj.rideStatus = status;
-    dispatch(scheduledRides(tempArr));
-  };
-
   const updateRideSessionStatus = async (
     rideSessionStatus,
     inRideStatus,
@@ -84,9 +75,6 @@ function RideInProgressCard(props) {
       data: {...data, rideStatus: rideSessionStatus, type: data.type},
       inRide: inRideStatus,
     };
-    // if (data.type !== 'instant') {
-    //   updateRideStatus(rideSessionStatus);
-    // }
     const popUpStatuses = {
       notstarted: 'PickUp Started',
       pickupstarted: 'PickUp Completed',
@@ -120,7 +108,6 @@ function RideInProgressCard(props) {
   };
 
   const completeScheduleRide = async () => {
-    // setIsLoading(true);
     let reqBody = {
       rideId: mainRideId,
       scheduledRideId: rideId,
@@ -131,8 +118,6 @@ function RideInProgressCard(props) {
       user?.userToken,
       reqBody,
     );
-    if (response === undefined) setIsLoading(false);
-    // setIsLoading(false);
     return response;
   };
 
@@ -201,11 +186,18 @@ function RideInProgressCard(props) {
           updateRideSessionStatus('dropoffstarted', 'scheduleEnded');
         }
       } else if (data.rideStatus === 'dropoffstarted') {
-        let result = await updateRideSession('dropoffended');
-        let result2 = await completeScheduleRide();
-        console.log('RESULT 2 RESPONSE', result2);
-        if (result !== undefined && result2 !== undefined) {
-          updateRideSessionStatus('dropoffended', 'ended');
+        try {
+          setIsLoading(true);
+          let promiseAll = await Promise.all([
+            updateRideSession('dropoffended'),
+            completeScheduleRide(),
+          ]);
+          if (promiseAll !== undefined) {
+            updateRideSessionStatus('dropoffended', 'ended');
+            setIsLoading(false);
+          }
+        } catch (error) {
+          setIsLoading(false);
         }
       }
     }

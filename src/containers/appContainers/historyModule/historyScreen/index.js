@@ -58,7 +58,7 @@ function History(props) {
       setRides(completedRes);
       let cancelledRes = results.filter(item => item.status === 'cancelled');
       setCancelledRides(cancelledRes);
-    }
+    } else setRides([]);
     showLoader && setLoading(false);
   };
 
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: R.unit.scale(20),
   },
   tab: {
-    padding: R.unit.scale(12),
     paddingHorizontal: R.unit.scale(20),
+    paddingVertical: R.unit.scale(10),
     borderRadius: R.unit.scale(20),
     borderWidth: 1,
     borderColor: R.color.black,

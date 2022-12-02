@@ -82,13 +82,10 @@ function NewScheduleRideDetailsScreen(props) {
           status: 'accepted',
         }),
       };
-
       let url =
         flag === 'accept'
           ? 'scheduling-rides/confirm/accept'
           : 'scheduling-rides/scheduled/decline-request';
-
-      console.log('SASASADSDASAD', url, reqBody);
 
       let response = await updateScheduleRideStartSession(
         url,
@@ -96,9 +93,10 @@ function NewScheduleRideDetailsScreen(props) {
         reqBody,
       );
 
-      console.log('ACCEPT RIDE RES', JSON.stringify(response, null, 2));
       if (response !== undefined) {
-        navigation.navigate('ScheduleRides');
+        navigation.navigate('ScheduleRides', {
+          initialTab: 2,
+        });
         PopUp({
           heading: `Ride ${flag === 'accept' ? 'Accepted' : 'Declined'}`,
           bottomOffset: 0.7,
@@ -110,7 +108,6 @@ function NewScheduleRideDetailsScreen(props) {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log('ERROR', error);
       setIsLoading(false);
     }
   };

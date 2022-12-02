@@ -15,7 +15,6 @@ import HoverText from '@components/common/HoverText';
 import Button from '@components/common/Button';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
-import {tempRidesSet} from '@store/common/commonSlice';
 import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, DimensionIcon} from '@components/utils/Svg';
 import {
@@ -30,7 +29,6 @@ function RideDetailsScreen(props) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const schedule = useSelector(state => state.schedule);
-  const common = useSelector(state => state.common);
   const user = useSelector(state => state.user);
   const {type = undefined, data = undefined, mainRideId} = props.route.params;
   const {customer, images} = data;
@@ -49,8 +47,6 @@ function RideDetailsScreen(props) {
     isSchedule,
   } = data;
   const {displayName, photo, city, country, ratingsAverage} = customer;
-
-  console.log('DATA', JSON.stringify(data, null, 2), mainRideId);
 
   const picture = imageUrl(photo);
   let productImages = images?.map(item => {
@@ -100,13 +96,28 @@ function RideDetailsScreen(props) {
 
   const rejectRide = async () => {
     if (isSchedule) {
-      let tempArr = JSON.parse(JSON.stringify(common.tempRides));
-      let obj = tempArr.find(item => item.requestedRides);
-      obj.requestedRides.find(item => item.id === data.id).isRejected = true;
-      dispatch(tempRidesSet(tempArr));
-      navigation.navigate('RideRequests', {
-        data: obj.requestedRides,
-      });
+      setIsLoading(true);
+      const reqBody = {
+        rideId: mainRideId,
+      };
+      let response = await updateScheduleRideStartSession(
+        'scheduling-rides/confirm/decline-request',
+        user?.userToken,
+        reqBody,
+      );
+      if (response !== undefined) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
+        PopUp({
+          heading: 'Ride Declined',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
+      }
+      setIsLoading(false);
     } else {
       setIsLoading(true);
       let response = await updateRideStartSession(
@@ -114,10 +125,17 @@ function RideDetailsScreen(props) {
         user?.userToken,
         'decline',
       );
+
       if (response !== undefined) {
         navigation.reset({
           index: 0,
           routes: [{name: 'Home'}],
+        });
+        PopUp({
+          heading: 'Ride Declined',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
         });
       }
       setIsLoading(false);
@@ -137,7 +155,6 @@ function RideDetailsScreen(props) {
         user?.userToken,
         reqBody,
       );
-      console.log('ADSSADSAD WISLOM', response);
       if (!!response?.results) {
         setIsLoading(false);
         PopUp({

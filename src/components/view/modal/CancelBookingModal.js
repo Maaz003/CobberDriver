@@ -12,19 +12,22 @@ import {updateUser} from '@store/user/userSlice';
 import {reportData} from '@components/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {createRideSession} from '@store/user/userSlice';
-import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Button from '@components/common/Button';
 import TextInput from '@components/common/TextInput';
 import CheckBoxLine from '@components/common/CheckBoxLine';
-import {updateRideStartSession} from '@components/utils/ReuseableFunctions';
+import {
+  updateRideStartSession,
+  updateScheduleRideStartSession,
+} from '@components/utils/ReuseableFunctions';
+import navigationService from '@navigation/navigationService';
+import PopUp from '@components/common/PopUp';
 
 function CancelBookingModal(props) {
-  const {title = 'Booking', isScheduled, itemId, cancellationComplete} = props;
+  const {title = 'Booking', isScheduled, itemId, mainRideId} = props;
   const dispatch = useDispatch();
-  const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
   const [modalVisible, setModalVisible] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
@@ -62,17 +65,26 @@ function CancelBookingModal(props) {
 
   const cancelRide = async () => {
     if (isScheduled) {
-      if (itemId) {
-        if (schedule?.scheduledRides?.length > 0) {
-          let tempArr = schedule?.scheduledRides?.filter(
-            item => item.id !== itemId,
-          );
-          dispatch(scheduledRides(tempArr));
-          setIsBlur(false);
-          setActiveIndex(undefined);
-          cancellationComplete();
-        }
+      setIsLoading(true);
+      const reqBody = {
+        rideId: mainRideId,
+        scheduledRideId: itemId,
+      };
+      let response = await updateScheduleRideStartSession(
+        'scheduling-rides/confirm/cancel',
+        user?.userToken,
+        reqBody,
+      );
+      if (response !== undefined) {
+        navigationService.navigate('ScheduleRides');
+        PopUp({
+          heading: 'Ride Cancelled Successfully',
+          bottomOffset: 0.7,
+          visibilityTime: 3000,
+          position: 'top',
+        });
       }
+      setIsLoading(false);
     } else {
       setIsLoading(true);
       let response = await updateRideStartSession(
@@ -259,7 +271,7 @@ function CancelBookingModal(props) {
                     font={'PoppinsMedium'}
                     color={R.color.blackShade2}
                     borderColor={R.color.mainColor}
-                    disabled={isLoading}
+                    disabled={isLoading || disabled}
                     loader={isLoading}
                     borderRadius={10}
                     loaderColor={R.color.white}

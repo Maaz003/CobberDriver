@@ -19,8 +19,6 @@ function RideRequestsCard(props) {
   const {displayName, photo} = item?.customer;
   const image = imageUrl(photo);
 
-  console.log('IEM', item);
-
   const onNavigate = () => {
     navigationService.navigate(
       screenType === 'History'

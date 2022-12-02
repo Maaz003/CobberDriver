@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Image, StyleSheet, Pressable} from 'react-native';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
@@ -8,6 +8,18 @@ import {imageUrl} from '@config/apiUrl';
 
 function ScheduleCard(props) {
   const {item, rideDay} = props;
+  const [ridesData, setRidesData] = useState([]);
+
+  useEffect(() => {
+    let tempArr =
+      item?.status === 'completed'
+        ? item?.rides
+        : item?.status === 'cancelled'
+        ? item?.cancelledRides
+        : item?.rides;
+    setRidesData(tempArr);
+  }, [item]);
+
   return (
     <Pressable
       style={({pressed}) => [
@@ -21,19 +33,41 @@ function ScheduleCard(props) {
           data: item,
         });
       }}>
-      <Text
-        variant={'body2'}
-        font={'Sequel551'}
-        gutterTop={2}
-        color={R.color.black}
-        align={'left'}
-        gutterBottom={20}
-        numberOfLines={1}
-        transform={'none'}>
-        {moment(rideDay).format('ddd, Do MMM hh:mm:a')}
-      </Text>
+      <View style={R.styles.rowView}>
+        <Text
+          variant={'body2'}
+          font={'Sequel551'}
+          gutterTop={2}
+          color={R.color.black}
+          align={'left'}
+          numberOfLines={1}
+          transform={'none'}>
+          {moment(rideDay).format('ddd, Do MMM hh:mm:a')}
+        </Text>
+        <Text
+          variant={'body4'}
+          font={'PoppinsRegular'}
+          gutterTop={2}
+          color={
+            item?.status === 'cancelled' ? R.color.white : R.color.blackShade2
+          }
+          align={'left'}
+          style={{
+            padding: R.unit.scale(8),
+            paddingHorizontal: R.unit.scale(15),
+            backgroundColor:
+              item?.status === 'cancelled'
+                ? R.color.cancelColor
+                : R.color.mainColor,
+            borderRadius: R.unit.scale(4),
+          }}
+          numberOfLines={1}
+          transform={'capitalize'}>
+          {item?.status === 'pending' ? 'Not started' : item.status}
+        </Text>
+      </View>
       <View style={styles.ridesContainer}>
-        {item?.rides?.map((item, index) => {
+        {ridesData?.map((item, index) => {
           const {displayName, photo} = item?.customer;
           return (
             <View
@@ -78,16 +112,17 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   image: {
-    width: R.unit.scale(45),
-    height: R.unit.scale(45),
-    borderRadius: R.unit.scale(100),
-    borderWidth: R.unit.scale(2),
-    borderColor: R.color.mainColor,
+    width: R.unit.scale(50),
+    height: R.unit.scale(50),
+    borderRadius: R.unit.scale(2),
+    borderWidth: R.unit.scale(1),
+    borderColor: R.color.gray,
   },
   ridesContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
+    marginTop: R.unit.scale(10),
   },
 });

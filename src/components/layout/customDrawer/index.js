@@ -53,6 +53,11 @@ const CustomDrawer = props => {
         type: 'home',
       });
       navigation.closeDrawer();
+    } else if (data.id === 5) {
+      navigation.navigate('ScheduledRides', {
+        screen: 'ScheduleRides',
+        params: {initialTab: 0},
+      });
     } else {
       navigation.navigate(data?.route);
       navigation.closeDrawer();

@@ -35,7 +35,6 @@ function ScheduleRideDetailsScreen(props) {
     images,
     isSchedule,
     rideStatus,
-    isCompleted,
     pickUpAddress,
     dropOffAddress,
     pickUpLocation,
@@ -55,8 +54,7 @@ function ScheduleRideDetailsScreen(props) {
   const [isModal, setIsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState('');
-
-  console.log('ITEM TALK TO BARAY', rideStatus, status);
+  const disabledStatuses = ['completed', 'cancelled'];
 
   const location = {
     pickUpLocation: pickUpAddress,
@@ -373,7 +371,7 @@ function ScheduleRideDetailsScreen(props) {
           <Divider
             lineStyles={{
               ...styles.lineStyles,
-              marginTop: R.unit.scale(isSchedule ? 12 : 0),
+              marginTop: R.unit.scale(12),
             }}
           />
           <Text
@@ -445,11 +443,17 @@ function ScheduleRideDetailsScreen(props) {
               </Text>
             </View>
           </View>
+          <Divider
+            lineStyles={{
+              ...styles.lineStyles,
+              marginTop: R.unit.scale(12),
+            }}
+          />
           <Text
             variant={'h4'}
             font={'Sequel551'}
             color={R.color.charcoalShade}
-            gutterTop={24}
+            gutterTop={16}
             gutterBottom={12}
             align={'left'}
             transform={'none'}>
@@ -531,7 +535,7 @@ function ScheduleRideDetailsScreen(props) {
               size={'lg'}
               color={R.color.blackShade2}
               borderColor={R.color.mainColor}
-              disabled={isCompleted ? true : false}
+              disabled={disabledStatuses.includes(status)}
               loaderColor={R.color.white}
               borderWidth={1}
               borderRadius={10}
@@ -543,7 +547,8 @@ function ScheduleRideDetailsScreen(props) {
       <CancelBookingModal
         isVisibleModal={isModal}
         isScheduled={isSchedule}
-        itemId={data?.id}
+        itemId={rideId}
+        mainRideId={mainRideId}
         cancellationComplete={() => setIsRideAccepted(false)}
       />
     </ScreenBoiler>

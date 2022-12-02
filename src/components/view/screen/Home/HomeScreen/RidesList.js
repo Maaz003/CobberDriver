@@ -26,8 +26,6 @@ function RidesList() {
     getNewRides();
   }, [isFocused]);
 
-  console.log('user?.user?.driverInfo', user?.user?.driverInfo?.isInRide);
-
   const getNewRides = async () => {
     if (user?.user?.driverInfo?.isInRide) {
       let currentRideSession = user?.user?.driverInfo?.currentRide;

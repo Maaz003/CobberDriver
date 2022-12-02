@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
@@ -8,21 +7,7 @@ import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 
 function RideRequestsScreen(props) {
   const {navigation} = props;
-  const isFocused = useIsFocused();
   const {data, screenType = 'Rides'} = props.route.params;
-  const [filteredArray, setFilteredArray] = useState(data?.requestedRides);
-
-  console.log('DTA', JSON.stringify(data, null, 2));
-
-  // useEffect(() => {
-  //   if (data) {
-  //     if (data?.requestedRides?.length > 0) {
-  //       setFilteredArray(data?.requestedRides);
-  //     } else {
-  //       setFilteredArray([]);
-  //     }
-  //   }
-  // }, [data, isFocused]);
 
   const headerProps = {
     isMainHeader: true,

@@ -26,11 +26,10 @@ const wait = timeout => {
 function ScheduledRidesScreen(props) {
   const {navigation} = props;
   const isFocused = useIsFocused();
-  const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
   const userToken = user?.userToken;
-  const [rides, setRides] = useState(new Array(schedule?.scheduledRides));
-  const [upcomingRides, setUpcomingRides] = useState([]);
+  const [rides, setRides] = useState();
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [tab, setTab] = useState(0);
@@ -53,26 +52,30 @@ function ScheduledRidesScreen(props) {
   );
 
   const tabContent = [
-    {id: 0, name: 'Completed'},
-    {id: 1, name: 'Cancelled'},
-    {id: 2, name: 'Upcoming'},
+    {id: 0, name: 'Completed', status: ['completed']},
+    {id: 1, name: 'Cancelled', status: ['cancelled']},
+    {id: 2, name: 'Upcoming', status: ['pending', 'in-ride']},
   ];
 
   useEffect(() => {
     getScheduledRides(true);
   }, [isFocused]);
 
-  console.log('RSASADSADSAD', JSON.stringify(rides, null, 2));
-
   const getScheduledRides = async showLoader => {
     showLoader && setLoading(true);
-    const scheduledRidesUrl = URL(`scheduling-rides/driver?status=upcoming`);
+    const scheduledRidesUrl = URL(`scheduling-rides/driver`);
     const response = await Get(scheduledRidesUrl, userToken);
-    if (response?.data?.data.length > 0) {
-      setRides(response?.data?.data);
-    } else {
-      setLoading(false);
-      setRides([]);
+    let results = response?.data?.data;
+    if (response !== undefined) {
+      if (results.length > 0) {
+        setRides(results);
+        let status = tab === 0 ? ['completed'] : ['pending', 'in-ride'];
+        let updatedArray = results.filter(item => status.includes(item.status));
+        setHistory(updatedArray);
+      } else {
+        setLoading(false);
+        setRides([]);
+      }
     }
     showLoader && setLoading(false);
   };
@@ -80,20 +83,31 @@ function ScheduledRidesScreen(props) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     getScheduledRides(false);
+    setTab(0);
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
   const renderItem = ({item, index}) => {
-    return <ScheduleCard key={index} item={item} rideDay={item.createdAt} />;
+    return (
+      <ScheduleCard
+        key={index}
+        item={item}
+        rideDay={item?.initialRideRequest?.pickUpTime}
+      />
+    );
   };
 
-  const selectTab = index => {
-    setTab(index);
+  const selectTab = item => {
+    const {status, id} = item;
+    setTab(id);
+    let tempArr = rides.slice(0);
+    let updatedArray = tempArr.filter(item => status.includes(item.status));
+    setHistory(updatedArray);
   };
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
-      {loading && <TruckLoader />}
+      {loading || refreshing ? <TruckLoader /> : null}
 
       <ScrollView
         style={styles.container}
@@ -108,20 +122,18 @@ function ScheduledRidesScreen(props) {
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.9}
-                onPress={() => selectTab(item?.id)}
+                onPress={() => selectTab(item)}
                 style={[
                   styles.tab,
                   {
                     backgroundColor:
                       item?.id === tab ? R.color.mainColor : R.color.black,
-                  },
-                  {
                     borderColor:
                       item?.id === tab ? R.color.mainColor : R.color.black,
                   },
                 ]}>
                 <Text
-                  variant={'body4'}
+                  variant={'body3'}
                   font={'PoppinsRegular'}
                   gutterTop={2}
                   color={item?.id === tab ? R.color.black : R.color.white}
@@ -138,7 +150,7 @@ function ScheduledRidesScreen(props) {
           showsVerticalScrollIndicator={false}
           style={{width: '100%'}}
           renderItem={renderItem}
-          data={rides}
+          data={history}
           bounces={false}
           refreshControl={
             <RefreshControl
@@ -186,8 +198,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   tab: {
-    padding: R.unit.scale(5),
     paddingHorizontal: R.unit.scale(20),
+    paddingVertical: R.unit.scale(10),
     borderRadius: R.unit.scale(30),
     borderWidth: 1,
     borderColor: R.color.black,
