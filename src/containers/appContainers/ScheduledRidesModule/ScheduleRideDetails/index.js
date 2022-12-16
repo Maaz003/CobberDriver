@@ -65,7 +65,7 @@ function ScheduleRideDetailsScreen(props) {
     },
     dropOffLoc: {
       latitude: dropOffLocation?.coordinates[1],
-      longitude: dropOffLocation?.coordinates[1],
+      longitude: dropOffLocation?.coordinates[0],
     },
   };
 
@@ -140,6 +140,7 @@ function ScheduleRideDetailsScreen(props) {
   const startScheduleRide = async () => {
     if (rideStatus === 'notstarted') {
       let result = await updateRideSession('pickupstarted');
+      let response = await startRide();
       if (result !== undefined) {
         updateRideSessionStatus('pickupstarted', 'accepted');
       }
@@ -159,6 +160,21 @@ function ScheduleRideDetailsScreen(props) {
         updateRideSessionStatus('dropoffended', 'ended');
       }
     }
+  };
+
+  const startRide = async status => {
+    setIsLoading(true);
+    let reqBody = {
+      rideId: mainRideId,
+      scheduledRideId: rideId,
+    };
+    let response = await updateScheduleRideStartSession(
+      'scheduling-rides/confirm/start',
+      user?.userToken,
+      reqBody,
+    );
+    setIsLoading(false);
+    return response;
   };
 
   const updateRideSession = async status => {
