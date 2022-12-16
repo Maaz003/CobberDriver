@@ -65,7 +65,7 @@ function ScheduleRideDetailsScreen(props) {
     },
     dropOffLoc: {
       latitude: dropOffLocation?.coordinates[1],
-      longitude: dropOffLocation?.coordinates[1],
+      longitude: dropOffLocation?.coordinates[0],
     },
   };
 
