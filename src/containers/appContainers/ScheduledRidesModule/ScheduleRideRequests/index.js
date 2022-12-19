@@ -10,9 +10,23 @@ import Button from '@components/common/Button';
 
 function ScheduleRideRequestsScreen(props) {
   const {navigation} = props;
-  const {data} = props.route.params;
+  const {data, status} = props.route.params;
   const dispatch = useDispatch();
   const [showEndButton, setShowEndButton] = useState(false);
+  const [ridesData, setRidesData] = useState([]);
+  let showNewRequestStatus = ['pending', 'in-ride'];
+
+  console.log('FORU IN 2222', status);
+
+  useEffect(() => {
+    let tempArr =
+      status === 'completed'
+        ? data?.rides
+        : status === 'cancelled'
+        ? data?.cancelledRides
+        : data?.rides;
+    setRidesData(tempArr);
+  }, [data]);
 
   const headerProps = {
     isMainHeader: true,
@@ -51,39 +65,42 @@ function ScheduleRideRequestsScreen(props) {
               Schedule Rides
             </Text>
 
-            {data?.requestedRides?.length !== 0 && (
-              <View style={styles.moreRequestsControlSection}>
-                <TouchableOpacity
-                  style={styles.moreRequestsControlButton}
-                  activeOpacity={0.6}
-                  onPress={() =>
-                    navigation.navigate('NewScheduleRideRequests', {
-                      data: data,
-                    })
-                  }>
-                  <Text
-                    variant={'body3'}
-                    font={'PoppinsRegular'}
-                    color={R.color.blackShade3}
-                    align={'right'}
-                    transform={'capitalize'}>
-                    New Requests
-                  </Text>
-                </TouchableOpacity>
-                <View style={styles.badge}>
-                  <Text
-                    variant={'body4'}
-                    font={'PoppinsSemiBold'}
-                    color={R.color.white}
-                    align={'center'}
-                    transform={'capitalize'}>
-                    {data?.requestedRides?.length}
-                  </Text>
-                </View>
-              </View>
+            {showNewRequestStatus?.includes(status) && (
+              <>
+                {data?.requestedRides?.length !== 0 && (
+                  <View style={styles.moreRequestsControlSection}>
+                    <TouchableOpacity
+                      style={styles.moreRequestsControlButton}
+                      activeOpacity={0.6}
+                      onPress={() =>
+                        navigation.navigate('NewScheduleRideRequests', {
+                          data: data,
+                        })
+                      }>
+                      <Text
+                        variant={'body3'}
+                        font={'PoppinsRegular'}
+                        color={R.color.blackShade3}
+                        align={'right'}
+                        transform={'capitalize'}>
+                        New Requests
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={styles.badge}>
+                      <Text
+                        variant={'body4'}
+                        font={'PoppinsSemiBold'}
+                        color={R.color.white}
+                        align={'center'}
+                        transform={'capitalize'}>
+                        {data?.requestedRides?.length}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </>
             )}
-
-            {data?.rides?.map((item, index, arr) => {
+            {ridesData?.map((item, index, arr) => {
               return (
                 <RideRequestsCard
                   item={item}

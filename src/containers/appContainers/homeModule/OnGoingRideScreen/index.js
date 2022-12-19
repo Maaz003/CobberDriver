@@ -25,6 +25,8 @@ function OnGoingRideScreen(props) {
   const [origin, setOrigin] = useState(undefined);
   const [duration, setDuration] = useState(undefined);
   const [destination, setDestination] = useState(undefined);
+  const [pickupPoint, setPickupPoint] = useState(undefined);
+  const [dropOffPoint, setDropOffPoint] = useState(undefined);
   const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
     coordinates;
 
@@ -67,6 +69,15 @@ function OnGoingRideScreen(props) {
           longitude: user?.pickupLoc.longitude,
         });
       }
+
+      setPickupPoint({
+        latitude: rideSession?.location?.pickUpLoc?.latitude,
+        longitude: rideSession?.location?.pickUpLoc?.longitude,
+      });
+      setDropOffPoint({
+        latitude: rideSession?.location?.dropOffLoc?.latitude,
+        longitude: rideSession?.location?.dropOffLoc?.longitude,
+      });
     }
   }, [isFocused, user?.rideSession, user?.pickupLoc]);
 
@@ -186,6 +197,8 @@ function OnGoingRideScreen(props) {
     }
   };
 
+  console.log('DATA', origin, destination, duration);
+
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>
@@ -226,7 +239,16 @@ function OnGoingRideScreen(props) {
           <MapDirections
             origin={origin}
             destination={destination}
-            setTime={time => setDuration(time)}
+            setTime={() => null}
+          />
+
+          <MapDirections
+            origin={pickupPoint}
+            destination={dropOffPoint}
+            strokeWidth={0}
+            setTime={time => {
+              setDuration(time);
+            }}
           />
         </Map>
         {user?.locationLoader && (

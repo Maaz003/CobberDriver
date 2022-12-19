@@ -69,8 +69,14 @@ function ScheduleRideDetailsScreen(props) {
     },
   };
 
+  console.log('RIDES DETAILS SCHEDULE', data?.status);
+
   useEffect(() => {
-    if (status !== 'completed') {
+    if (status === 'completed') {
+      setButtonText('Ride Completed');
+    } else if (status === 'cancelled') {
+      setButtonText('Ride Cancelled');
+    } else {
       switch (rideStatus) {
         case 'notstarted':
           setButtonText('Start Pickup');
@@ -85,9 +91,29 @@ function ScheduleRideDetailsScreen(props) {
           setButtonText('Complete Ride');
           break;
       }
-    } else {
-      setButtonText('Ride Completed');
     }
+
+    // if (status !== 'completed') {
+    //   switch (rideStatus) {
+    //     case 'notstarted':
+    //       setButtonText('Start Pickup');
+    //       break;
+    //     case 'pickupended':
+    //       setButtonText('Start DropOff');
+    //       break;
+    //     case 'dropoffstarted':
+    //       setButtonText('Complete DropOff');
+    //       break;
+    //     case 'dropoffended':
+    //       setButtonText('Complete Ride');
+    //       break;
+    //   }
+    // }
+    // else if (status === 'cancelled') {
+    //   setButtonText('Ride Cancelled');
+    // } else {
+    //   setButtonText('Ride Completed');
+    // }
   }, []);
 
   const headerProps = {
@@ -524,32 +550,14 @@ function ScheduleRideDetailsScreen(props) {
             text={'Get directions'}
             onPress={() => openDirections('Dropoff', location)}
           />
-          <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
-            {rideStatus === 'notstarted' && (
-              <Button
-                bgColor={R.color.white}
-                width={'16%'}
-                size={'lg'}
-                color={R.color.white}
-                borderColor={R.color.gray}
-                disabled={false}
-                loaderColor={R.color.white}
-                borderWidth={0.5}
-                borderRadius={10}
-                iconName={'close'}
-                iconType={'Ionicons'}
-                iconColor={R.color.blackShade2}
-                onPress={openModal}
-                rippleColor={R.color.gray}
-              />
-            )}
-
+          {disabledStatuses?.includes(status) ? (
             <Button
               value={buttonText}
               bgColor={R.color.mainColor}
-              width={rideStatus !== 'notstarted' ? '100%' : '82%'}
+              width={'100%'}
               size={'lg'}
               color={R.color.blackShade2}
+              gutterTop={20}
               borderColor={R.color.mainColor}
               disabled={disabledStatuses.includes(status)}
               loaderColor={R.color.white}
@@ -557,7 +565,42 @@ function ScheduleRideDetailsScreen(props) {
               borderRadius={10}
               onPress={startScheduleRide}
             />
-          </View>
+          ) : (
+            <View style={[R.styles.twoItemsRow, styles.buttonLayout]}>
+              {rideStatus === 'notstarted' && (
+                <Button
+                  bgColor={R.color.white}
+                  width={'16%'}
+                  size={'lg'}
+                  color={R.color.white}
+                  borderColor={R.color.gray}
+                  disabled={false}
+                  loaderColor={R.color.white}
+                  borderWidth={0.5}
+                  borderRadius={10}
+                  iconName={'close'}
+                  iconType={'Ionicons'}
+                  iconColor={R.color.blackShade2}
+                  onPress={openModal}
+                  rippleColor={R.color.gray}
+                />
+              )}
+
+              <Button
+                value={buttonText}
+                bgColor={R.color.mainColor}
+                width={rideStatus !== 'notstarted' ? '100%' : '82%'}
+                size={'lg'}
+                color={R.color.blackShade2}
+                borderColor={R.color.mainColor}
+                disabled={disabledStatuses.includes(status)}
+                loaderColor={R.color.white}
+                borderWidth={1}
+                borderRadius={10}
+                onPress={startScheduleRide}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
       <CancelBookingModal

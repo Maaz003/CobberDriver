@@ -76,9 +76,7 @@ function LocationPoint(props) {
               gutterBottom={10}
               numberOfLines={2}
               transform={'none'}>
-              {moment(scheduledTime?.pickUpTime).format(
-                'MMMM Do YYYY, h:mm:ss a',
-              )}
+              {moment(scheduledTime?.pickUpTime).format('MMMM Do YYYY, h:mm a')}
             </Text>
           )}
 
@@ -119,7 +117,7 @@ function LocationPoint(props) {
               numberOfLines={2}
               transform={'none'}>
               {moment(scheduledTime?.dropOffTime).format(
-                'MMMM Do YYYY, h:mm:ss a',
+                'MMMM Do YYYY, h:mm a',
               )}
             </Text>
           )}

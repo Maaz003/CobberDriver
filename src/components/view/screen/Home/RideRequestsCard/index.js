@@ -19,6 +19,8 @@ function RideRequestsCard(props) {
   const {displayName, photo} = item?.customer;
   const image = imageUrl(photo);
 
+  console.log('ITEM REQUEST CARD', item);
+
   const onNavigate = () => {
     navigationService.navigate(
       screenType === 'History'
@@ -85,7 +87,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {moment(item.scheduledTime?.pickUpTime).format('Do MMM  YY')}
+          {moment(item?.pickUpTime).format('ddd, Do MMM YY')}
         </Text>
       </View>
 
@@ -100,7 +102,7 @@ function RideRequestsCard(props) {
           align={'left'}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
-          {moment(item.scheduledTime?.pickUpTime).format('hh:mm a')}
+          {moment(item?.pickUpTime).format('hh:mm a')}
         </Text>
       </View>
 
@@ -111,11 +113,12 @@ function RideRequestsCard(props) {
           font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
+          numberOfLines={3}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
           {item?.pickUpAddress}
         </Text>
-        <View style={styles.dot} />
+        {/* <View style={styles.dot} />
         <Text
           variant={'body3'}
           font={'InterRegular'}
@@ -124,7 +127,7 @@ function RideRequestsCard(props) {
           style={{fontStyle: 'italic', width: '30%'}}
           transform={'none'}>
           PickUp
-        </Text>
+        </Text> */}
       </View>
 
       <View style={[R.styles.twoItemsRow, styles.detailView]}>
@@ -136,20 +139,21 @@ function RideRequestsCard(props) {
           font={'InterRegular'}
           color={R.color.blackShade3}
           align={'left'}
+          numberOfLines={3}
           style={{marginLeft: R.unit.scale(8)}}
           transform={'none'}>
           {item?.dropOffAddress}
         </Text>
-        <View style={styles.dot} />
-        <Text
-          variant={'body3'}
-          font={'InterRegular'}
-          color={R.color.blackShade3}
-          align={'left'}
-          style={{fontStyle: 'italic', width: '30%'}}
-          transform={'none'}>
-          DropOff
-        </Text>
+        {/* <View style={styles.dot} />
+          <Text
+            variant={'body3'}
+            font={'PoppinsThinItalic'}
+            color={R.color.blackShade3}
+            align={'left'}
+            style={{fontStyle: 'italic', width: '30%'}}
+            transform={'none'}>
+            DropOff
+          </Text> */}
       </View>
 
       <View style={[R.styles.rowView, styles.buttonContainer]}>

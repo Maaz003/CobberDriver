@@ -120,11 +120,11 @@ function CancelBookingModal(props) {
         visible={modalVisible}
         onRequestClose={() => setIsBlur(false)}
         onShow={() => {
-          setIsBlur(true);
+          !isLoading && setIsBlur(true);
         }}>
         <View style={styles.centeredView}>
           <TouchableOpacity
-            onPress={() => setIsBlur(false)}
+            onPress={() => !isLoading && setIsBlur(false)}
             style={{
               ...StyleSheet.absoluteFillObject,
               backgroundColor: 'rgba(0,0,0,0.7)',

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image, Keyboard} from 'react-native';
 import {createRideSession} from '@store/user/userSlice';
 import {URL, apiHeader} from '@config/apiUrl';
 import {Post} from '@axios/AxiosInterceptorFunction';
@@ -13,6 +13,8 @@ import PopUp from '@components/common/PopUp';
 import Stars from '@components/common/RatingStars';
 import LocationDot from '@components/common/LocationDot';
 import TextInput from '@components/common/TextInput';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {fareRoundOff} from '@components/utils/ReuseableFunctions';
 
 function RideCompletedBox(props) {
   const {navigation} = props;
@@ -70,7 +72,14 @@ function RideCompletedBox(props) {
   };
 
   return (
-    <View style={styles.mainLayout}>
+    <KeyboardAwareScrollView
+      style={styles.mainLayout}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        flexGrow: 1,
+        // alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
       <Text
         variant={'h1'}
         font={'Sequel551'}
@@ -88,7 +97,7 @@ function RideCompletedBox(props) {
         gutterTop={10}
         gutterBottom={20}
         transform={'none'}>
-        Final Cost: ${rideSession?.fare}
+        Final Cost: ${fareRoundOff(rideSession?.fare)}
       </Text>
       <View style={R.styles.twoItemsRow}>
         <Image
@@ -185,6 +194,9 @@ function RideCompletedBox(props) {
         borderRadius={8}
         height={148}
         inputHeight={148}
+        onBlur={() => {
+          Keyboard.dismiss();
+        }}
       />
 
       <Button
@@ -201,7 +213,7 @@ function RideCompletedBox(props) {
         disabled={disabled || isLoading}
         loader={isLoading}
       />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 export default RideCompletedBox;

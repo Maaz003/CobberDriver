@@ -53,9 +53,9 @@ function ScheduledRidesScreen(props) {
   );
 
   const tabContent = [
-    {id: 0, name: 'Completed', status: ['completed']},
-    {id: 1, name: 'Cancelled', status: ['cancelled']},
-    {id: 2, name: 'Upcoming', status: ['pending', 'in-ride']},
+    {id: 0, name: 'Accepted', status: ['pending', 'in-ride']},
+    {id: 1, name: 'Completed', status: ['completed']},
+    {id: 2, name: 'Cancelled', status: ['cancelled']},
   ];
 
   useEffect(() => {
@@ -71,11 +71,22 @@ function ScheduledRidesScreen(props) {
       if (response !== undefined) {
         if (results.length > 0) {
           setRides(results);
-          let status = tab === 0 ? ['completed'] : ['pending', 'in-ride'];
+          let status =
+            tab === 0
+              ? ['pending', 'in-ride']
+              : tab === 1
+              ? ['completed']
+              : ['cancelled'];
           let updatedArray = results.filter(item =>
             status.includes(item.status),
           );
-          setHistory(updatedArray);
+          console.log(
+            'UPDATED ARRAT',
+            updatedArray?.map(item => item.status),
+          );
+          let reversedArray = updatedArray?.reverse().slice(0);
+
+          setHistory(reversedArray);
         } else {
           setLoading(false);
           setRides([]);
@@ -114,8 +125,12 @@ function ScheduledRidesScreen(props) {
     setTab(id);
     let tempArr = rides.slice(0);
     let updatedArray = tempArr.filter(item => status.includes(item.status));
-    setHistory(updatedArray);
+    let reversedArray = updatedArray?.reverse().slice(0);
+
+    setHistory(reversedArray);
   };
+
+  console.log('TAB', tab);
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
@@ -183,10 +198,10 @@ function ScheduledRidesScreen(props) {
             return (
               <TruckError
                 heading={`You have no ${
-                  tab === 0 ? 'completed' : tab === 1 ? 'cancelled' : 'upcoming'
+                  tab === 0 ? 'accepted' : tab === 1 ? 'completed' : 'cancelled'
                 } rides yet`}
                 subText={`As soon as the there is a ${
-                  tab === 0 ? 'completed' : tab === 1 ? 'cancelled' : 'upcoming'
+                  tab === 0 ? 'accepted' : tab === 1 ? 'completed' : 'cancelled'
                 } request it will appear in this list.`}
               />
             );

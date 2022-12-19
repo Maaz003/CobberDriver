@@ -88,7 +88,7 @@ const CustomDrawer = props => {
       svg: <EarningIcon height="100%" width="100%" fill={'#85FA00'} />,
     },
     {
-      name: 'History',
+      name: 'Instant Rides',
       id: 4,
       route: 'History',
       svg: <HistoryIcon height="100%" width="100%" fill={'#85FA00'} />,

@@ -10,6 +10,8 @@ function ScheduleCard(props) {
   const {item, rideDay} = props;
   const [ridesData, setRidesData] = useState([]);
 
+  console.log('FORU IN NESTED', item.status);
+
   useEffect(() => {
     let tempArr =
       item?.status === 'completed'
@@ -31,6 +33,7 @@ function ScheduleCard(props) {
       onPress={() => {
         navigationService.navigate('ScheduleRideRequests', {
           data: item,
+          status: item.status,
         });
       }}>
       <View style={R.styles.rowView}>
@@ -63,7 +66,7 @@ function ScheduleCard(props) {
           }}
           numberOfLines={1}
           transform={'capitalize'}>
-          {item?.status === 'pending' ? 'Not started' : item.status}
+          {item?.status === 'pending' ? 'Upcoming' : item.status}
         </Text>
       </View>
       <View style={styles.ridesContainer}>

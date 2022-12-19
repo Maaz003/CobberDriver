@@ -1,22 +1,24 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {ActivityIndicator, Alert, BackHandler, View} from 'react-native';
+import {_SOCKET_REF} from '@store/extra/extraSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import io from 'socket.io-client';
+import {apiUrl} from '@config/apiUrl';
 import {confirmDropOff} from '@store/user/userSlice';
 import R from '@components/utils/R';
-import {firstTimeReduxSet, tempRidesSet} from '@store/common/commonSlice';
 import {useFocusEffect} from '@react-navigation/native';
 import ScreenBoiler from '@components/layout/header/ScreenBoiler';
 import HomeMap from '@components/view/screen/Home/HomeScreen/HomeMap';
 import MapHeader from '@components/view/screen/Home/MapHeader';
 import RidesList from '@components/view/screen/Home/HomeScreen/RidesList';
 import CurrentLocation from '@components/utils/CurrentLocation';
-import {rides} from '@components/constants';
+import {getUpdatedProfile} from '@components/utils/ReuseableFunctions';
 
 function HomeScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
+  const socketRef = useRef(null);
   const user = useSelector(state => state.user);
-  const common = useSelector(state => state.common);
 
   const headerProps = {
     isHeader: true,
@@ -24,18 +26,41 @@ function HomeScreen(props) {
     headerColor: R.color.charcoalShade2,
   };
 
+  console.log('IUSE', user?.pinLoc, user?.user);
+
+  const fetchLiveLocation = () => {
+    console.log('get ive');
+    CurrentLocation({actionCall: dispatch, flag: 'home'});
+    // if (socketRef?.current) {
+    //   socketRef.current = io(apiUrl);
+    //   socketRef.current.emit('location', async data => {
+    //     console.log('ASDASDSADAS SOCKET', data?.ride);
+
+    //   });
+    // }
+  };
+
   useEffect(() => {
     if (!user?.pickupLoc) {
-      CurrentLocation({actionCall: dispatch, flag: true});
+      fetchLiveLocation();
     }
   }, []);
 
   useEffect(() => {
-    if (!common?.firstReduxSet) {
-      dispatch(firstTimeReduxSet(true));
-      dispatch(tempRidesSet(rides));
-    }
-  }, [common?.firstReduxSet]);
+    socketRef.current = io(apiUrl);
+    socketRef.current.emit('join', {id: user?.user?._id});
+    dispatch(_SOCKET_REF(socketRef.current));
+    // getUpdatedProfile({actionCall: dispatch, authToken: user?.userToken});
+  }, []);
+
+  useEffect(() => {
+    let locationTimer = setInterval(fetchLiveLocationGPS, 30000);
+    return () => clearInterval(locationTimer);
+  }, []);
+
+  const fetchLiveLocationGPS = () => {
+    fetchLiveLocation();
+  };
 
   const onPress = () => {
     navigation.toggleDrawer();
@@ -71,11 +96,11 @@ function HomeScreen(props) {
       <View style={R.styles.mainLayout}>
         <MapHeader onPress={onPress} iconName={'menu'} />
         <HomeMap />
-        {user?.locationLoader && (
+        {/* {user?.locationLoader && (
           <View style={R.styles.loaderView}>
             <ActivityIndicator size="large" color={R.color.mainColor} />
           </View>
-        )}
+        )} */}
         <RidesList navigation={props.navigation} />
       </View>
     </ScreenBoiler>

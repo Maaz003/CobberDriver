@@ -4,6 +4,7 @@ import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import {imageUrl} from '@config/apiUrl';
 import LocationDot from '@components/common/LocationDot';
+import {fareRoundOff} from '@components/utils/ReuseableFunctions';
 
 function HistoryCard(props) {
   const {item} = props;
@@ -55,7 +56,7 @@ function HistoryCard(props) {
           style={{marginLeft: 10, flex: 0.2}}
           align={'right'}
           transform={'capitalize'}>
-          $ {fare}
+          $ {fareRoundOff(fare)}
         </Text>
       </View>
 

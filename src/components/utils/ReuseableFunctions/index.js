@@ -1,7 +1,8 @@
 import moment from 'moment';
 import {Linking, Platform} from 'react-native';
-import {Patch} from '@axios/AxiosInterceptorFunction';
+import {Patch, Get} from '@axios/AxiosInterceptorFunction';
 import {apiHeader, URL} from '@config/apiUrl';
+import {updateUser} from '@store/user/userSlice';
 
 export function stringTrim(value, index = 2) {
   if (value !== undefined) {
@@ -10,6 +11,12 @@ export function stringTrim(value, index = 2) {
     const result = firstTwo.join(',');
     return result;
   }
+}
+
+export function fareRoundOff(value) {
+  return Math.abs(value) > 999
+    ? Math.sign(value) * (Math.abs(value) / 1000).toFixed(1) + 'k'
+    : Math.sign(value) * Math.abs(value);
 }
 
 export function timeFormatSchedule(value) {
@@ -95,6 +102,20 @@ export const openCall = data => {
   Linking.openURL(phoneNumber);
 };
 
+export const getUpdatedProfile = async props => {
+  try {
+    const {actionCall, authToken} = props;
+    const getUpdatedProfileURL = URL('users/profile');
+    const response = await Get(getUpdatedProfileURL, authToken);
+    const user = response?.data?.data?.user;
+    if (response?.data !== undefined) {
+      await actionCall(updateUser(user));
+    }
+  } catch (error) {
+    console.log('Cannot get updated profile', error);
+  }
+};
+
 export const updateRideStartSession = async (
   rideId,
   token,
@@ -146,4 +167,6 @@ export default {
   openDirections,
   updateRideStartSession,
   updateScheduleRideStartSession,
+  fareRoundOff,
+  getUpdatedProfile,
 };

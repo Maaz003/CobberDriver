@@ -30,7 +30,7 @@ function MediaDisplay(props) {
           showNextButton={false}
           showPrevButton={false}
           showDoneButton={false}
-          activeDotStyle={{backgroundColor: R.color.white}}
+          activeDotStyle={{backgroundColor: R.color.mainColor}}
           dotStyle={{backgroundColor: R.color.gray5}}
         />
       </View>

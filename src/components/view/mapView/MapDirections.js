@@ -6,15 +6,21 @@ import R from '@components/utils/R';
 
 const MapDirections = props => {
   Geocoder.init(GOOGLE_GEOCODE);
-  const {setTime, origin, destination} = props;
+  const {
+    setTime,
+    origin,
+    destination,
+    strokeColor = R.color.black,
+    strokeWidth = R.unit.tabSizeCalc(1.5, 3),
+  } = props;
 
   return (
     <MapViewDirections
       origin={origin}
       destination={destination}
       apikey={GOOGLE_GEOCODE}
-      strokeWidth={R.unit.tabSizeCalc(1.5, 3)}
-      strokeColor={R.color.black}
+      strokeWidth={strokeWidth}
+      strokeColor={strokeColor}
       timePrecision={'now'}
       precision={'high'}
       mode={'DRIVING'}

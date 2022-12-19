@@ -5,10 +5,14 @@ import {Marker} from 'react-native-maps';
 import {stringTrim} from '@components/utils/ReuseableFunctions';
 import Text from '@components/common/Text';
 import Icon from '@components/common/Icon';
+import {LocationCoordinates} from '@components/utils/LocationCoordinates';
 
 function PickUpMarker(props) {
+  const location = LocationCoordinates();
+
   const {pickUpLat, pickUpLong, addressRawPickup, initialLat, initialLong} =
-    props;
+    location;
+
   const pickUpAddr = stringTrim(addressRawPickup, 1);
 
   return (
