@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, Platform, BackHandler} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import messaging from '@react-native-firebase/messaging';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {login} from '@store/auth/authSlice';
@@ -57,11 +58,19 @@ function LoginScreen(props) {
 
   const onSubmit = async () => {
     setIsLoading(true);
+
+    let deviceToken;
+    try {
+      deviceToken = await messaging().getToken();
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+
     const reqData = {
       email: authUser?.email,
       password: authUser?.password,
+      fcmToken: deviceToken,
     };
-
     const formError = FormValidation(reqData);
     if (formError) {
       setIsLoading(false);

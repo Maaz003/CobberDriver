@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react';
 import AppNavigator from './src/navigation/index';
 import 'react-native-gesture-handler';
 import {PersistGate} from 'redux-persist/integration/react';
+import messaging from '@react-native-firebase/messaging';
 import store from './src/store/index';
 import {persistStore} from 'redux-persist';
 import SplashScreen from 'react-native-splash-screen';
 import FlashMessage from 'react-native-flash-message';
 import {enableLatestRenderer} from 'react-native-maps';
 import Toast from 'react-native-toast-message';
+import {Notifications} from 'react-native-notifications';
+import LocalNotification from '@components/utils/Notifications';
 
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {AppState, LogBox, Platform, TouchableOpacity, View} from 'react-native';
@@ -20,8 +23,7 @@ import CurrentLocation from '@components/utils/CurrentLocation';
 import Icon from '@components/common/Icon';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
-// import {fcmSerice} from './src/store/notificationService/fcmService';
-// import {localNotificationService} from './src/store/notificationService/localNotificationService';
+import {setFcmToken} from '@store/misc/miscSlice';
 
 const App = () => {
   LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -36,13 +38,13 @@ const App = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
-  useEffect(() => {
-    if (Platform.OS === 'ios') {
-      requestLocationIOS();
-    } else {
-      requestLocation();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios') {
+  //     requestLocationIOS();
+  //   } else {
+  //     requestLocation();
+  //   }
+  // }, []);
 
   const requestLocation = async () => {
     let granted = await requestLocationPermission();
@@ -107,6 +109,68 @@ const App = () => {
     const dispatch = useDispatch();
 
     const [isAccess, setIsAccess] = useState(false);
+    useEffect(() => {
+      LocalNotification({
+        title: 'qwwwwwwww',
+        text: '----------',
+      });
+    }, []);
+
+    const getToken = async () => {
+      try {
+        let deviceToken = await messaging().getToken();
+        dispatch(setFcmToken(deviceToken));
+        console.log('deviceToken', deviceToken);
+      } catch (error) {
+        console.log('ERROR', error);
+      }
+    };
+
+    useEffect(() => {
+      getToken();
+    }, []);
+
+    useEffect(() => {
+      Notifications.registerRemoteNotifications();
+
+      const messageSub = messaging().onMessage(async remoteMessage => {
+        console.warn('DSSSSSSSSSSSSSSSSs======', remoteMessage?.notification);
+        LocalNotification({
+          title: remoteMessage?.notification?.title,
+          text: remoteMessage?.notification?.body,
+        });
+
+        Notifications.events().registerNotificationOpened(
+          (notification: Notification, completion) => {
+            // WHEN APP IS IN FOREGROUND AND APP IS OPENED
+            completion();
+          },
+        );
+      });
+
+      messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.warn(
+          'BACKGROUND MESSGAE HANDLER WHJEN APP WILL BE IN BACKGROUND',
+        );
+
+        // Notifications.events().registerNotificationReceivedBackground()
+      });
+
+      messaging().onNotificationOpenedApp(async remoteMessage => {
+        // WHEN APP IS OPENED FROM BACKGROUND THIS WILL RUN
+        console.warn('bACKGROUND OPENED');
+      });
+
+      Notifications.getInitialNotification()
+        .then(notify => {
+          console.warn('WHEN APP IS KILLEDD-----');
+        })
+        .catch(err => {
+          console.warn('ERRROR NOTIFICATION GET NOTI');
+        });
+
+      return messageSub;
+    }, []);
 
     const getLiveLocation = async () => {
       try {
@@ -132,8 +196,9 @@ const App = () => {
     };
 
     useEffect(() => {
+      console.log('BEFORE AUTH UE');
       getLiveLocation();
-    }, [isAccess]);
+    }, [isAccess === false]);
 
     return (
       <>

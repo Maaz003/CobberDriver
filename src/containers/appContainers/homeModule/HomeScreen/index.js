@@ -12,7 +12,7 @@ import HomeMap from '@components/view/screen/Home/HomeScreen/HomeMap';
 import MapHeader from '@components/view/screen/Home/MapHeader';
 import RidesList from '@components/view/screen/Home/HomeScreen/RidesList';
 import CurrentLocation from '@components/utils/CurrentLocation';
-import {getUpdatedProfile} from '@components/utils/ReuseableFunctions';
+import TruckLoader from '@components/common/TruckLoader';
 
 function HomeScreen(props) {
   const {navigation} = props;
@@ -26,18 +26,15 @@ function HomeScreen(props) {
     headerColor: R.color.charcoalShade2,
   };
 
-  console.log('IUSE', user?.pinLoc, user?.user);
-
   const fetchLiveLocation = () => {
-    console.log('get ive');
+    console.log('get live');
     CurrentLocation({actionCall: dispatch, flag: 'home'});
-    // if (socketRef?.current) {
-    //   socketRef.current = io(apiUrl);
-    //   socketRef.current.emit('location', async data => {
-    //     console.log('ASDASDSADAS SOCKET', data?.ride);
-
-    //   });
-    // }
+    if (socketRef?.current) {
+      socketRef.current = io(apiUrl);
+      socketRef.current.emit('location', async data => {
+        console.log('ASDASDSADAS SOCKET', data?.ride);
+      });
+    }
   };
 
   useEffect(() => {
@@ -49,18 +46,12 @@ function HomeScreen(props) {
   useEffect(() => {
     socketRef.current = io(apiUrl);
     socketRef.current.emit('join', {id: user?.user?._id});
-    dispatch(_SOCKET_REF(socketRef.current));
-    // getUpdatedProfile({actionCall: dispatch, authToken: user?.userToken});
   }, []);
 
   useEffect(() => {
-    let locationTimer = setInterval(fetchLiveLocationGPS, 30000);
+    let locationTimer = setInterval(fetchLiveLocation, 30000);
     return () => clearInterval(locationTimer);
   }, []);
-
-  const fetchLiveLocationGPS = () => {
-    fetchLiveLocation();
-  };
 
   const onPress = () => {
     navigation.toggleDrawer();
@@ -93,15 +84,11 @@ function HomeScreen(props) {
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
+      {user?.locationLoader && <TruckLoader />}
       <View style={R.styles.mainLayout}>
         <MapHeader onPress={onPress} iconName={'menu'} />
         <HomeMap />
-        {/* {user?.locationLoader && (
-          <View style={R.styles.loaderView}>
-            <ActivityIndicator size="large" color={R.color.mainColor} />
-          </View>
-        )} */}
-        <RidesList navigation={props.navigation} />
+        <RidesList />
       </View>
     </ScreenBoiler>
   );

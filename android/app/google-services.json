@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "927819771302",
+    "project_id": "cobber-driver",
+    "storage_bucket": "cobber-driver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927819771302:android:d6bab6e15b137a9f017367",
+        "android_client_info": {
+          "package_name": "com.cobberdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927819771302-ru6o2fhj5nes4jg1iuqj0lkja8mqf3rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyRTsz1nwwLKHtovs_8eLZ_H2dppK_jls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927819771302-ru6o2fhj5nes4jg1iuqj0lkja8mqf3rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

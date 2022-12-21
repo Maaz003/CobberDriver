@@ -31,6 +31,8 @@ function RideInProgressCard(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [startRideLoader, setStartRideLoader] = useState(false);
   const [etaDistance, setEtaDistance] = useState(duration);
+  const [buttonColor, setButtonColor] = useState(R.color.mainColor);
+  const [textButtoncolor, setTextButtoncolor] = useState(R.color.black);
 
   useEffect(() => {
     if (data) {
@@ -43,6 +45,8 @@ function RideInProgressCard(props) {
             setButtonText('Start DropOff');
             break;
           case 'dropoffstarted':
+            setButtonColor('#DB1A2D');
+            setTextButtoncolor(R.color.white);
             setButtonText('Complete DropOff');
             break;
         }
@@ -53,6 +57,8 @@ function RideInProgressCard(props) {
             break;
           case 'pickupstarted':
             setButtonText('End Ride');
+            setButtonColor('#DB1A2D');
+            setTextButtoncolor(R.color.white);
             break;
         }
       }
@@ -449,11 +455,11 @@ function RideInProgressCard(props) {
 
         <Button
           value={buttonText}
-          bgColor={R.color.mainColor}
+          bgColor={buttonColor}
           width={'90%'}
           size={'lg'}
           gutterTop={32}
-          color={R.color.black}
+          color={textButtoncolor}
           borderRadius={10}
           borderColor={R.color.mainColor}
           onPress={onSubmit}

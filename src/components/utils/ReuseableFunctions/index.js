@@ -3,6 +3,7 @@ import {Linking, Platform} from 'react-native';
 import {Patch, Get} from '@axios/AxiosInterceptorFunction';
 import {apiHeader, URL} from '@config/apiUrl';
 import {updateUser} from '@store/user/userSlice';
+import DeviceInfo from 'react-native-device-info';
 
 export function stringTrim(value, index = 2) {
   if (value !== undefined) {
@@ -153,6 +154,16 @@ export const updateRideStartSession = async (
   return response?.data;
 };
 
+export const getDeviceID = async props => {
+  let res;
+  await DeviceInfo.getUniqueId().then(uniqueId => {
+    res = uniqueId;
+  });
+  if (res) {
+    return res;
+  }
+};
+
 export const updateScheduleRideStartSession = async (url, token, reqBody) => {
   const header = apiHeader(token, false);
   const respondRideUrl = URL(url);
@@ -169,4 +180,5 @@ export default {
   updateScheduleRideStartSession,
   fareRoundOff,
   getUpdatedProfile,
+  getDeviceID,
 };

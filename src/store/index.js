@@ -10,6 +10,7 @@ import userReducer from './user/userSlice';
 import commonReducer from './common/commonSlice';
 import ridesReducer from './rides/ridesSlice';
 import extraReducer from './extra/extraSlice';
+import miscReducer from './misc/miscSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,13 +19,14 @@ const rootReducer = combineReducers({
   common: commonReducer,
   rides: ridesReducer,
   extra: extraReducer,
+  misc: miscReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   // Whitelist (Save Specific Reducers)
-  whitelist: ['auth', 'schedule', 'user', 'common', 'rides', 'extra'],
+  whitelist: ['auth', 'schedule', 'user', 'common', 'rides', 'extra', 'misc'],
   // Blacklist (Don't Save Specific Reducers)
   // blacklist: ['setting', 'upload']
 };

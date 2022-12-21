@@ -28,57 +28,65 @@ function RidesList() {
 
   const getNewRides = async () => {
     if (user?.user?.driverInfo?.isInRide) {
-      let currentRideSession = user?.user?.driverInfo?.currentRide;
-      let rideSessionStatus;
-      let inRideStatus;
-      let rideType = currentRideSession?.isSchedule ? 'schedule' : 'instant';
+      //INSTANT RIDE SESSION
+      if (user?.user?.driverInfo?.currentRide) {
+        let currentRideSession = user?.user?.driverInfo?.currentRide;
+        console.log(
+          'currentRideSession',
+          JSON.stringify(currentRideSession, null, 2),
+        );
+        let rideSessionStatus;
+        let inRideStatus;
+        let rideType = currentRideSession?.isSchedule ? 'schedule' : 'instant';
 
-      if (currentRideSession?.status === 'accepted') {
-        rideSessionStatus = 'notstarted';
-        inRideStatus = 'accepted';
+        if (currentRideSession?.status === 'accepted') {
+          rideSessionStatus = 'notstarted';
+          inRideStatus = 'accepted';
+        }
+        if (currentRideSession?.status === 'in-ride') {
+          rideSessionStatus = 'pickupstarted';
+          inRideStatus = 'started';
+        }
+        if (currentRideSession?.status === 'completed') {
+          rideSessionStatus = 'dropoffended';
+          inRideStatus = 'ended';
+        }
+
+        const location = {
+          pickUpLocation: currentRideSession?.pickUpAddress,
+          dropOffLocation: currentRideSession?.dropOffAddress,
+          pickUpLoc: {
+            latitude: currentRideSession?.pickUpLocation?.coordinates[1],
+            longitude: currentRideSession?.pickUpLocation?.coordinates[0],
+          },
+          dropOffLoc: {
+            latitude: currentRideSession?.dropOffLocation?.coordinates[1],
+            longitude: currentRideSession?.dropOffLocation?.coordinates[1],
+          },
+        };
+
+        let {
+          pickUpLocation,
+          dropOffLocation,
+          pickUpAddress,
+          dropOffAddress,
+          ...rideSessionData
+        } = currentRideSession;
+        rideSessionData = {...rideSessionData, location};
+
+        const dataRide = {
+          data: {
+            ...rideSessionData,
+            rideStatus: rideSessionStatus,
+            type: rideType,
+          },
+          inRide: inRideStatus,
+        };
+
+        await dispatch(createRideSession(dataRide));
       }
-      if (currentRideSession?.status === 'in-ride') {
-        rideSessionStatus = 'pickupstarted';
-        inRideStatus = 'started';
-      }
-      if (currentRideSession?.status === 'completed') {
-        rideSessionStatus = 'dropoffended';
-        inRideStatus = 'ended';
-      }
-
-      const location = {
-        pickUpLocation: currentRideSession?.pickUpAddress,
-        dropOffLocation: currentRideSession?.dropOffAddress,
-        pickUpLoc: {
-          latitude: currentRideSession?.pickUpLocation?.coordinates[1],
-          longitude: currentRideSession?.pickUpLocation?.coordinates[0],
-        },
-        dropOffLoc: {
-          latitude: currentRideSession?.dropOffLocation?.coordinates[1],
-          longitude: currentRideSession?.dropOffLocation?.coordinates[1],
-        },
-      };
-
-      let {
-        pickUpLocation,
-        dropOffLocation,
-        pickUpAddress,
-        dropOffAddress,
-        ...rideSessionData
-      } = currentRideSession;
-      rideSessionData = {...rideSessionData, location};
-
-      const dataRide = {
-        data: {
-          ...rideSessionData,
-          rideStatus: rideSessionStatus,
-          type: rideType,
-        },
-        inRide: inRideStatus,
-      };
-
-      await dispatch(createRideSession(dataRide));
     } else {
+      console.log('ELKSE RRsadkljlbjsadhlsial');
       setLoading(true);
       await dispatch(
         newRides({
@@ -88,28 +96,6 @@ function RidesList() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (rides?.newRides) {
-      if (active === 0) {
-        let updatedArr = rides?.newRides?.data?.rides?.map(item => {
-          return {
-            ...item,
-            isScheduled: false,
-          };
-        });
-        setRideRequests(updatedArr);
-      } else {
-        let updatedArr = rides?.newRides?.data?.schedulingRides?.map(item => {
-          return {
-            ...item,
-            isScheduled: true,
-          };
-        });
-        setRideRequests(updatedArr);
-      }
-    }
-  }, [active, rides?.newRides?.data]);
 
   const tabChange = index => {
     setActive(index);

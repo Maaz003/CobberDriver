@@ -35,7 +35,7 @@ function MapHeader(props) {
 }
 const styles = StyleSheet.create({
   headerView: {
-    zIndex: 99999,
+    zIndex: 99,
     width: R.unit.width(0.97),
     paddingVertical: R.unit.scale(10),
     position: 'absolute',
