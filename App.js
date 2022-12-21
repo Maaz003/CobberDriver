@@ -109,12 +109,13 @@ const App = () => {
     const dispatch = useDispatch();
 
     const [isAccess, setIsAccess] = useState(false);
-    useEffect(() => {
-      LocalNotification({
-        title: 'qwwwwwwww',
-        text: '----------',
-      });
-    }, []);
+
+    // useEffect(() => {
+    //   LocalNotification({
+    //     title: 'qwwwwwwww',
+    //     text: '----------',
+    //   });
+    // }, []);
 
     const getToken = async () => {
       try {

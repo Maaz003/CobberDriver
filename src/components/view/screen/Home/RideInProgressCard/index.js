@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {useDispatch, useSelector} from 'react-redux';
-import {scheduledRides} from '@store/scheduleRides/scheduleSlice';
 import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
