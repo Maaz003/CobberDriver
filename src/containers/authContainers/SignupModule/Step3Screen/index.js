@@ -43,6 +43,7 @@ function Step3Screen(props) {
       model,
       color,
       vehicleId,
+      licenseNumber,
     } = step2Data;
     let driverPics = pictures;
     const [lat, long] = currentLocation.coordinates;
@@ -59,6 +60,7 @@ function Step3Screen(props) {
     formData.append('color', color);
     formData.append('model', model);
     formData.append('vehicle', vehicleId);
+    formData.append('licenseNumber', licenseNumber);
     formData.append('password', authUser?.password);
     formData.append('passwordConfirm', authUser?.confirmPassword);
 
@@ -136,6 +138,7 @@ function Step3Screen(props) {
         });
 
         const userData = await convertFormData();
+        console.log('FOM', JSON.stringify(userData, null, 2));
         const signUrl = URL('auth/driver-signup');
         const response = await Post(signUrl, userData);
         if (response !== undefined) {

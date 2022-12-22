@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {createRideSession} from '@store/ride/rideSlice';
 import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';

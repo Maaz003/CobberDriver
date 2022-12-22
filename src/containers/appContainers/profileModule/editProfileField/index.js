@@ -42,6 +42,7 @@ function EditProfileField(props) {
   };
   const Header = apiHeader(userToken, false);
   const [text, setText] = useState(fieldValue);
+  const [phoneNumber, setPhoneNumber] = useState(fieldValue);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState({
     oldPassword: '',
@@ -59,6 +60,7 @@ function EditProfileField(props) {
     oldPassword: '',
     password: '',
     confirmPassword: '',
+    phoneNumber: '',
   });
 
   useEffect(() => {
@@ -167,7 +169,8 @@ function EditProfileField(props) {
   const updateNumber = async () => {
     setIsLoading(true);
     const reqData = {
-      text: text,
+      dialCode: dialCode,
+      phoneNumber: phoneNumber,
     };
 
     const formError = FormValidation(reqData);
@@ -179,20 +182,20 @@ function EditProfileField(props) {
       });
       setErrorField({
         ...{
-          text: '',
+          phoneNumber: '',
         },
         ...obj,
       });
     } else {
       setErrorField({
-        text: '',
+        phoneNumber: '',
       });
       try {
         const updatePhone = URL('auth/updateContact');
         const userData = {
           dialCode: dialCode,
           countryCode: countryCode,
-          contact: text,
+          contact: phoneNumber,
         };
         const response = await Patch(updatePhone, userData, Header);
         if (response !== undefined) {
@@ -283,224 +286,231 @@ function EditProfileField(props) {
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
-      <ScrollView
+      {/* <ScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           paddingBottom: Platform.OS === 'ios' ? 50 : 50,
           flex: 1,
+        }}> */}
+      <KeyboardAwareScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps="always"
+        contentContainerStyle={{
+          alignItems: 'center',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignContent: 'space-between',
+          justifyContent: 'space-between',
+          paddingBottom: Platform.OS === 'ios' ? 50 : 50,
         }}>
-        <KeyboardAwareScrollView
-          style={styles.container}
-          keyboardShouldPersistTaps="always"
-          contentContainerStyle={{
-            alignItems: 'center',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignContent: 'space-between',
-            justifyContent: 'space-between',
-          }}>
-          <View style={{width: '100%'}}>
-            <Text
-              variant={'h2'}
-              font={'bold'}
-              gutterTop={5}
-              gutterBottom={20}
-              color={R.color.charcoalShade}
-              align={'left'}
-              transform={'capitalize'}>
-              Update your {title}
-            </Text>
-            {title === 'Name' ? (
+        <View style={{width: '100%'}}>
+          <Text
+            variant={'h2'}
+            font={'PoppinsMedium'}
+            gutterTop={5}
+            gutterBottom={20}
+            color={R.color.charcoalShade}
+            align={'left'}
+            transform={'capitalize'}>
+            Update your {title}
+          </Text>
+          {title === 'Name' ? (
+            <TextInput
+              secureText={false}
+              placeholder={'Name'}
+              onChangeText={value => {
+                setText(value);
+              }}
+              value={text}
+              title={title}
+              borderRadius={0}
+              inputWidth={0.93}
+              formError={errorField.text}
+              backgroundColor={R.color.lightSilver}
+              borderColor={R.color.lightSilver}
+              placeholdercolor={R.color.black}
+              inputContainerStyles={{
+                borderBottomWidth: R.unit.scale(1.5),
+                borderBottomColor: R.color.black,
+              }}
+            />
+          ) : title === 'Number' ? (
+            <View
+              style={{
+                ...R.styles.twoItemsRow,
+                alignItems: 'stretch',
+              }}>
+              <View>
+                <Text
+                  variant={'body2'}
+                  font={'semiBold'}
+                  color={R.color.inputTitle}
+                  gutterBottom={3}
+                  transform={'none'}>
+                  Dial Code
+                </Text>
+                <View style={styles.countryFlag}>
+                  <CountryFlag
+                    isoCode={countryCode ? countryCode : 'de'}
+                    size={20}
+                  />
+                  <Text
+                    variant={'body2'}
+                    font={'bold'}
+                    color={R.color.black}
+                    align={'center'}
+                    style={{marginLeft: R.unit.scale(5)}}
+                    transform={'none'}>
+                    {dialCode}
+                  </Text>
+                  <TouchableOpacity onPress={openCountryListModal}>
+                    <Icon
+                      name={'arrow-drop-down'}
+                      type={'MaterialIcons'}
+                      color={R.color.black}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
               <TextInput
                 secureText={false}
-                placeholder={'Name'}
+                placeholder={'Number'}
                 onChangeText={value => {
-                  setText(value);
+                  setPhoneNumber(value);
                 }}
-                value={text}
-                title={title}
+                color={R.color.black}
+                value={phoneNumber}
+                inputWidth={R.unit.height(1) > 900 ? 0.76 : 0.6}
+                width={R.unit.height(1) > 900 ? 0.76 : 0.6}
                 borderRadius={0}
-                inputWidth={0.93}
-                formError={errorField.text}
-                backgroundColor={R.color.lightSilverShade2}
+                title={'Number'}
+                keyboardType={'phone-pad'}
+                backgroundColor={R.color.lightSilver}
+                borderColor={R.color.lightSilver}
+                placeholdercolor={R.color.black}
+                inputContainerStyles={{
+                  borderBottomWidth: R.unit.scale(1.5),
+                  borderBottomColor: R.color.black,
+                  flex: 1,
+                  marginLeft: R.unit.scale(10),
+                  paddingTop: 0,
+                }}
+                formError={errorField?.phoneNumber}
+                // errorMTop={8}
+                errorMBottom={-20}
+              />
+            </View>
+          ) : (
+            <>
+              <TextInput
+                secureText={true}
+                placeholder={'Old Password'}
+                onChangeText={value => {
+                  setPassword({...password, oldPassword: value});
+                }}
+                value={password?.oldPassword}
+                borderRadius={0}
+                gutterBottom={24}
+                title={'Old Password'}
+                inputWidth={0.92}
+                widthInPercent={'100%'}
+                formError={errorField?.oldPassword}
+                backgroundColor={R.color.lightSilver}
+                borderColor={R.color.lightSilver}
                 placeholdercolor={R.color.black}
                 inputContainerStyles={{
                   borderBottomWidth: R.unit.scale(1.5),
                   borderBottomColor: R.color.black,
                 }}
+                eyeColor={R.color.black}
               />
-            ) : title === 'Number' ? (
-              <View
-                style={{
-                  ...R.styles.twoItemsRow,
-                  alignItems: 'stretch',
-                }}>
-                <View>
-                  <Text
-                    variant={'body2'}
-                    font={'semiBold'}
-                    color={R.color.inputTitle}
-                    gutterBottom={3}
-                    transform={'none'}>
-                    Dial Code
-                  </Text>
-                  <View style={styles.countryFlag}>
-                    <CountryFlag
-                      isoCode={countryCode ? countryCode : 'de'}
-                      size={20}
-                    />
-                    <Text
-                      variant={'body2'}
-                      font={'bold'}
-                      color={R.color.black}
-                      align={'center'}
-                      style={{marginLeft: R.unit.scale(5)}}
-                      transform={'none'}>
-                      {dialCode}
-                    </Text>
-                    <TouchableOpacity onPress={openCountryListModal}>
-                      <Icon
-                        name={'arrow-drop-down'}
-                        type={'MaterialIcons'}
-                        color={R.color.black}
-                        size={30}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
+              <TextInput
+                secureText={true}
+                placeholder={'New Password'}
+                onChangeText={value => {
+                  setPassword({...password, newPassword: value});
+                }}
+                value={password?.newPassword}
+                borderRadius={0}
+                gutterBottom={24}
+                inputWidth={0.92}
+                widthInPercent={'100%'}
+                title={'New Password'}
+                fontSize={14}
+                formError={errorField?.password}
+                backgroundColor={R.color.lightSilver}
+                borderColor={R.color.lightSilver}
+                placeholdercolor={R.color.black}
+                inputContainerStyles={{
+                  borderBottomWidth: R.unit.scale(1.5),
+                  borderBottomColor: R.color.black,
+                }}
+                eyeColor={R.color.black}
+              />
+              <TextInput
+                secureText={true}
+                placeholder={'Confirm New Password'}
+                onChangeText={value => {
+                  setPassword({
+                    ...password,
+                    confirmNewPassword: value,
+                  });
+                }}
+                value={password?.confirmNewPassword}
+                borderRadius={0}
+                inputWidth={0.92}
+                widthInPercent={'100%'}
+                gutterBottom={24}
+                formErrorText={'Empty Field'}
+                title={'Confirm New Password'}
+                fontSize={14}
+                formError={errorField?.confirmPassword}
+                backgroundColor={R.color.lightSilver}
+                borderColor={R.color.lightSilver}
+                placeholdercolor={R.color.black}
+                inputContainerStyles={{
+                  borderBottomWidth: R.unit.scale(1.5),
+                  borderBottomColor: R.color.black,
+                }}
+                eyeColor={R.color.black}
+              />
+            </>
+          )}
+        </View>
 
-                <TextInput
-                  secureText={false}
-                  placeholder={'Number'}
-                  onChangeText={value => {
-                    setText(value);
-                  }}
-                  value={text}
-                  height={R.unit.scale(40)}
-                  inputWidth={R.unit.height(1) > 900 ? 0.76 : 0.6}
-                  width={R.unit.height(1) > 900 ? 0.76 : 0.6}
-                  borderRadius={0}
-                  title={'Number'}
-                  formError={errorField?.text}
-                  backgroundColor={R.color.lightSilverShade2}
-                  placeholdercolor={R.color.black}
-                  inputContainerStyles={{
-                    borderBottomWidth: R.unit.scale(1.5),
-                    borderBottomColor: R.color.black,
-                    flex: 1,
-                    marginLeft: R.unit.scale(10),
-                  }}
-                  errorMTop={5}
-                />
-              </View>
-            ) : (
-              <>
-                <TextInput
-                  secureText={true}
-                  placeholder={'Old Password'}
-                  onChangeText={value => {
-                    setPassword({...password, oldPassword: value});
-                  }}
-                  value={password?.oldPassword}
-                  borderRadius={0}
-                  gutterBottom={24}
-                  title={'Old Password'}
-                  inputWidth={0.92}
-                  widthInPercent={'100%'}
-                  formError={errorField?.oldPassword}
-                  backgroundColor={R.color.lightSilverShade2}
-                  borderColor={R.color.lightSilverShade2}
-                  placeholdercolor={R.color.black}
-                  inputContainerStyles={{
-                    borderBottomWidth: R.unit.scale(1.5),
-                    borderBottomColor: R.color.black,
-                  }}
-                  eyeColor={R.color.black}
-                />
-                <TextInput
-                  secureText={true}
-                  placeholder={'New Password'}
-                  onChangeText={value => {
-                    setPassword({...password, newPassword: value});
-                  }}
-                  value={password?.newPassword}
-                  borderRadius={0}
-                  gutterBottom={24}
-                  inputWidth={0.92}
-                  widthInPercent={'100%'}
-                  title={'New Password'}
-                  fontSize={14}
-                  formError={errorField?.password}
-                  backgroundColor={R.color.lightSilverShade2}
-                  borderColor={R.color.lightSilverShade2}
-                  placeholdercolor={R.color.black}
-                  inputContainerStyles={{
-                    borderBottomWidth: R.unit.scale(1.5),
-                    borderBottomColor: R.color.black,
-                  }}
-                  eyeColor={R.color.black}
-                />
-                <TextInput
-                  secureText={true}
-                  placeholder={'Confirm New Password'}
-                  onChangeText={value => {
-                    setPassword({
-                      ...password,
-                      confirmNewPassword: value,
-                    });
-                  }}
-                  value={password?.confirmNewPassword}
-                  borderRadius={0}
-                  inputWidth={0.92}
-                  widthInPercent={'100%'}
-                  gutterBottom={24}
-                  formErrorText={'Empty Field'}
-                  title={'Confirm New Password'}
-                  fontSize={14}
-                  formError={errorField?.confirmPassword}
-                  backgroundColor={R.color.lightSilverShade2}
-                  borderColor={R.color.lightSilverShade2}
-                  placeholdercolor={R.color.black}
-                  inputContainerStyles={{
-                    borderBottomWidth: R.unit.scale(1.5),
-                    borderBottomColor: R.color.black,
-                  }}
-                  eyeColor={R.color.black}
-                />
-              </>
-            )}
-          </View>
-
-          <Button
-            value={title === 'Number' ? 'Next' : 'Update'}
-            bgColor={R.color.mainColor}
-            width={'100%'}
-            size={'lg'}
-            gutterTop={R.unit.scale(20)}
-            height={50}
-            variant={'h6'}
-            font={'bold'}
-            color={'black'}
-            borderRadius={100}
-            borderColor={R.color.mainColor}
-            loader={isLoading}
-            loaderColor={R.color.black}
-            onPress={formCompleted}
-            borderWidth={1}
-          />
-        </KeyboardAwareScrollView>
-      </ScrollView>
-      <CountryListModal
-        isVisibleModal={isModal}
-        loaderParentCall={countryDropDown}
-      />
-      <OTPModal
-        isVisibleModal={isOtpModal}
-        loaderParentCall={countryDropDown}
-        otpCode={code}
-        {...props}
-      />
+        <Button
+          value={title === 'Number' ? 'Next' : 'Update'}
+          bgColor={R.color.mainColor}
+          width={'100%'}
+          size={'lg'}
+          gutterTop={R.unit.scale(20)}
+          height={50}
+          variant={'h6'}
+          font={'bold'}
+          color={'black'}
+          borderRadius={100}
+          borderColor={R.color.mainColor}
+          loader={isLoading}
+          disabled={isLoading}
+          loaderColor={R.color.black}
+          onPress={formCompleted}
+          borderWidth={1}
+        />
+        <CountryListModal
+          isVisibleModal={isModal}
+          loaderParentCall={countryDropDown}
+        />
+        <OTPModal
+          isVisibleModal={isOtpModal}
+          loaderParentCall={countryDropDown}
+          otpCode={code}
+          {...props}
+        />
+      </KeyboardAwareScrollView>
+      {/* </ScrollView> */}
     </ScreenBoiler>
   );
 }
@@ -509,8 +519,9 @@ export default EditProfileField;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    marginTop: R.unit.scale(30),
+    paddingTop: R.unit.scale(30),
     paddingHorizontal: R.unit.scale(20),
+    backgroundColor: R.color.lightSilver,
   },
   buttonLayout: {
     width: '100%',

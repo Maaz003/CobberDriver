@@ -30,12 +30,14 @@ function Step2Screen(props) {
     color: '',
     vehicle: '',
     vehicleId: '',
+    licenseNumber: '',
   });
   const [errorField, setErrorField] = useState({
     model: '',
     color: '',
     vehicle: '',
     vehicleId: '',
+    licenseNumber: '',
   });
 
   const [options, setOptions] = useState([
@@ -126,6 +128,7 @@ function Step2Screen(props) {
         color: authUser?.color,
         vehicle: authUser?.vehicle,
         vehicleId: authUser?.vehicleId,
+        licenseNumber: authUser?.licenseNumber,
       };
       const formError = FormValidation(formData);
       if (formError) {
@@ -152,6 +155,7 @@ function Step2Screen(props) {
           pictures: options,
           vehicle: authUser?.vehicle,
           vehicleId: authUser?.vehicleId,
+          licenseNumber: authUser?.licenseNumber,
         };
         navigation.navigate('Step3', {
           step2Data: {...step1Data, ...reqData},
@@ -240,6 +244,20 @@ function Step2Screen(props) {
             iconName={'truck'}
             iconType={'MaterialCommunityIcons'}
             formError={errorField?.color}
+          />
+          <TextInput
+            secureText={false}
+            placeholder={`License Number`}
+            onChangeText={text => {
+              setAuthUser({...authUser, licenseNumber: text});
+            }}
+            color={R.color.white}
+            value={authUser?.licenseNumber}
+            widthInPercent={'100%'}
+            gutterBottom={24}
+            iconName={'truck'}
+            iconType={'MaterialCommunityIcons'}
+            formError={errorField?.licenseNumber}
           />
 
           {options?.map(item => {

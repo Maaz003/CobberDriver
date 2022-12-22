@@ -76,7 +76,7 @@ function Profile(props) {
               resizeMode="cover"
               style={styles.profileImage}
               imageStyle={{borderRadius: R.unit.scale(120)}}
-              source={{uri: photo}}
+              source={{uri: imageUrl(user?.user?.photo)}}
             />
           )}
           <TouchableOpacity
@@ -214,8 +214,9 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    marginTop: R.unit.scale(30),
+    paddingTop: R.unit.scale(30),
     paddingHorizontal: R.unit.scale(10),
+    backgroundColor: R.color.lightSilver,
   },
   buttonLayout: {
     width: '100%',

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
+import {createRideSession} from '@store/ride/rideSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';

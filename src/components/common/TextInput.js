@@ -63,7 +63,7 @@ const TextInput = props => {
       {title && (
         <Text
           variant={'body2'}
-          font={'semiBold'}
+          font={'PoppinsRegular'}
           gutterTop={1}
           gutterBottom={2}
           color={R.color.inputTitle}

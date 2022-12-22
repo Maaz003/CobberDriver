@@ -33,12 +33,13 @@ const aspectRatio = originalWidth / originalHeight;
 const CustomDrawer = props => {
   const {navigation} = props;
   const user = useSelector(state => state.user);
-  let picture = imageUrl + user?.user?.photo;
   const [isModal, setIsModal] = useState(false);
 
   const toggleDrawer = () => {
     navigation.toggleDrawer();
   };
+
+  console.log('USER', JSON.stringify(user?.user, null, 2));
 
   const navigateProfile = () => {
     navigation.navigate('Profile');
@@ -165,8 +166,8 @@ const CustomDrawer = props => {
                 <Image
                   resizeMode="cover"
                   style={styles.image}
-                  imageStyle={{borderRadius: 120}}
-                  source={{uri: picture}}
+                  imageStyle={{borderRadius: R.unit.scale(120)}}
+                  source={{uri: imageUrl(user?.user?.photo)}}
                 />
               </TouchableOpacity>
             )}
@@ -184,6 +185,7 @@ const CustomDrawer = props => {
                 font={'PoppinsSemiBold'}
                 color={R.color.white}
                 align={'left'}
+                numberOfLines={2}
                 transform={'capitalize'}>
                 {user?.user?.displayName}
               </Text>
@@ -204,7 +206,7 @@ const CustomDrawer = props => {
                   }}
                   align={'left'}
                   transform={'capitalize'}>
-                  5.0
+                  {user?.user?.ratingsAverage.toFixed(1)}
                 </Text>
               </View>
             </View>
@@ -258,8 +260,8 @@ const styles = StyleSheet.create({
     padding: R.unit.scale(20),
   },
   image: {
-    height: R.unit.scale(80),
-    width: R.unit.scale(80),
+    height: R.unit.scale(100),
+    width: R.unit.scale(100),
     borderRadius: R.unit.scale(120),
     borderColor: R.color.black,
     borderWidth: 1.5,
@@ -274,6 +276,7 @@ const styles = StyleSheet.create({
   nameView: {
     justifyContent: 'center',
     marginLeft: R.unit.scale(10),
+    flex: 1,
   },
   ratingView: {
     flexDirection: 'row',

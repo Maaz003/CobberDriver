@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image, Keyboard} from 'react-native';
-import {createRideSession} from '@store/user/userSlice';
 import {URL, apiHeader} from '@config/apiUrl';
+import {createRideSession} from '@store/ride/rideSlice';
 import {Post} from '@axios/AxiosInterceptorFunction';
 import {updateUser} from '@store/user/userSlice';
 import Text from '@components/common/Text';
@@ -20,7 +20,8 @@ function RideCompletedBox(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  const rideSession = user?.rideSession;
+  const ride = useSelector(state => state.ride);
+  const rideSession = ride?.rideSession;
   const {_id: rideId, mainRideId, isSchedule} = rideSession;
   const {displayName, photo, city, country} = rideSession?.customer;
   const {pickUpLocation, dropOffLocation} = rideSession?.location;

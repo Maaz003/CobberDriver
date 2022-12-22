@@ -214,27 +214,27 @@ export const scheduledRideTime = createAsyncThunk(
   },
 );
 
-export const createRideSession = createAsyncThunk(
-  'user/createRideSession',
-  async data => {
-    try {
-      return {
-        status: 'success',
-        error: false,
-        message: 'Success!',
-        isData: data.inRide,
-        rideData: data.data,
-      };
-    } catch (error) {
-      return {
-        status: 'failed',
-        error: true,
-        message: 'Oops! Something went wrong!',
-        isData: undefined,
-      };
-    }
-  },
-);
+// export const createRideSession = createAsyncThunk(
+//   'user/createRideSession',
+//   async data => {
+//     try {
+//       return {
+//         status: 'success',
+//         error: false,
+//         message: 'Success!',
+//         isData: data.inRide,
+//         rideData: data.data,
+//       };
+//     } catch (error) {
+//       return {
+//         status: 'failed',
+//         error: true,
+//         message: 'Oops! Something went wrong!',
+//         isData: undefined,
+//       };
+//     }
+//   },
+// );
 
 export const clearUser = createAsyncThunk('user/clearUser', async data => {
   try {
@@ -269,8 +269,8 @@ const initialState = {
   locationLoader: true,
   scheduledTime: undefined,
   pinLoc: true,
-  inRide: 'finished',
-  rideSession: undefined,
+  // inRide: 'finished',
+  // rideSession: undefined,
 };
 
 const userSlice = createSlice({
@@ -363,13 +363,13 @@ const userSlice = createSlice({
       state.error = false;
       state.locationLoader = action.payload.isData;
     },
-    [createRideSession.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
-      state.isLoadingRequest = false;
-      state.error = false;
-      state.inRide = action.payload.isData;
-      state.rideSession = action.payload.rideData;
-    },
+    // [createRideSession.fulfilled]: (state, action) => {
+    //   state.status = 'succeeded';
+    //   state.isLoadingRequest = false;
+    //   state.error = false;
+    //   state.inRide = action.payload.isData;
+    //   state.rideSession = action.payload.rideData;
+    // },
 
     [clearUser.fulfilled]: (state, action) => {
       state.status = 'succeeded';
@@ -386,8 +386,8 @@ const userSlice = createSlice({
       state.errorMessage = '';
       state.scheduledTime = undefined;
       state.pinLoc = true;
-      state.inRide = 'finished';
-      state.rideSession = undefined;
+      // state.inRide = 'finished';
+      // state.rideSession = undefined;
     },
   },
 });

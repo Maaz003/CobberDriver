@@ -3,7 +3,6 @@ import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import moment from 'moment';
 import {imageUrl} from '@config/apiUrl';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import {useIsFocused} from '@react-navigation/native';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
@@ -23,6 +22,7 @@ import {
   updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
 import TruckLoader from '@components/common/TruckLoader';
+import {createRideSession} from '@store/ride/rideSlice';
 
 function RideDetailsScreen(props) {
   const {navigation} = props;

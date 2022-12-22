@@ -18,7 +18,7 @@ function CreditCard(props) {
         }}>
         <Text
           variant={'body2'}
-          font={'regular'}
+          font={'PoppinsRegular'}
           color={R.color.white}
           align={'right'}
           gutterTop={20}
@@ -31,18 +31,18 @@ function CreditCard(props) {
       <View style={[R.styles.rowView, styles.numberView]}>
         <Text
           variant={'h3'}
-          font={'regular'}
+          font={'PoppinsRegular'}
           color={R.color.white}
           align={'left'}
           style={{width: '70%'}}
           transform={'capitalize'}>
-          **** **** **** 1234
+          **** **** **** {cardData?.endDigits ? cardData?.endDigits : '1234'}
         </Text>
         <View style={[R.styles.twoItemsRow, styles.validThruView]}>
           <View>
             <Text
               variant={'small'}
-              font={'regular'}
+              font={'PoppinsRegular'}
               color={R.color.white}
               align={'left'}
               style={{
@@ -54,7 +54,7 @@ function CreditCard(props) {
             </Text>
             <Text
               variant={'small'}
-              font={'regular'}
+              font={'PoppinsRegular'}
               color={R.color.white}
               align={'left'}
               style={{
@@ -67,11 +67,12 @@ function CreditCard(props) {
           </View>
           <Text
             variant={'body1'}
-            font={'regular'}
+            font={'PoppinsRegular'}
             color={R.color.white}
             align={'right'}
             transform={'capitalize'}>
-            03/24
+            {cardData?.validMonth ? cardData?.validMonth : '01'}/
+            {cardData?.validYear ? cardData?.validYear : '01'}
           </Text>
         </View>
       </View>
