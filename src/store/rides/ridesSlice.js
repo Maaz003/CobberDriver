@@ -15,6 +15,8 @@ export const newRides = createAsyncThunk('rides/newRides', async data => {
     const newRidesURL = URL('rides/new');
     const response = await Get(newRidesURL, token);
 
+    console.log('RESPOSNE NEW RIDES', JSON.stringify(response?.data, null, 2));
+
     if (response !== undefined) {
       return {
         status: 'success',

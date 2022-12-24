@@ -86,7 +86,7 @@ function RidesList() {
         await dispatch(createRideSession(dataRide));
       }
     } else {
-      console.log('ELKSE RRsadkljlbjsadhlsial');
+      console.log('ELKSE RRsadkljlbjsadhlsial', rides?.newRides);
       setLoading(true);
       await dispatch(
         newRides({
@@ -110,6 +110,28 @@ function RidesList() {
   const renderItem = ({item, index}) => {
     return <CustomerCard item={item} key={index} />;
   };
+
+  useEffect(() => {
+    if (rides?.newRides) {
+      if (active === 0) {
+        let updatedArr = rides?.newRides?.data?.rides?.map(item => {
+          return {
+            ...item,
+            isScheduled: false,
+          };
+        });
+        setRideRequests(updatedArr);
+      } else {
+        let updatedArr = rides?.newRides?.data?.schedulingRides?.map(item => {
+          return {
+            ...item,
+            isScheduled: true,
+          };
+        });
+        setRideRequests(updatedArr);
+      }
+    }
+  }, [active, rides?.newRides?.data]);
 
   return (
     <BottomSheet

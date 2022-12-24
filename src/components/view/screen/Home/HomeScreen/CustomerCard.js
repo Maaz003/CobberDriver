@@ -24,6 +24,8 @@ function CustomerCard(props) {
     dropOffLocation: rideData?.dropOffAddress,
   };
 
+  console.log('ITEM', JSON.stringify(item, null, 2));
+
   const scheduleTime = item.isScheduled && {
     pickUpTime: item?.slots?.pickupStartTime,
     dropOffTime: item?.slots?.dropOffEndTime,

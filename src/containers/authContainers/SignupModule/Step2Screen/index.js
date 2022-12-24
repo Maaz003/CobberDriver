@@ -247,7 +247,7 @@ function Step2Screen(props) {
           />
           <TextInput
             secureText={false}
-            placeholder={`License Number`}
+            placeholder={`Vehcile Registration Number`}
             onChangeText={text => {
               setAuthUser({...authUser, licenseNumber: text});
             }}
