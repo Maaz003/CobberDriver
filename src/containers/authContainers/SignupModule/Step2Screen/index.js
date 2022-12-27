@@ -124,11 +124,11 @@ function Step2Screen(props) {
       });
     } else {
       const formData = {
-        model: authUser?.model,
-        color: authUser?.color,
-        vehicle: authUser?.vehicle,
+        model: authUser?.model.trim(),
+        color: authUser?.color.trim(),
+        vehicle: authUser?.vehicle.trim(),
         vehicleId: authUser?.vehicleId,
-        licenseNumber: authUser?.licenseNumber,
+        licenseNumber: authUser?.licenseNumber.trim(),
       };
       const formError = FormValidation(formData);
       if (formError) {
@@ -142,12 +142,17 @@ function Step2Screen(props) {
             color: '',
             vehicle: '',
             vehicleId: '',
+            licenseNumber: '',
           },
           ...obj,
         });
       } else {
         setErrorField({
           model: '',
+          color: '',
+          vehicle: '',
+          vehicleId: '',
+          licenseNumber: '',
         });
         const reqData = {
           model: authUser?.model,
@@ -247,7 +252,7 @@ function Step2Screen(props) {
           />
           <TextInput
             secureText={false}
-            placeholder={`Vehcile Registration Number`}
+            placeholder={`Vehicle Registration Number`}
             onChangeText={text => {
               setAuthUser({...authUser, licenseNumber: text});
             }}

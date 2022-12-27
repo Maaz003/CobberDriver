@@ -27,14 +27,13 @@ function HomeScreen(props) {
   };
 
   const fetchLiveLocation = () => {
-    console.log('get live');
     CurrentLocation({actionCall: dispatch, flag: 'home'});
-    if (socketRef?.current) {
-      socketRef.current = io(apiUrl);
-      socketRef.current.emit('location', async data => {
-        console.log('ASDASDSADAS SOCKET', data?.ride);
-      });
-    }
+    // if (socketRef?.current) {
+    // socketRef.current = io(apiUrl);
+    // socketRef.current.emit('location', async data => {
+    //   console.log('ASDASDSADAS SOCKET', data?.ride);
+    // });
+    // }
   };
 
   useEffect(() => {

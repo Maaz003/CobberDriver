@@ -108,6 +108,7 @@ const App = () => {
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
+    console.log('AWKWARD', auth?.firstTimePop);
     const [isAccess, setIsAccess] = useState(false);
 
     // useEffect(() => {

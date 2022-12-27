@@ -14,8 +14,6 @@ function EarningsScreen(props) {
 
   const user = useSelector(state => state.user);
 
-  console.log(':user', user?.user);
-
   const [active, setActive] = useState(0);
 
   const cards = [

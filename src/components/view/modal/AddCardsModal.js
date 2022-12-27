@@ -17,7 +17,6 @@ import Text from '@components/common/Text';
 import {toastConfig} from '@components/utils/Validators';
 
 function AddCardsModal(props) {
-  console.log('STRIPE_KEY', STRIPE_KEY);
   const {submitCard} = props;
   const auth = useSelector(state => state.auth);
   const authToken = auth?.userToken;

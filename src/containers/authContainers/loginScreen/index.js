@@ -67,8 +67,8 @@ function LoginScreen(props) {
     }
 
     const reqData = {
-      email: authUser?.email,
-      password: authUser?.password,
+      email: authUser?.email.trim(),
+      password: authUser?.password.trim(),
       fcmToken: deviceToken,
     };
     const formError = FormValidation(reqData);

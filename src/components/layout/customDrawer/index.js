@@ -39,8 +39,6 @@ const CustomDrawer = props => {
     navigation.toggleDrawer();
   };
 
-  console.log('USER', JSON.stringify(user?.user, null, 2));
-
   const navigateProfile = () => {
     navigation.navigate('Profile');
     navigation.closeDrawer();
@@ -49,6 +47,11 @@ const CustomDrawer = props => {
   const switchScreen = data => {
     if (data?.id === 8) {
       logOutFunction();
+    } else if (data.id === 1) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'HomeScreen'}],
+      });
     } else if (data.id === 2) {
       navigation.navigate('Payment', {
         type: 'home',

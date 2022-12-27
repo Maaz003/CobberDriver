@@ -198,8 +198,6 @@ function OnGoingRideScreen(props) {
     }
   };
 
-  console.log('DATA', origin, destination, duration);
-
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
       <View style={R.styles.mainLayout}>

@@ -29,7 +29,7 @@ function ScheduledRidesScreen(props) {
   const isFocused = useIsFocused();
   const user = useSelector(state => state.user);
   const userToken = user?.userToken;
-  const [rides, setRides] = useState();
+  const [rides, setRides] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -80,10 +80,6 @@ function ScheduledRidesScreen(props) {
           let updatedArray = results.filter(item =>
             status.includes(item.status),
           );
-          console.log(
-            'UPDATED ARRAT',
-            updatedArray?.map(item => item.status),
-          );
           let reversedArray = updatedArray?.reverse().slice(0);
 
           setHistory(reversedArray);
@@ -123,14 +119,12 @@ function ScheduledRidesScreen(props) {
   const selectTab = item => {
     const {status, id} = item;
     setTab(id);
-    let tempArr = rides.slice(0);
+    let tempArr = rides.length > 0 ? rides.slice(0) : [];
     let updatedArray = tempArr.filter(item => status.includes(item.status));
     let reversedArray = updatedArray?.reverse().slice(0);
 
     setHistory(reversedArray);
   };
-
-  console.log('TAB', tab);
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>

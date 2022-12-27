@@ -113,7 +113,7 @@ export const getUpdatedProfile = async props => {
       await actionCall(updateUser(user));
     }
   } catch (error) {
-    console.log('Cannot get updated profile', error);
+    // console.log('Cannot get profile', error);
   }
 };
 

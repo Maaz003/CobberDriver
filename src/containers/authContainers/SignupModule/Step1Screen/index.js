@@ -195,11 +195,11 @@ function Step1Screen(props) {
       });
     } else {
       const formData = {
-        name: authUser?.name,
-        email: authUser?.email,
+        name: authUser?.name.trim(),
+        email: authUser?.email.trim(),
         dialCode: authUser?.dialCode,
         country: authUser?.country,
-        phoneNumber: authUser?.phoneNumber,
+        phoneNumber: authUser?.phoneNumber.trim(),
       };
 
       const formError = FormValidation(formData);
@@ -299,7 +299,7 @@ function Step1Screen(props) {
             gutterBottom={10}
             color={R.color.mainColor}
             align={'left'}
-            lineHeight={Platform.OS === 'ios' ? 56 : 40}
+            lineHeight={Platform.OS === 'ios' ? 56 : 55}
             transform={'none'}>
             Driver Account
           </Text>

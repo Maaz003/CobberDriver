@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  BackHandler,
-} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, BackHandler} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -24,8 +17,6 @@ import Icon from '@components/common/Icon';
 import CountryListModal from '@components/view/modal/CountryListModal';
 import OTPModal from '@components/view/modal/OTPModal';
 import FormValidation from '@components/utils/FormValidation';
-
-const width = Dimensions.get('window').width;
 
 function EditProfileField(props) {
   const isFocused = useIsFocused();
@@ -135,32 +126,19 @@ function EditProfileField(props) {
       const userData = {
         displayName: text,
       };
-      try {
-        const response = await Patch(updateURL, userData, Header);
-        if (response !== undefined) {
-          const user = response?.data?.user;
-          dispatch(updateUser(user));
-          Toast.show({
-            title: 'Hurrah!',
-            message: 'Profile Updated Successfully',
-            type: 'success',
-          });
-          setIsLoading(false);
-          navigation.navigate('Profile');
-        } else {
-          setIsLoading(false);
-          Toast.show({
-            title: 'Ooops!',
-            message: 'Profile Not Updated',
-            type: 'danger',
-          });
-        }
-      } catch (error) {
+
+      const response = await Patch(updateURL, userData, Header);
+      if (response !== undefined) {
+        const user = response?.data?.user;
+        dispatch(updateUser(user));
         Toast.show({
-          title: 'Ooops!',
-          message: 'Profile Not Updated',
-          type: 'danger',
+          title: 'Hurrah!',
+          message: 'Profile Updated Successfully',
+          type: 'success',
         });
+        setIsLoading(false);
+        navigation.navigate('Profile');
+      } else {
         setIsLoading(false);
       }
     }
@@ -286,12 +264,6 @@ function EditProfileField(props) {
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>
-      {/* <ScrollView
-        keyboardShouldPersistTaps="always"
-        contentContainerStyle={{
-          paddingBottom: Platform.OS === 'ios' ? 50 : 50,
-          flex: 1,
-        }}> */}
       <KeyboardAwareScrollView
         style={styles.container}
         keyboardShouldPersistTaps="always"
@@ -510,7 +482,6 @@ function EditProfileField(props) {
           {...props}
         />
       </KeyboardAwareScrollView>
-      {/* </ScrollView> */}
     </ScreenBoiler>
   );
 }
@@ -518,7 +489,7 @@ export default EditProfileField;
 
 const styles = StyleSheet.create({
   container: {
-    width: width,
+    width: R.unit.width(1),
     paddingTop: R.unit.scale(30),
     paddingHorizontal: R.unit.scale(20),
     backgroundColor: R.color.lightSilver,
