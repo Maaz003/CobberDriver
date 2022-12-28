@@ -4,6 +4,7 @@ import {Patch, Get} from '@axios/AxiosInterceptorFunction';
 import {apiHeader, URL} from '@config/apiUrl';
 import {updateUser} from '@store/user/userSlice';
 import DeviceInfo from 'react-native-device-info';
+import {getUserCards} from '@store/user/userSlice';
 
 export function stringTrim(value, index = 2) {
   if (value !== undefined) {
@@ -51,8 +52,8 @@ export const calculateDelta = points => {
 
   const midX = (minX + maxX) / 2;
   const midY = (minY + maxY) / 2;
-  const deltaX = maxX - minX + 0.12;
-  const deltaY = maxY - minY + 0.12;
+  const deltaX = maxX - minX + 0.07;
+  const deltaY = maxY - minY + 0.07;
 
   return {
     latitude: midX,
@@ -96,6 +97,17 @@ export const openDirections = (type, location) => {
       return Linking.openURL(browser_url);
     }
   });
+};
+
+export const getUserCreditCards = async props => {
+  const {actionCall, authToken, user} = props;
+  const getCardsURL = URL('users/payment-methods');
+  const response = await Get(getCardsURL, authToken);
+  let cards = response?.data?.data;
+
+  if (response?.data !== undefined) {
+    await actionCall(getUserCards(cards));
+  }
 };
 
 export const openCall = data => {
@@ -181,4 +193,5 @@ export default {
   fareRoundOff,
   getUpdatedProfile,
   getDeviceID,
+  getUserCreditCards,
 };

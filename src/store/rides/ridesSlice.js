@@ -15,14 +15,17 @@ export const newRides = createAsyncThunk('rides/newRides', async data => {
     const newRidesURL = URL('rides/new');
     const response = await Get(newRidesURL, token);
 
-    console.log('RESPOSNE NEW RIDES', JSON.stringify(response?.data, null, 2));
-
     if (response !== undefined) {
+      let combinedArr = [
+        ...response?.data?.data?.rides,
+        ...response?.data?.data?.schedulingRides,
+      ];
       return {
         status: 'success',
         error: false,
         message: 'Success!',
         rideData: response?.data,
+        newRideDataCount: combinedArr.length,
       };
     } else {
       return {
@@ -41,26 +44,23 @@ export const newRides = createAsyncThunk('rides/newRides', async data => {
   }
 });
 
-export const clearScheduleRides = createAsyncThunk(
-  'plans/clearScheduleRides',
-  async data => {
-    try {
-      return {
-        status: 'success',
-        error: false,
-        message: 'Success!',
-        isData: data,
-      };
-    } catch (error) {
-      return {
-        status: 'failed',
-        error: true,
-        message: 'Oops! Something went wrong!',
-        isData: undefined,
-      };
-    }
-  },
-);
+export const clearRides = createAsyncThunk('plans/clearRides', async data => {
+  try {
+    return {
+      status: 'success',
+      error: false,
+      message: 'Success!',
+      isData: data,
+    };
+  } catch (error) {
+    return {
+      status: 'failed',
+      error: true,
+      message: 'Oops! Something went wrong!',
+      isData: undefined,
+    };
+  }
+});
 
 const initialState = {
   isLoadingRequest: false,
@@ -68,6 +68,7 @@ const initialState = {
   error: false,
   errorMessage: '',
   newRides: [],
+  newRidesCount: 0,
 };
 
 const ridesSlice = createSlice({
@@ -90,12 +91,14 @@ const ridesSlice = createSlice({
       state.isLoadingRequest = false;
       state.error = false;
       state.newRides = action.payload.rideData;
+      state.newRidesCount = action.payload.newRideDataCount;
     },
-    [clearScheduleRides.fulfilled]: (state, action) => {
+    [clearRides.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;
-      state.scheduledRides = [];
+      state.newRides = [];
+      state.newRidesCount = 0;
     },
   },
 });

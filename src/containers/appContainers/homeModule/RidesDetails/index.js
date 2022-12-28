@@ -18,6 +18,7 @@ import PopUp from '@components/common/PopUp';
 import {ClockReqIcon, DimensionIcon} from '@components/utils/Svg';
 import {
   openDirections,
+  stringTrim,
   updateRideStartSession,
   updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
@@ -27,8 +28,6 @@ import {createRideSession} from '@store/ride/rideSlice';
 function RideDetailsScreen(props) {
   const {navigation} = props;
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
   const {type = undefined, data = undefined, mainRideId} = props.route.params;
   const {
@@ -53,8 +52,8 @@ function RideDetailsScreen(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const location = {
-    pickUpLocation: pickUpAddress,
-    dropOffLocation: dropOffAddress,
+    pickUpLocation: stringTrim(pickUpAddress, 1),
+    dropOffLocation: stringTrim(dropOffAddress, 1),
     pickUpLoc: {
       latitude: pickUpLocation?.coordinates[1],
       longitude: pickUpLocation?.coordinates[0],
@@ -64,17 +63,6 @@ function RideDetailsScreen(props) {
       longitude: dropOffLocation?.coordinates[0],
     },
   };
-
-  useEffect(() => {
-    if (schedule?.scheduledRides.length > 0) {
-      let obj = schedule?.scheduledRides.find(item => item.id === data.id);
-      if (obj) {
-        setIsRideAccepted(true);
-      } else {
-        setIsRideAccepted(false);
-      }
-    }
-  }, [isFocused]);
 
   const headerProps = {
     isMainHeader: true,

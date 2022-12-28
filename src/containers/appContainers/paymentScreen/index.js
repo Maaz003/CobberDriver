@@ -12,6 +12,7 @@ import CreditCard from '@components/view/cards/CreditCard';
 import Icon from '@components/common/Icon';
 import AddCardsModal from '@components/view/modal/AddCardsModal';
 import PopUp from '@components/common/PopUp';
+import TruckLoader from '@components/common/TruckLoader';
 
 function PaymentScreen(props) {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function PaymentScreen(props) {
   const [isModal, setIsModal] = useState(false);
   const [paymentId, setPaymentId] = useState();
   const [cardData, setCardData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getCards();
@@ -36,12 +38,14 @@ function PaymentScreen(props) {
   }, []);
 
   const getCards = async () => {
+    setIsLoading(true);
     const getCardsURL = URL('users/payment-methods');
     const response = await Get(getCardsURL, authToken);
     if (response !== undefined) {
       dispatch(getUserCards(response?.data?.data));
       setCards(response?.data?.data);
     }
+    setIsLoading(false);
   };
 
   const addCard = data => {
@@ -84,6 +88,7 @@ function PaymentScreen(props) {
 
   return (
     <ScreenBoiler {...props} headerProps={headerProps}>
+      {isLoading && <TruckLoader />}
       <View style={[R.styles.container, styles.mainLayout]}>
         <View style={styles.formView}>
           <CreditCard cardData={cardData} />

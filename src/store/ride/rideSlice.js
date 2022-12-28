@@ -8,7 +8,7 @@ export const initialSetupRequest = createAsyncThunk(
 );
 
 export const createRideSession = createAsyncThunk(
-  'user/createRideSession',
+  'ride/createRideSession',
   async data => {
     try {
       return {
@@ -29,26 +29,23 @@ export const createRideSession = createAsyncThunk(
   },
 );
 
-export const clearScheduleRides = createAsyncThunk(
-  'plans/clearScheduleRides',
-  async data => {
-    try {
-      return {
-        status: 'success',
-        error: false,
-        message: 'Success!',
-        isData: data,
-      };
-    } catch (error) {
-      return {
-        status: 'failed',
-        error: true,
-        message: 'Oops! Something went wrong!',
-        isData: undefined,
-      };
-    }
-  },
-);
+export const clearRide = createAsyncThunk('ride/clearRide', async data => {
+  try {
+    return {
+      status: 'success',
+      error: false,
+      message: 'Success!',
+      isData: data,
+    };
+  } catch (error) {
+    return {
+      status: 'failed',
+      error: true,
+      message: 'Oops! Something went wrong!',
+      isData: undefined,
+    };
+  }
+});
 
 const initialState = {
   isLoadingRequest: false,
@@ -61,7 +58,7 @@ const initialState = {
 };
 
 const rideSlice = createSlice({
-  name: 'rides',
+  name: 'ride',
   initialState: initialState,
   reducers: {},
   extraReducers: {
@@ -72,11 +69,13 @@ const rideSlice = createSlice({
       state.inRide = action.payload.isData;
       state.rideSession = action.payload.rideData;
     },
-    [clearScheduleRides.fulfilled]: (state, action) => {
+    [clearRide.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;
-      state.scheduledRides = [];
+      state.newRides = [];
+      state.inRide = 'finished';
+      state.rideSession = undefined;
     },
   },
 });

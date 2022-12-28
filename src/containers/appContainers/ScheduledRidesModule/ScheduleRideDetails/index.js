@@ -21,6 +21,7 @@ import {
 } from '@components/utils/Svg';
 import {
   openDirections,
+  stringTrim,
   updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
 import PopUp from '@components/common/PopUp';
@@ -57,8 +58,8 @@ function ScheduleRideDetailsScreen(props) {
   const disabledStatuses = ['completed', 'cancelled'];
 
   const location = {
-    pickUpLocation: pickUpAddress,
-    dropOffLocation: dropOffAddress,
+    pickUpLocation: stringTrim(pickUpAddress, 1),
+    dropOffLocation: stringTrim(dropOffAddress, 1),
     pickUpLoc: {
       latitude: pickUpLocation?.coordinates[1],
       longitude: pickUpLocation?.coordinates[0],
@@ -68,8 +69,6 @@ function ScheduleRideDetailsScreen(props) {
       longitude: dropOffLocation?.coordinates[0],
     },
   };
-
-  console.log('RIDES DETAILS SCHEDULE', data?.status);
 
   useEffect(() => {
     if (status === 'completed') {

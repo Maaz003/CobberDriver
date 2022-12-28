@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {ActivityIndicator, Alert, BackHandler, View} from 'react-native';
-import {_SOCKET_REF} from '@store/extra/extraSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import io from 'socket.io-client';
 import {apiUrl} from '@config/apiUrl';
@@ -31,7 +30,6 @@ function HomeScreen(props) {
     // if (socketRef?.current) {
     // socketRef.current = io(apiUrl);
     // socketRef.current.emit('location', async data => {
-    //   console.log('ASDASDSADAS SOCKET', data?.ride);
     // });
     // }
   };

@@ -4,7 +4,9 @@ import {useDispatch} from 'react-redux';
 import {logOut} from '@store/auth/authSlice';
 import {clearUser} from '@store/user/userSlice';
 import {clearCommon} from '@store/common/commonSlice';
+import {clearRides} from '@store/rides/ridesSlice';
 import Text from '@components/common/Text';
+import {clearRide} from '@store/ride/rideSlice';
 import R from '@components/utils/R';
 import Button from '@components/common/Button';
 
@@ -26,6 +28,8 @@ function LogOutModal(props) {
       dispatch(logOut());
       dispatch(clearUser());
       dispatch(clearCommon());
+      dispatch(clearRides());
+      dispatch(clearRide());
     } else {
       setIsBlur(false);
     }
@@ -74,8 +78,6 @@ function LogOutModal(props) {
                 width={'49%'}
                 size={'xmd'}
                 gutterTop={R.unit.scale(20)}
-                variant={'body1'}
-                font={'PoppinsMedium'}
                 color={R.color.charcoalShade}
                 borderRadius={100}
                 onPress={() => buttonSubmit(true)}
@@ -90,8 +92,6 @@ function LogOutModal(props) {
                 width={'49%'}
                 size={'xmd'}
                 gutterTop={R.unit.scale(20)}
-                variant={'body1'}
-                font={'PoppinsMedium'}
                 color={R.color.mainColor}
                 borderRadius={100}
                 onPress={() => buttonSubmit(false)}

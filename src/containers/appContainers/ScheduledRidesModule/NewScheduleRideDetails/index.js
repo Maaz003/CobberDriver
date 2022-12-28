@@ -50,8 +50,8 @@ function NewScheduleRideDetailsScreen(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const location = {
-    pickUpLocation: pickUpAddress,
-    dropOffLocation: dropOffAddress,
+    pickUpLocation: stringTrim(pickUpAddress, 1),
+    dropOffLocation: stringTrim(dropOffAddress, 1),
     pickUpLoc: {
       latitude: pickUpLocation?.coordinates[1],
       longitude: pickUpLocation?.coordinates[0],

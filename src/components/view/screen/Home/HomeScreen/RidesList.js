@@ -11,6 +11,7 @@ import BottomSheet from '@components/common/BottomSheet';
 import {newRides} from '@store/rides/ridesSlice';
 import TruckLoader from '@components/common/TruckLoader';
 import TruckError from '@components/common/TruckError';
+import {getUserCreditCards} from '@components/utils/ReuseableFunctions';
 
 function RidesList() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function RidesList() {
 
   useEffect(() => {
     getNewRides();
+    getUserCreditCards({actionCall: dispatch, authToken: userToken});
   }, [isFocused]);
 
   const getNewRides = async () => {
@@ -31,10 +33,7 @@ function RidesList() {
       //INSTANT RIDE SESSION
       if (user?.user?.driverInfo?.currentRide) {
         let currentRideSession = user?.user?.driverInfo?.currentRide;
-        console.log(
-          'currentRideSession',
-          JSON.stringify(currentRideSession, null, 2),
-        );
+
         let rideSessionStatus;
         let inRideStatus;
         let rideType = currentRideSession?.isSchedule ? 'schedule' : 'instant';
@@ -86,7 +85,6 @@ function RidesList() {
         await dispatch(createRideSession(dataRide));
       }
     } else {
-      console.log('ELKSE RRsadkljlbjsadhlsial', rides?.newRides);
       setLoading(true);
       await dispatch(
         newRides({
@@ -155,7 +153,9 @@ function RidesList() {
               color={R.color.black}
               align={'center'}
               transform={'none'}>
-              02
+              {rides?.newRidesCount < 10
+                ? '0' + rides?.newRidesCount
+                : rides?.newRidesCount}
             </Text>
           </View>
         </View>

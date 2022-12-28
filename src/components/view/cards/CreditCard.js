@@ -80,9 +80,9 @@ function CreditCard(props) {
       <View style={[R.styles.twoItemsRow, styles.validView]}>
         <View style={styles.svgView}>
           {cardData?.cardType === 'mastercard' ? (
-            <VisaIcon height="100%" width="100%" />
-          ) : (
             <MasterCardIcon height="100%" width="100%" />
+          ) : (
+            <VisaIcon height="100%" width="100%" />
           )}
         </View>
       </View>

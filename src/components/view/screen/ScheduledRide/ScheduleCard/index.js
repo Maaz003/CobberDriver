@@ -10,8 +10,6 @@ function ScheduleCard(props) {
   const {item, rideDay} = props;
   const [ridesData, setRidesData] = useState([]);
 
-  console.log('FORU IN NESTED', item.status);
-
   useEffect(() => {
     let tempArr =
       item?.status === 'completed'

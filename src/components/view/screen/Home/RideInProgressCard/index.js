@@ -23,7 +23,6 @@ function RideInProgressCard(props) {
   const {_id: rideId, customer, location, mainRideId, isSchedule} = data;
   const {displayName, photo, contact} = customer;
   const dispatch = useDispatch();
-  const schedule = useSelector(state => state.schedule);
   const user = useSelector(state => state.user);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);

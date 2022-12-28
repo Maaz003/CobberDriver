@@ -63,7 +63,7 @@ function LoginScreen(props) {
     try {
       deviceToken = await messaging().getToken();
     } catch (error) {
-      console.log('ERROR', error);
+      // console.log('ERROR', error);
     }
 
     const reqData = {

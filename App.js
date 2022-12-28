@@ -24,6 +24,7 @@ import Icon from '@components/common/Icon';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import {setFcmToken} from '@store/misc/miscSlice';
+import navigationService from './src/navigation/navigationService';
 
 const App = () => {
   LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -108,7 +109,6 @@ const App = () => {
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    console.log('AWKWARD', auth?.firstTimePop);
     const [isAccess, setIsAccess] = useState(false);
 
     // useEffect(() => {
@@ -153,6 +153,7 @@ const App = () => {
       messaging().setBackgroundMessageHandler(async remoteMessage => {
         console.warn(
           'BACKGROUND MESSGAE HANDLER WHJEN APP WILL BE IN BACKGROUND',
+          remoteMessage,
         );
 
         // Notifications.events().registerNotificationReceivedBackground()
@@ -160,7 +161,8 @@ const App = () => {
 
       messaging().onNotificationOpenedApp(async remoteMessage => {
         // WHEN APP IS OPENED FROM BACKGROUND THIS WILL RUN
-        console.warn('bACKGROUND OPENED');
+        console.warn('bACKGROUND OPENED', remoteMessage);
+        navigationService.navigateReset('HomeScreen');
       });
 
       Notifications.getInitialNotification()
@@ -198,7 +200,6 @@ const App = () => {
     };
 
     useEffect(() => {
-      console.log('BEFORE AUTH UE');
       getLiveLocation();
     }, [isAccess === false]);
 
