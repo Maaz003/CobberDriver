@@ -30,12 +30,14 @@ function Step2Screen(props) {
     color: '',
     vehicle: '',
     vehicleId: '',
+    licenseNumber: '',
   });
   const [errorField, setErrorField] = useState({
     model: '',
     color: '',
     vehicle: '',
     vehicleId: '',
+    licenseNumber: '',
   });
 
   const [options, setOptions] = useState([
@@ -122,10 +124,11 @@ function Step2Screen(props) {
       });
     } else {
       const formData = {
-        model: authUser?.model,
-        color: authUser?.color,
-        vehicle: authUser?.vehicle,
+        model: authUser?.model.trim(),
+        color: authUser?.color.trim(),
+        vehicle: authUser?.vehicle.trim(),
         vehicleId: authUser?.vehicleId,
+        licenseNumber: authUser?.licenseNumber.trim(),
       };
       const formError = FormValidation(formData);
       if (formError) {
@@ -139,12 +142,17 @@ function Step2Screen(props) {
             color: '',
             vehicle: '',
             vehicleId: '',
+            licenseNumber: '',
           },
           ...obj,
         });
       } else {
         setErrorField({
           model: '',
+          color: '',
+          vehicle: '',
+          vehicleId: '',
+          licenseNumber: '',
         });
         const reqData = {
           model: authUser?.model,
@@ -152,6 +160,7 @@ function Step2Screen(props) {
           pictures: options,
           vehicle: authUser?.vehicle,
           vehicleId: authUser?.vehicleId,
+          licenseNumber: authUser?.licenseNumber,
         };
         navigation.navigate('Step3', {
           step2Data: {...step1Data, ...reqData},
@@ -240,6 +249,20 @@ function Step2Screen(props) {
             iconName={'truck'}
             iconType={'MaterialCommunityIcons'}
             formError={errorField?.color}
+          />
+          <TextInput
+            secureText={false}
+            placeholder={`Vehicle Registration Number`}
+            onChangeText={text => {
+              setAuthUser({...authUser, licenseNumber: text});
+            }}
+            color={R.color.white}
+            value={authUser?.licenseNumber}
+            widthInPercent={'100%'}
+            gutterBottom={24}
+            iconName={'truck'}
+            iconType={'MaterialCommunityIcons'}
+            formError={errorField?.licenseNumber}
           />
 
           {options?.map(item => {

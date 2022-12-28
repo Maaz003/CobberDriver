@@ -37,14 +37,6 @@ function FormValidation(data) {
     };
     return error;
   }
-  // if (data?.phoneNumber && data?.phoneNumber?.length <= 8) {
-  //   errorArr.push('phoneNumber');
-  //   let error = {
-  //     errorArr,
-  //     message: 'Number should be greater than 9 digits',
-  //   };
-  //   return error;
-  // }
 
   if (data?.dialCode && data?.phoneNumber) {
     let valid;
@@ -102,6 +94,18 @@ function FormValidation(data) {
     let error = {
       errorArr,
       message: 'An error has occured, focusTags should be selected',
+    };
+    return error;
+  }
+
+  if (
+    data?.color &&
+    !validators.onlyAlphaREX.test(String(data?.color).toLowerCase())
+  ) {
+    errorArr.push('color');
+    let error = {
+      errorArr,
+      message: 'An error has occured, Please Enter only alphabets',
     };
     return error;
   }

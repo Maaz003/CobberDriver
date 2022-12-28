@@ -88,7 +88,7 @@ function OTPModal(props) {
           <View style={[styles.modalView]}>
             <Text
               variant={'h2'}
-              font={'bold'}
+              font={'PoppinsMedium'}
               gutterTop={20}
               color={R.color.black}
               align={'center'}
@@ -105,14 +105,11 @@ function OTPModal(props) {
             <Button
               value={'Verify'}
               bgColor={R.color.mainColor}
-              width={'60%'}
-              size={'xxmd'}
+              width={'100%'}
+              size={'lg'}
               gutterTop={R.unit.scale(20)}
-              variant={'h6'}
-              font={'bold'}
               disabled={isLoading || code?.length < 4}
               color={'black'}
-              borderRadius={100}
               borderColor={R.color.mainColor}
               loader={isLoading}
               loaderColor={'white'}
@@ -139,8 +136,9 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: R.color.white,
     width: '100%',
-    height: R.unit.height(0.4),
     borderRadius: 10,
+    paddingHorizontal: R.unit.scale(10),
+    paddingVertical: R.unit.scale(10),
   },
   header: {
     paddingHorizontal: 0,

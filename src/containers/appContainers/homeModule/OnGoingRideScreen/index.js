@@ -21,7 +21,8 @@ function OnGoingRideScreen(props) {
   const mapRef = useRef(null);
   let coordinates = LocationCoordinates();
   const user = useSelector(state => state.user);
-  const {rideSession} = user;
+  const ride = useSelector(state => state.ride);
+  const {rideSession} = ride;
   const [origin, setOrigin] = useState(undefined);
   const [duration, setDuration] = useState(undefined);
   const [destination, setDestination] = useState(undefined);
@@ -79,7 +80,7 @@ function OnGoingRideScreen(props) {
         longitude: rideSession?.location?.dropOffLoc?.longitude,
       });
     }
-  }, [isFocused, user?.rideSession, user?.pickupLoc]);
+  }, [isFocused, ride?.rideSession, user?.pickupLoc]);
 
   useEffect(() => {
     if (!user?.locationLoader) {
@@ -90,7 +91,7 @@ function OnGoingRideScreen(props) {
         animatePickup(navigationPoints);
       }
     }
-  }, [origin, destination, user?.rideSession, user?.pickUpLoc]);
+  }, [origin, destination, ride?.rideSession, user?.pickUpLoc]);
 
   const animatePickup = data => {
     const {latitude, latitudeDelta, longitude, longitudeDelta} = data;
@@ -196,8 +197,6 @@ function OnGoingRideScreen(props) {
       }
     }
   };
-
-  console.log('DATA', origin, destination, duration);
 
   return (
     <ScreenBoiler headerProps={headerProps} {...props}>

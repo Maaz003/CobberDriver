@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {createRideSession} from '@store/ride/rideSlice';
 import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import CustomerCard from './CustomerCard';
@@ -86,7 +86,7 @@ function RidesList() {
         await dispatch(createRideSession(dataRide));
       }
     } else {
-      console.log('ELKSE RRsadkljlbjsadhlsial');
+      console.log('ELKSE RRsadkljlbjsadhlsial', rides?.newRides);
       setLoading(true);
       await dispatch(
         newRides({
@@ -110,6 +110,28 @@ function RidesList() {
   const renderItem = ({item, index}) => {
     return <CustomerCard item={item} key={index} />;
   };
+
+  useEffect(() => {
+    if (rides?.newRides) {
+      if (active === 0) {
+        let updatedArr = rides?.newRides?.data?.rides?.map(item => {
+          return {
+            ...item,
+            isScheduled: false,
+          };
+        });
+        setRideRequests(updatedArr);
+      } else {
+        let updatedArr = rides?.newRides?.data?.schedulingRides?.map(item => {
+          return {
+            ...item,
+            isScheduled: true,
+          };
+        });
+        setRideRequests(updatedArr);
+      }
+    }
+  }, [active, rides?.newRides?.data]);
 
   return (
     <BottomSheet

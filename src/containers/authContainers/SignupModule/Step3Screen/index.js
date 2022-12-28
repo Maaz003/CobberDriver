@@ -11,10 +11,13 @@ import Icon from '@components/common/Icon';
 import Loader from '@components/common/Loader';
 import PopUp from '@components/common/PopUp';
 import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
+import {useSelector} from 'react-redux';
+import Toast from '@components/utils/Toast';
 
 function Step3Screen(props) {
   const {navigation} = props;
   const {step2Data} = props.route.params;
+  const auth = useSelector(state => state.auth);
   const [authUser, setAuthUser] = useState({
     password: '',
     confirmPassword: '',
@@ -43,6 +46,7 @@ function Step3Screen(props) {
       model,
       color,
       vehicleId,
+      licenseNumber,
     } = step2Data;
     let driverPics = pictures;
     const [lat, long] = currentLocation.coordinates;
@@ -59,6 +63,7 @@ function Step3Screen(props) {
     formData.append('color', color);
     formData.append('model', model);
     formData.append('vehicle', vehicleId);
+    formData.append('licenseNumber', licenseNumber);
     formData.append('password', authUser?.password);
     formData.append('passwordConfirm', authUser?.confirmPassword);
 
@@ -105,15 +110,16 @@ function Step3Screen(props) {
     if (authUser?.password !== authUser?.confirmPassword) {
       PopUp({
         heading: `Passwords Mismatch`,
-        bottomOffset: 0.8,
+        text1: 'ERROR',
+        bottomOffset: 0.2,
         visibilityTime: 3000,
         position: 'top',
       });
     } else {
       setLoading(true);
       const formData = {
-        password: authUser?.password,
-        confirmPassword: authUser?.confirmPassword,
+        password: authUser?.password.trim(),
+        confirmPassword: authUser?.confirmPassword.trim(),
       };
       const formError = FormValidation(formData);
       if (formError) {
@@ -139,9 +145,18 @@ function Step3Screen(props) {
         const signUrl = URL('auth/driver-signup');
         const response = await Post(signUrl, userData);
         if (response !== undefined) {
+          console.log(
+            'REPONSE',
+            JSON.stringify(response?.data?.data?.user, null, 2),
+          );
           const code = response?.data?.data?.user?.verificationCode;
           navigation.navigate('Verification', {
             user: response?.data?.data?.user?._id,
+          });
+          Toast.show({
+            title: `Yout OTp ${code}`,
+            message: 'code',
+            type: 'danger',
           });
           PopUp({
             heading: `Registered Successfully. Meanwhile ${code}`,

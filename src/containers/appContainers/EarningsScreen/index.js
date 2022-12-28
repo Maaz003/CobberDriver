@@ -6,10 +6,13 @@ import Text from '@components/common/Text';
 import Icon from '@components/common/Icon';
 import Button from '@components/common/Button';
 import {MasterCardIcon, VisaIcon} from '@components/utils/Svg';
+import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
 
 function EarningsScreen(props) {
   const {navigation} = props;
-  // const {type = 'home'} = props.route.params;
+
+  const user = useSelector(state => state.user);
 
   const [active, setActive] = useState(0);
 
@@ -36,11 +39,13 @@ function EarningsScreen(props) {
           flexDirection: 'column',
         }}>
         <View style={styles.contentView}>
-          <View style={[styles.earningView]}>
+          <LinearGradient
+            colors={['#2c2c2c', '#171717']}
+            style={[styles.earningView]}>
             <Text
               variant={'h6'}
-              font={'regular'}
-              color={R.color.black}
+              font={'PoppinsRegular'}
+              color={R.color.white}
               align={'left'}
               gutterTop={24}
               gutterBottom={24}
@@ -49,28 +54,26 @@ function EarningsScreen(props) {
             </Text>
             <Text
               variant={'h3'}
-              font={'bold'}
-              color={R.color.black}
+              font={'PoppinsMedium'}
+              color={R.color.white}
               align={'left'}
               gutterBottom={25}
               transform={'none'}>
-              {`$ ${Number('2058').toFixed(2)}`}
+              {`$ ${Number(user?.user?.wallet?.balance).toFixed(1)}`}
             </Text>
             <Button
               value={'Withdraw Payment'}
               bgColor={R.color.mainColor}
-              width={'80%'}
-              size={'xmd'}
-              variant={'body2'}
-              font={'semiBold'}
-              color={R.color.black}
+              width={'90%'}
+              size={'xxmd'}
+              color={R.color.charcoalShade2}
               borderRadius={10}
               onPress={() => null}
             />
-          </View>
+          </LinearGradient>
           <Text
-            variant={'body2'}
-            font={'medium'}
+            variant={'body1'}
+            font={'PoppinsMedium'}
             color={R.color.black}
             align={'left'}
             gutterTop={32}
@@ -93,7 +96,7 @@ function EarningsScreen(props) {
                   </View>
                   <Text
                     variant={'body2'}
-                    font={'semiBold'}
+                    font={'PoppinsSemiBold'}
                     color={
                       active === index ? R.color.blackLightShade : R.color.gray6
                     }
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
     marginTop: R.unit.scale(12),
     paddingVertical: R.unit.scale(20),
     backgroundColor: R.color.white,
-    borderRadius: R.unit.scale(20),
+    borderRadius: R.unit.scale(2),
   },
   svgView: {
     aspectRatio: 1,

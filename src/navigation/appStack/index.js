@@ -31,7 +31,7 @@ import R from '@components/utils/R';
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createNativeStackNavigator();
-  const user = useSelector(state => state.user);
+  const ride = useSelector(state => state.ride);
 
   const DrawerNavigator = () => {
     return (
@@ -42,7 +42,7 @@ const AppStack = () => {
           drawerPosition="left"
           screenOptions={{
             headerShown: false,
-            swipeEnabled: user?.inRide === 'scheduleEnded' ? false : true,
+            swipeEnabled: ride?.inRide === 'scheduleEnded' ? false : true,
             drawerType: 'slide',
             drawerStyle: {
               backgroundColor: 'black',
@@ -50,7 +50,7 @@ const AppStack = () => {
             },
           }}
           initialRouteName={
-            user?.inRide === 'scheduleEnded' ? 'ScheduledRides' : 'HomeScreen'
+            ride?.inRide === 'scheduleEnded' ? 'ScheduledRides' : 'HomeScreen'
           }
           drawerContent={props => <CustomDrawer {...props} />}>
           <Drawer.Screen name="HomeScreen" component={HomeStackNavigator} />
@@ -71,9 +71,9 @@ const AppStack = () => {
   };
 
   const initalRoute = () => {
-    if (user?.inRide === 'started' || user?.inRide === 'accepted') {
+    if (ride?.inRide === 'started' || ride?.inRide === 'accepted') {
       return 'OnGoingRide';
-    } else if (user?.inRide === 'ended') {
+    } else if (ride?.inRide === 'ended') {
       return 'RideCompleted';
     } else {
       return 'Home';

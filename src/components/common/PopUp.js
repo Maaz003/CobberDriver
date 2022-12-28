@@ -25,7 +25,7 @@ const PopUp = props => {
     autoHide: true,
     visibilityTime: visibilityTime,
     bottomOffset: R.unit.width(1) - R.unit.width(bottomOffset),
-    keyboardOffset: R.unit.width(1) - R.unit.width(0.94),
+    keyboardOffset: R.unit.width(1) - R.unit.width(bottomOffset),
     props: {
       leftIcon: leftIcon,
       rightIcon: rightIcon,

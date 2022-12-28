@@ -11,8 +11,11 @@ import {View, StyleSheet, Button, Alert} from 'react-native';
 const emailREX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,256}))$/;
 
+const onlyAlphaREX = /^[a-zA-Z]+$/;
+
 export default {
   emailREX,
+  onlyAlphaREX,
 };
 
 export const requestLocationPermission = async () => {

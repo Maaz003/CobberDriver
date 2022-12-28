@@ -22,7 +22,6 @@ function HomeMap() {
   }, [pickupLoc, user.locationLoader]);
 
   const animatePickup = () => {
-    console.log('ANIMATE CALLED');
     if (mapRef.current) {
       let region = {
         latitude: pickUpLat ? Number(pickUpLat) : initialLat,
@@ -30,7 +29,6 @@ function HomeMap() {
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       };
-      console.log(':ANIMATED REGION', region, mapRef.current.animateToRegion);
       mapRef?.current?.animateToRegion(region, 2000);
       // mapRef?.current?.animateCamera({
       //   center: region,
@@ -39,7 +37,6 @@ function HomeMap() {
   };
 
   const onMapReady = () => {
-    console.log('MAP REAY CALLED');
     animatePickup();
   };
 

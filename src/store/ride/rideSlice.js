@@ -1,6 +1,4 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {Get} from '@axios/AxiosInterceptorFunction';
-import {URL} from '@config/apiUrl';
 
 export const initialSetupRequest = createAsyncThunk(
   'rides/initialSetupRequest',
@@ -9,37 +7,27 @@ export const initialSetupRequest = createAsyncThunk(
   },
 );
 
-export const newRides = createAsyncThunk('rides/newRides', async data => {
-  try {
-    const {token} = data;
-    const newRidesURL = URL('rides/new');
-    const response = await Get(newRidesURL, token);
-
-    console.log('RESPOSNE NEW RIDES', JSON.stringify(response?.data, null, 2));
-
-    if (response !== undefined) {
+export const createRideSession = createAsyncThunk(
+  'user/createRideSession',
+  async data => {
+    try {
       return {
         status: 'success',
         error: false,
         message: 'Success!',
-        rideData: response?.data,
+        isData: data.inRide,
+        rideData: data.data,
       };
-    } else {
+    } catch (error) {
       return {
-        status: 'success',
+        status: 'failed',
         error: true,
-        message: 'Success!',
-        rideData: undefined,
+        message: 'Oops! Something went wrong!',
+        isData: undefined,
       };
     }
-  } catch (error) {
-    return {
-      status: 'failed',
-      error: true,
-      message: 'Oops! Something went wrong!',
-    };
-  }
-});
+  },
+);
 
 export const clearScheduleRides = createAsyncThunk(
   'plans/clearScheduleRides',
@@ -68,28 +56,21 @@ const initialState = {
   error: false,
   errorMessage: '',
   newRides: [],
+  inRide: 'finished',
+  rideSession: undefined,
 };
 
-const ridesSlice = createSlice({
+const rideSlice = createSlice({
   name: 'rides',
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [newRides.pending]: (state, action) => {
-      state.status = 'pending';
-      state.isLoadingRequest = true;
-    },
-    [newRides.rejected]: (state, action) => {
-      state.status = 'rejected';
-      state.isLoadingRequest = false;
-      state.error = false;
-      state.newRides = undefined;
-    },
-    [newRides.fulfilled]: (state, action) => {
+    [createRideSession.fulfilled]: (state, action) => {
       state.status = 'succeeded';
       state.isLoadingRequest = false;
       state.error = false;
-      state.newRides = action.payload.rideData;
+      state.inRide = action.payload.isData;
+      state.rideSession = action.payload.rideData;
     },
     [clearScheduleRides.fulfilled]: (state, action) => {
       state.status = 'succeeded';
@@ -100,4 +81,4 @@ const ridesSlice = createSlice({
   },
 });
 
-export default ridesSlice.reducer;
+export default rideSlice.reducer;

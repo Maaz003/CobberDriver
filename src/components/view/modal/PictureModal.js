@@ -185,7 +185,7 @@ function PictureModal(props) {
                         />
                         <Text
                           variant={'body2'}
-                          font={'regular'}
+                          font={'PoppinsRegular'}
                           align={'center'}
                           color={R.color.mainColor}
                           gutterTop={5}
@@ -200,15 +200,14 @@ function PictureModal(props) {
                       onPress={uploadImage}>
                       <Icon
                         name={'pencil'}
-                        size={25}
+                        size={20}
                         type={'MaterialCommunityIcons'}
                       />
                       <Text
                         variant={'body2'}
-                        font={'regular'}
+                        font={'PoppinsRegular'}
                         align={'center'}
                         color={R.color.black}
-                        gutterTop={5}
                         style={{marginLeft: 8}}>
                         Edit Picture
                       </Text>
@@ -263,7 +262,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 40,
+    height: R.unit.scale(40),
     justifyContent: 'space-around',
     borderBottomLeftRadius: R.unit.scale(25),
     borderBottomRightRadius: R.unit.scale(25),

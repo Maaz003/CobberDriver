@@ -11,7 +11,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {updateUser} from '@store/user/userSlice';
 import {reportData} from '@components/constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
+import {createRideSession} from '@store/ride/rideSlice';
 import Text from '@components/common/Text';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';

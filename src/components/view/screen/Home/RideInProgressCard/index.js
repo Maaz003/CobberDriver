@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
+import {createRideSession} from '@store/ride/rideSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
 import Divider from '@components/common/Divider';
@@ -143,12 +143,9 @@ function RideInProgressCard(props) {
   const onSubmit = async () => {
     if (data.type === 'instant') {
       if (data.rideStatus === 'notstarted') {
-        console.log('DURATRION', etaDistance);
-
         setStartRideLoader(true);
         let estimatedTimeEnd = Math.ceil(etaDistance).toFixed(2);
         estimatedTimeEnd = moment().add(estimatedTimeEnd, 'minutes');
-        console.log('estimatedTimeEnd', estimatedTimeEnd);
         try {
           const response = await updateRideStartSession(
             rideId,
@@ -217,12 +214,9 @@ function RideInProgressCard(props) {
             updateRideSession('dropoffended'),
             completeScheduleRide(),
           ]);
-          console.log('DROP 1');
           if (promiseAll !== undefined) {
             updateRideSessionStatus('dropoffended', 'ended');
-            console.log('DROP 2');
           }
-          console.log('DROP 3');
           setIsLoading(false);
         } catch (error) {
           setIsLoading(false);

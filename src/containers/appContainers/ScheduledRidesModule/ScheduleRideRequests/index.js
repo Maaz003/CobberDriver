@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {createRideSession} from '@store/ride/rideSlice';
 import {useDispatch} from 'react-redux';
-import {createRideSession} from '@store/user/userSlice';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import RideRequestsCard from '@components/view/screen/Home/RideRequestsCard';
@@ -15,8 +15,6 @@ function ScheduleRideRequestsScreen(props) {
   const [showEndButton, setShowEndButton] = useState(false);
   const [ridesData, setRidesData] = useState([]);
   let showNewRequestStatus = ['pending', 'in-ride'];
-
-  console.log('FORU IN 2222', status);
 
   useEffect(() => {
     let tempArr =
