@@ -189,6 +189,7 @@
 		FA08A0AD291C2EFE000CEA81 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		FA56D479295D2D4100BE7270 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/Cobber Credentials/Cobber Driver/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA56D483295D3FF900BE7270 /* RNExitApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RNExitApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAF1F155295DCBF200B269BC /* CobberDriver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CobberDriver.entitlements; path = CobberDriver/CobberDriver.entitlements; sourceTree = "<group>"; };
 		FC372510C69DA826E7B387B2 /* Pods_CobberDriver_CobberDriverTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CobberDriver_CobberDriverTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCA70A33B792461689123DDD /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		FCEA1B71C95A4A9DB8D126C0 /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../src/assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
@@ -235,6 +236,7 @@
 		13B07FAE1A68108700A75B9A /* CobberDriver */ = {
 			isa = PBXGroup;
 			children = (
+				FAF1F155295DCBF200B269BC /* CobberDriver.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -779,6 +781,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CobberDriver/CobberDriver.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -811,6 +814,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CobberDriver/CobberDriver.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;

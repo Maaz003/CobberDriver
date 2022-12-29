@@ -24,7 +24,7 @@ function RidesList() {
   const [rideRequests, setRideRequests] = useState([]);
   const userToken = user?.userToken;
 
-  console.log('USER', JSON.stringify(user?.user, null, 2));
+  // console.log('USER', JSON.stringify(user?.user, null, 2));
 
   useEffect(() => {
     getNewRides();
