@@ -40,6 +40,10 @@
 			</dict>
 		</dict>
 	</dict>
+		<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+</array>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSCameraUsageDescription</key>

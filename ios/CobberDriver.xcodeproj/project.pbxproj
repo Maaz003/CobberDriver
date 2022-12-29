@@ -782,8 +782,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CobberDriver/CobberDriver.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56W6424234;
 				ENABLE_BITCODE = NO;
@@ -800,7 +800,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.example.CobberDriver;
 				PRODUCT_NAME = CobberDriver;
-				PROVISIONING_PROFILE_SPECIFIER = CobberDriverDeployment;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -815,8 +815,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CobberDriver/CobberDriver.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56W6424234;
 				INFOPLIST_FILE = CobberDriver/Info.plist;
@@ -832,7 +832,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.example.CobberDriver;
 				PRODUCT_NAME = CobberDriver;
-				PROVISIONING_PROFILE_SPECIFIER = CobberDriverDeployment;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

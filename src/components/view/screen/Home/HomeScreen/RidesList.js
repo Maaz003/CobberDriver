@@ -12,7 +12,6 @@ import {newRides} from '@store/rides/ridesSlice';
 import TruckLoader from '@components/common/TruckLoader';
 import TruckError from '@components/common/TruckError';
 import {getUserCreditCards} from '@components/utils/ReuseableFunctions';
-import Toast from '@components/utils/Toast';
 
 function RidesList() {
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ function RidesList() {
 
   useEffect(() => {
     getNewRides();
-    // getUserCreditCards({actionCall: dispatch, authToken: userToken});
+    getUserCreditCards({actionCall: dispatch, authToken: userToken});
   }, [isFocused]);
 
   const getNewRides = async () => {
@@ -90,11 +89,16 @@ function RidesList() {
     } else {
       // if (!user?.user?.active) {
       //   // console.log('IF ');
-      //   Toast.show({
-      //     type: 'danger',
-      //     title: 'Account Unverified',
-      //     message: 'Please verify your account first',
-      //   });
+      //  PopUp({
+      //    heading: `Your account is currently under verification. You won't be able to see any new rides`,
+      //    text1: 'ERROR',
+      //    bottomOffset: 0.2,
+      //    visibilityTime: 10000,
+      //    position: 'top',
+      //    bgColor: R.color.cancelColor,
+      //    textColor: R.color.white,
+      //  });
+
       // } else {
       console.log('SU');
       setLoading(true);
