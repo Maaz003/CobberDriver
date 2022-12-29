@@ -148,19 +148,15 @@ function Step3Screen(props) {
           const signUrl = URL('auth/driver-signup');
           const response = await Post(signUrl, userData);
           if (response !== undefined) {
-            console.log(
-              'REPONSE',
-              JSON.stringify(response?.data?.data?.user, null, 2),
-            );
             const code = response?.data?.data?.user?.verificationCode;
             navigation.navigate('Verification', {
               user: response?.data?.data?.user?._id,
             });
-            Toast.show({
-              title: `Yout OTp ${code}`,
-              message: 'code',
-              type: 'danger',
-            });
+            // Toast.show({
+            //   title: `Yout OTp ${code}`,
+            //   message: 'code',
+            //   type: 'danger',
+            // });
             PopUp({
               heading: `Registered Successfully. Meanwhile ${code}`,
               bottomOffset: 0.8,

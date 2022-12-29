@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {ActivityIndicator, Alert, BackHandler, View} from 'react-native';
+import {Alert, BackHandler, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import io from 'socket.io-client';
 import {apiUrl} from '@config/apiUrl';
@@ -27,11 +27,6 @@ function HomeScreen(props) {
 
   const fetchLiveLocation = () => {
     CurrentLocation({actionCall: dispatch, flag: 'home'});
-    // if (socketRef?.current) {
-    // socketRef.current = io(apiUrl);
-    // socketRef.current.emit('location', async data => {
-    // });
-    // }
   };
 
   useEffect(() => {
