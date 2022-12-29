@@ -7,7 +7,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Post} from '@axios/AxiosInterceptorFunction';
+import {Post, Get} from '@axios/AxiosInterceptorFunction';
 import {URL, apiHeader} from '@config/apiUrl';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
@@ -17,6 +17,7 @@ import {Footer} from '@components/utils/Svg';
 import OTPInput from '@components/common/OTP';
 import Icon from '@components/common/Icon';
 import AuthBoiler from '@components/layout/AuthBoiler/ScreenBoiler';
+import PopUp from '@components/common/PopUp';
 
 const originalWidth = 463;
 const originalHeight = 155;
@@ -31,6 +32,11 @@ function OTPVerifyScreen(props) {
   const [codeError, setCodeError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isPinReady, setIsPinReady] = useState(false);
+  const [timerCount, setTimer] = useState(120);
+  const [isResendable, setIsResendable] = useState(false);
+  const [minutes, setMinutes] = useState(2);
+  const [seconds, setSeconds] = useState(0);
+
   const maximumCodeLength = 4;
 
   useEffect(() => {
@@ -38,6 +44,38 @@ function OTPVerifyScreen(props) {
       Keyboard.dismiss();
     }
   }, [isPinReady]);
+
+  useEffect(() => {
+    let interval;
+    if (isResendable) {
+      interval = setInterval(() => {
+        if (timerCount > 0) {
+          setTimer(lastTimerCount => {
+            lastTimerCount <= 1 && clearInterval(interval);
+            return lastTimerCount - 1;
+          });
+        }
+      }, 1000);
+    }
+
+    if (timerCount === 0) {
+      setIsResendable(false);
+      setTimer(120);
+    }
+
+    return () => {
+      if (isResendable) {
+        clearInterval(interval);
+      }
+    };
+  }, [isResendable, timerCount]);
+
+  useEffect(() => {
+    let minutes = Math.floor(timerCount / 60);
+    let seconds = timerCount - minutes * 60;
+    setSeconds(seconds);
+    setMinutes(minutes);
+  }, [timerCount, isResendable]);
 
   const onSubmit = async () => {
     // navigation.navigate('VerfiySucess');
@@ -76,7 +114,17 @@ function OTPVerifyScreen(props) {
     setIsLoading(false);
   };
 
-  const resendOtp = () => {};
+  const resendOtp = async () => {
+    setIsResendable(true);
+    const getOTPUrl = URL(`auth/resend/code?user=${user}`);
+    const response = await Get(getOTPUrl);
+    PopUp({
+      heading: `Verification Code .Meantime ${response?.data?.data?.code}`,
+      bottomOffset: 0.8,
+      visibilityTime: 5000,
+      position: 'top',
+    });
+  };
 
   const onPress = () => {
     navigation.goBack();
@@ -149,42 +197,56 @@ function OTPVerifyScreen(props) {
           <Button
             value="Verify"
             bgColor={R.color.mainColor}
-            disabled={!isPinReady}
             width={'100%'}
             size={'lg'}
             variant={'body1'}
             font={'PoppinsMedium'}
             color={'black'}
             gutterTop={20}
+            gutterBottom={40}
             loaderColor={R.color.black}
             borderRadius={100}
             borderColor={R.color.mainColor}
             loader={isLoading}
+            disabled={!isPinReady || isLoading}
             onPress={onSubmit}
             borderWidth={1}
           />
-          <Text
-            variant={'body2'}
-            font={'PoppinsMedium'}
-            gutterTop={R.unit.scale(30)}
-            color={R.color.white}
-            align={'center'}
-            transform={'none'}>
-            Didn't receive a code?{' '}
+          <View style={R.styles.rowView}>
+            <View style={R.styles.twoItemsRow}>
+              <Text
+                variant={'body2'}
+                font={'PoppinsRegular'}
+                color={R.color.white}
+                align={'center'}
+                transform={'none'}>
+                Didn't receive a code?{' '}
+              </Text>
+              <TouchableOpacity
+                onPress={resendOtp}
+                disabled={isResendable}
+                activeOpacity={0.7}>
+                <Text
+                  variant={'body2'}
+                  font={'PoppinsSemiBold'}
+                  color={isResendable ? R.color.gray : R.color.mainColor}
+                  align={'center'}
+                  transform={'none'}>
+                  Resend
+                </Text>
+              </TouchableOpacity>
+            </View>
+
             <Text
               variant={'body2'}
-              font={'PoppinsMedium'}
+              font={'PoppinsSemiBold'}
               color={R.color.mainColor}
               align={'center'}
-              style={{
-                paddingVertical: R.unit.scale(10),
-                marginLeft: R.unit.scale(5),
-              }}
-              onPress={resendOtp}
               transform={'none'}>
-              Resend
+              {minutes}:
+              {seconds > 0 ? (seconds < 10 ? `0${seconds}` : seconds) : '00'}
             </Text>
-          </Text>
+          </View>
         </View>
 
         <View style={styles.footerImage}>

@@ -114,6 +114,8 @@ function Step3Screen(props) {
         bottomOffset: 0.2,
         visibilityTime: 3000,
         position: 'top',
+        bgColor: R.color.cancelColor,
+        textColor: R.color.white,
       });
     } else {
       setLoading(true);
@@ -141,32 +143,37 @@ function Step3Screen(props) {
           confirmPassword: '',
         });
 
-        const userData = await convertFormData();
-        const signUrl = URL('auth/driver-signup');
-        const response = await Post(signUrl, userData);
-        if (response !== undefined) {
-          console.log(
-            'REPONSE',
-            JSON.stringify(response?.data?.data?.user, null, 2),
-          );
-          const code = response?.data?.data?.user?.verificationCode;
-          navigation.navigate('Verification', {
-            user: response?.data?.data?.user?._id,
-          });
-          Toast.show({
-            title: `Yout OTp ${code}`,
-            message: 'code',
-            type: 'danger',
-          });
-          PopUp({
-            heading: `Registered Successfully. Meanwhile ${code}`,
-            bottomOffset: 0.8,
-            visibilityTime: 7000,
-            position: 'top',
-          });
-        } else {
-          setLoading(false);
+        try {
+          const userData = await convertFormData();
+          const signUrl = URL('auth/driver-signup');
+          const response = await Post(signUrl, userData);
+          if (response !== undefined) {
+            console.log(
+              'REPONSE',
+              JSON.stringify(response?.data?.data?.user, null, 2),
+            );
+            const code = response?.data?.data?.user?.verificationCode;
+            navigation.navigate('Verification', {
+              user: response?.data?.data?.user?._id,
+            });
+            Toast.show({
+              title: `Yout OTp ${code}`,
+              message: 'code',
+              type: 'danger',
+            });
+            PopUp({
+              heading: `Registered Successfully. Meanwhile ${code}`,
+              bottomOffset: 0.8,
+              visibilityTime: 7000,
+              position: 'top',
+            });
+          } else {
+            setLoading(false);
+          }
+        } catch (error) {
+          console.log('ERROR CATCH', error);
         }
+
         setLoading(false);
       }
     }
