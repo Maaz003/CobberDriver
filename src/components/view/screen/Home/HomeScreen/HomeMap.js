@@ -1,9 +1,10 @@
 import React, {useEffect, useRef} from 'react';
-import {SafeAreaView} from 'react-native';
+import {Platform, SafeAreaView} from 'react-native';
 import {useSelector} from 'react-redux';
 import Map from '@components/view/mapView/Map';
 import {LocationCoordinates} from '@components/utils/LocationCoordinates';
 import PickUpMarker from '@components/view/mapView/PickUpMarker';
+import R from '@components/utils/R';
 
 function HomeMap() {
   const mapRef = useRef(null);
@@ -41,11 +42,13 @@ function HomeMap() {
   };
 
   return (
-    <SafeAreaView>
-      <Map mapForwardRef={mapRef} loadingEnabled={false} mapReady={onMapReady}>
-        <PickUpMarker />
-      </Map>
-    </SafeAreaView>
+    <Map
+      mapForwardRef={mapRef}
+      mapViewStyles={{height: R.unit.height(Platform.OS === 'ios' ? 0.9 : 1)}}
+      loadingEnabled={false}
+      mapReady={onMapReady}>
+      <PickUpMarker />
+    </Map>
   );
 }
 export default HomeMap;

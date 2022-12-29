@@ -38,6 +38,5 @@ const styles = StyleSheet.create({
     flex: 1,
     width: R.unit.width(1),
     alignItems: 'center',
-    backgroundColor: 'red',
   },
 });

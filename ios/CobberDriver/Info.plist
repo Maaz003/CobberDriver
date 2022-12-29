@@ -49,7 +49,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

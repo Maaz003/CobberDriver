@@ -1,5 +1,5 @@
 import React, {useRef, useMemo, useCallback} from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import R from '@components/utils/R';
 
