@@ -102,10 +102,10 @@ function OnGoingRideScreen(props) {
   const animatePickup = data => {
     const {latitude, latitudeDelta, longitude, longitudeDelta} = data;
     let region = {
-      latitude: Number(latitude),
-      longitude: Number(longitude),
-      latitudeDelta: latitudeDelta,
-      longitudeDelta: longitudeDelta,
+      latitude: Number(pickUpLat),
+      longitude: Number(pickUpLong),
+      latitudeDelta: 0.003,
+      longitudeDelta: 0.003,
     };
     mapRef.current.animateToRegion(region, 2000);
   };

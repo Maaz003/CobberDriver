@@ -41,6 +41,10 @@ function EditProfileField(props) {
     confirmNewPassword: '',
   });
 
+  useEffect(() => {
+    setText(fieldValue);
+  }, [isFocused]);
+
   const [countryCode, setCountryCode] = useState(user?.user?.countryCode);
   const [dialCode, setDialCode] = useState(user?.user?.dialCode);
   const [isModal, setIsModal] = useState(false);

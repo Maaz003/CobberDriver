@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AppNavigator from './src/navigation/index';
 import 'react-native-gesture-handler';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -24,12 +24,12 @@ import Icon from '@components/common/Icon';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import {setFcmToken} from '@store/misc/miscSlice';
-import navigationService from './src/navigation/navigationService';
+
+var focusChanges = false;
 
 const App = () => {
   LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
-
   let persistor = persistStore(store);
   useEffect(() => {
     SplashScreen.hide();
@@ -39,13 +39,14 @@ const App = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios') {
-  //     requestLocationIOS();
-  //   } else {
-  //     requestLocation();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      requestLocationIOS();
+    } else {
+      requestLocation();
+    }
+    focusChanges = true;
+  }, [focusChanges]);
 
   const requestLocation = async () => {
     let granted = await requestLocationPermission();

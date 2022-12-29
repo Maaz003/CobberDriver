@@ -1,28 +1,46 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  AppState,
+} from 'react-native';
 import {PinLocation} from '@components/utils/Svg';
 import {createRideSession} from '@store/ride/rideSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import R from '@components/utils/R';
 import Icon from '@components/common/Icon';
+import io from 'socket.io-client';
+import {apiUrl} from '@config/apiUrl';
+import CurrentLocation from '@components/utils/CurrentLocation';
 import Divider from '@components/common/Divider';
 import Text from '@components/common/Text';
 import Button from '@components/common/Button';
 import CancelBookingModal from '@components/view/modal/CancelBookingModal';
 import PopUp from '@components/common/PopUp';
 import {
+  getDeviceID,
   openCall,
   updateRideStartSession,
   updateScheduleRideStartSession,
 } from '@components/utils/ReuseableFunctions';
 import {imageUrl} from '@config/apiUrl';
 import moment from 'moment';
+import {useFocusEffect} from '@react-navigation/native';
+import {LocationCoordinates} from '@components/utils/LocationCoordinates';
+
+var firstTimeSoc = false;
 
 function RideInProgressCard(props) {
+  const socket = useRef(null);
+  const dispatch = useDispatch();
+  socket.current = io(apiUrl);
   const {data = undefined, navigation, duration} = props;
   const {_id: rideId, customer, location, mainRideId, isSchedule} = data;
-  const {displayName, photo, contact} = customer;
-  const dispatch = useDispatch();
+  const {displayName, photo, contact, _id: customerId} = customer;
+  let coordinates = LocationCoordinates();
+
   const user = useSelector(state => state.user);
   const [buttonText, setButtonText] = useState('');
   const [isModal, setIsModal] = useState(false);
@@ -31,6 +49,27 @@ function RideInProgressCard(props) {
   const [etaDistance, setEtaDistance] = useState(duration);
   const [buttonColor, setButtonColor] = useState(R.color.mainColor);
   const [textButtoncolor, setTextButtoncolor] = useState(R.color.black);
+  const [uniqueId, setUniqueId] = useState(undefined);
+  const appState = useRef(AppState.currentState);
+  const {pickUpLat, pickUpLong, initialLat, initialLong} = coordinates;
+
+  const getDeviceUniqueId = async () => {
+    let res = await getDeviceID();
+    setUniqueId(res);
+  };
+
+  useEffect(() => {
+    getDeviceUniqueId();
+  }, []);
+
+  const connectSocket = async () => {
+    if (uniqueId) {
+      if (!firstTimeSoc) {
+        socket.current.emit('join', {id: user?.user?._id, device: uniqueId});
+        firstTimeSoc = true;
+      }
+    }
+  };
 
   useEffect(() => {
     if (data) {
@@ -63,18 +102,62 @@ function RideInProgressCard(props) {
     }
   }, []);
 
+  const handleAppStateChange = nextAppState => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      connectSocket();
+      socket.current.emit('join', {id: user?.user?._id, device: uniqueId});
+    } else {
+      // console.log('app on baackground tracking card');
+    }
+    appState.current = nextAppState;
+  };
+
+  const fetchLiveLocation = () => {
+    CurrentLocation({actionCall: dispatch, flag: 'home'});
+  };
+
   useEffect(() => {
-    // if(duration === 0)
-    // {
+    if (!user?.pickupLoc) {
+      fetchLiveLocation();
+    }
+  }, []);
 
-    // }
-    // else
-    // {
+  useEffect(() => {
+    let locationTimer = setInterval(fetchLiveLocation, 30000);
+    return () => clearInterval(locationTimer);
+  }, []);
 
-    //   setEtaDistance(duration);
-    // }
+  useEffect(() => {
     setEtaDistance(duration);
   }, [props]);
+
+  useEffect(() => {
+    connectSocket();
+  }, [uniqueId]);
+
+  useEffect(() => {
+    socket.current.emit('share-location', {
+      userId: customerId,
+      latitude: pickUpLat ? pickUpLat : initialLat,
+      longitude: pickUpLong ? pickUpLong : initialLong,
+    });
+  }, [user?.pickupLoc]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const subscription = AppState.addEventListener(
+        'change',
+        handleAppStateChange,
+      );
+
+      return () => {
+        subscription.remove();
+      };
+    }, []),
+  );
 
   const openCancelModal = () => {
     setIsModal(!isModal);
