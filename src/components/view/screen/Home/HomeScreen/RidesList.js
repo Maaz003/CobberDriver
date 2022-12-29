@@ -12,7 +12,7 @@ import {newRides} from '@store/rides/ridesSlice';
 import TruckLoader from '@components/common/TruckLoader';
 import TruckError from '@components/common/TruckError';
 import {getUserCreditCards} from '@components/utils/ReuseableFunctions';
-import Toast from '@components/utils/Toast';
+import PopUp from '@components/common/PopUp';
 
 function RidesList() {
   const dispatch = useDispatch();
@@ -24,16 +24,25 @@ function RidesList() {
   const [rideRequests, setRideRequests] = useState([]);
   const userToken = user?.userToken;
 
-  console.log('USER', JSON.stringify(user?.user, null, 2));
-
   useEffect(() => {
-    getNewRides();
-    // getUserCreditCards({actionCall: dispatch, authToken: userToken});
+    if (user?.user?.active !== 'active') {
+      PopUp({
+        heading: `Your account is currently under verification. You won't be able to see any new rides`,
+        text1: 'ERROR',
+        bottomOffset: 0.2,
+        visibilityTime: 100000,
+        position: 'top',
+        bgColor: R.color.cancelColor,
+        textColor: R.color.white,
+      });
+    } else {
+      getNewRides();
+      getUserCreditCards({actionCall: dispatch, authToken: userToken});
+    }
   }, [isFocused]);
 
   const getNewRides = async () => {
     if (user?.user?.driverInfo?.isInRide) {
-      //INSTANT RIDE SESSION
       if (user?.user?.driverInfo?.currentRide) {
         let currentRideSession = user?.user?.driverInfo?.currentRide;
 
@@ -88,14 +97,6 @@ function RidesList() {
         await dispatch(createRideSession(dataRide));
       }
     } else {
-      // if (!user?.user?.active) {
-      //   // console.log('IF ');
-      //   Toast.show({
-      //     type: 'danger',
-      //     title: 'Account Unverified',
-      //     message: 'Please verify your account first',
-      //   });
-      // } else {
       console.log('SU');
       setLoading(true);
       await dispatch(
@@ -105,7 +106,6 @@ function RidesList() {
       );
       setLoading(false);
     }
-    // }
   };
 
   const tabChange = index => {
@@ -148,104 +148,117 @@ function RidesList() {
     <BottomSheet
       onSwipeBottomSheet={() => null}
       initalHeight={R.unit.width(1) > 900 ? 0.09 : 0.11}>
-      <View style={styles.contentView}>
-        <View style={R.styles.rowView}>
-          <Text
-            variant={'body2'}
-            font={'PoppinsRegular'}
-            color={R.color.white}
-            align={'center'}
-            style={{top: 2}}
-            transform={'none'}>
-            You have a New Ride
-          </Text>
-          <View style={styles.numberView}>
+      {user?.user?.active !== 'active' ? (
+        <View style={styles.contentView}>
+          <TruckError
+            heading={'Account unverified'}
+            headingColor={R.color.mainColor}
+            subTextColor={R.color.white}
+            subText={
+              'It seems like your account is still under review. As soon as admin will approve the account. You will start seeing new rides'
+            }
+          />
+        </View>
+      ) : (
+        <View style={styles.contentView}>
+          <View style={R.styles.rowView}>
             <Text
-              variant={'body3'}
-              font={'PoppinsMedium'}
-              color={R.color.black}
+              variant={'body2'}
+              font={'PoppinsRegular'}
+              color={R.color.white}
               align={'center'}
+              style={{top: 2}}
               transform={'none'}>
-              {rides?.newRidesCount < 10
-                ? '0' + rides?.newRidesCount
-                : rides?.newRidesCount}
+              You have a New Ride
             </Text>
+            <View style={styles.numberView}>
+              <Text
+                variant={'body3'}
+                font={'PoppinsMedium'}
+                color={R.color.black}
+                align={'center'}
+                transform={'none'}>
+                {rides?.newRidesCount < 10
+                  ? '0' + rides?.newRidesCount
+                  : rides?.newRidesCount}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[R.styles.rowView, styles.tabsContainer]}>
+            {tabs?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => tabChange(item.index)}
+                  style={{
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '50%',
+                    backgroundColor:
+                      index === active
+                        ? R.color.mainColor
+                        : R.color.charcoalShade2,
+                  }}>
+                  <Text
+                    variant={index === active ? 'body2' : 'body3'}
+                    font={'PoppinsSemiBold'}
+                    color={
+                      index === active
+                        ? R.color.charcoalShade2
+                        : R.color.mainColor
+                    }
+                    align={'center'}
+                    transform={'none'}>
+                    {item.title}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <View style={styles.scrollViewContainer}>
+            {loading ? (
+              <TruckLoader
+                containerStyles={{
+                  height: R.unit.height(0.5),
+                  width: '100%',
+                }}
+                overlayColor={R.color.charcoalShade2}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  paddingBottom: R.unit.height(0.44),
+                }}>
+                <BottomSheetFlatList
+                  showsVerticalScrollIndicator={false}
+                  data={rideRequests}
+                  keyExtractor={i => i}
+                  renderItem={renderItem}
+                  contentContainerStyle={styles.contentContainer}
+                  ListEmptyComponent={() => {
+                    return (
+                      <TruckError
+                        headingColor={R.color.lightSilverShade2}
+                        subTextColor={R.color.lightSilverShade2}
+                        heading={`You have no ${
+                          active === 0 ? 'Instant' : 'Scheduled'
+                        } rides yet`}
+                        subText={`As soon as the there is a ${
+                          active === 0 ? 'Instant' : 'Scheduled'
+                        } request it will appear in this list.`}
+                      />
+                    );
+                  }}
+                />
+              </View>
+            )}
           </View>
         </View>
-
-        <View style={[R.styles.rowView, styles.tabsContainer]}>
-          {tabs?.map((item, index) => {
-            return (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => tabChange(item.index)}
-                style={{
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '50%',
-                  backgroundColor:
-                    index === active
-                      ? R.color.mainColor
-                      : R.color.charcoalShade2,
-                }}>
-                <Text
-                  variant={index === active ? 'body2' : 'body3'}
-                  font={'PoppinsSemiBold'}
-                  color={
-                    index === active
-                      ? R.color.charcoalShade2
-                      : R.color.mainColor
-                  }
-                  align={'center'}
-                  transform={'none'}>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        <View style={styles.scrollViewContainer}>
-          {loading ? (
-            <TruckLoader
-              containerStyles={{
-                height: R.unit.height(0.5),
-                width: '100%',
-              }}
-              overlayColor={R.color.charcoalShade2}
-            />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                paddingBottom: R.unit.height(0.44),
-              }}>
-              <BottomSheetFlatList
-                showsVerticalScrollIndicator={false}
-                data={rideRequests}
-                keyExtractor={i => i}
-                renderItem={renderItem}
-                contentContainerStyle={styles.contentContainer}
-                ListEmptyComponent={() => {
-                  return (
-                    <TruckError
-                      headingColor={R.color.lightSilverShade2}
-                      subTextColor={R.color.lightSilverShade2}
-                      heading={`You have no ${
-                        active === 0 ? 'Instant' : 'Scheduled'
-                      } rides yet`}
-                      subText={`As soon as the there is a ${
-                        active === 0 ? 'Instant' : 'Scheduled'
-                      } request it will appear in this list.`}
-                    />
-                  );
-                }}
-              />
-            </View>
-          )}
-        </View>
-      </View>
+      )}
     </BottomSheet>
   );
 }

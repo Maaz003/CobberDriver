@@ -64,10 +64,16 @@ function OnGoingRideScreen(props) {
           });
         }
       }
+
       if (user?.pickupLoc) {
         setOrigin({
-          latitude: user?.pickupLoc.latitude,
-          longitude: user?.pickupLoc.longitude,
+          latitude: pickUpLat,
+          longitude: pickUpLong,
+        });
+      } else {
+        setOrigin({
+          latitude: initialLat,
+          longitude: initialLong,
         });
       }
 

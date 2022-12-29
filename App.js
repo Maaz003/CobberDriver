@@ -13,7 +13,7 @@ import {Notifications} from 'react-native-notifications';
 import LocalNotification from '@components/utils/Notifications';
 
 import {Provider, useDispatch, useSelector} from 'react-redux';
-import {AppState, LogBox, Platform, TouchableOpacity, View} from 'react-native';
+import {LogBox, Platform, TouchableOpacity, View} from 'react-native';
 import {
   requestLocationPermission,
   requestLocationPermissionIOS,
@@ -122,7 +122,6 @@ const App = () => {
       try {
         let deviceToken = await messaging().getToken();
         dispatch(setFcmToken(deviceToken));
-        console.log('deviceToken', deviceToken);
       } catch (error) {
         console.log('ERROR', error);
       }

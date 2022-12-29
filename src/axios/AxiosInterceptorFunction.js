@@ -9,6 +9,7 @@ import toast from '../components/utils/Toast';
  */
 
 let Get = async (route, token, showAlert = true) => {
+  console.log('FGE CALLED');
   const options = {
     headers: {
       Authorization: `Bearer ${token}`,

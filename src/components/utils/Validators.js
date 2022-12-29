@@ -1,5 +1,4 @@
-import {PermissionsAndroid, Platform} from 'react-native';
-import RNExitApp from 'react-native-exit-app';
+import {BackHandler, PermissionsAndroid, Platform} from 'react-native';
 import {
   check,
   PERMISSIONS,
@@ -38,7 +37,7 @@ export const requestLocationPermission = async () => {
       Alert.alert(
         'Location Permission',
         `You haven't enabled location access. For enabling location go to user settings and grant location access`,
-        [{text: 'OK', onPress: () => RNExitApp.exitApp()}],
+        [{text: 'OK', onPress: () => BackHandler.exitApp()}],
         {cancelable: false},
       );
 
@@ -62,7 +61,13 @@ export const requestLocationPermissionIOS = async () => {
       Alert.alert(
         'Location Permission',
         `You haven't enabled location access. For enabling location go to user settings and grant location access`,
-        [{text: 'OK', onPress: () => RNExitApp.exitApp()}],
+        [
+          {
+            text: 'OK',
+            onPress: () =>
+              openSettings().catch(() => console.warn('cannot open settings')),
+          },
+        ],
         {cancelable: false},
       );
       return false;

@@ -40,6 +40,10 @@
 			</dict>
 		</dict>
 	</dict>
+		<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+</array>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>App uses for perfomance</string>
 	<key>NSCameraUsageDescription</key>
@@ -130,6 +134,12 @@
 		<string>Sequel100Wide-45.ttf</string>
 		<string>Sequel100Wide-55.ttf</string>
 		<string>Sequel100Wide-65.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
