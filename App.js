@@ -111,12 +111,12 @@ const App = () => {
 
     const [isAccess, setIsAccess] = useState(false);
 
-    // useEffect(() => {
-    //   LocalNotification({
-    //     title: 'qwwwwwwww',
-    //     text: '----------',
-    //   });
-    // }, []);
+    useEffect(() => {
+      LocalNotification({
+        title: 'qwwwwwwww',
+        text: '----------',
+      });
+    }, []);
 
     const getToken = async () => {
       try {
