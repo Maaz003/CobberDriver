@@ -24,6 +24,7 @@ import Icon from '@components/common/Icon';
 import R from '@components/utils/R';
 import Text from '@components/common/Text';
 import {setFcmToken} from '@store/misc/miscSlice';
+import navigationService from './src/navigation/navigationService';
 
 var focusChanges = false;
 
@@ -38,6 +39,8 @@ const App = () => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
+
+  console.log('focusChanges', focusChanges);
 
   useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -107,10 +110,14 @@ const App = () => {
   };
 
   const AppWrapper = () => {
+    // const isFocused = useIsFocused();
+    // console.log("SADDSASADDSA",navigationService)
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const [isAccess, setIsAccess] = useState(false);
+
+    console.log('T', navigationService.toggleDrawer());
 
     // useEffect(() => {
     //   LocalNotification({

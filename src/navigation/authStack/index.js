@@ -11,13 +11,35 @@ import ForgetPasswordScreen from '@containers/authContainers/forgetPasswordScree
 import Step1Screen from '@containers/authContainers/SignupModule/Step1Screen';
 import Step2Screen from '@containers/authContainers/SignupModule/Step2Screen';
 import Step3Screen from '@containers/authContainers/SignupModule/Step3Screen';
+import {
+  requestLocationPermission,
+  requestLocationPermissionIOS,
+} from '@components/utils/Validators';
+// import {useNavigation} from '@react-navigation/native';
 
 const AuthStack = () => {
   const common = useSelector(state => state.common);
   const Stack = createNativeStackNavigator();
 
+  const checkForLocation = () => {
+    console.log('RUYN-0---- AUTH');
+    if (Platform.OS === 'ios') {
+      requestLocationIOS();
+    } else {
+      requestLocation();
+    }
+  };
+
+  const requestLocation = async () => {
+    let granted = await requestLocationPermission();
+  };
+
+  const requestLocationIOS = async () => {
+    let granted = await requestLocationPermissionIOS();
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onStateChange={checkForLocation}>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName={common?.onBoard ? 'Login' : 'OnBoardStep1'}>

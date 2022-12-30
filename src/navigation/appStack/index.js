@@ -27,15 +27,38 @@ import NewScheduleRideDetailsScreen from '@containers/appContainers/ScheduledRid
 
 import PaymentScreen from '@containers/appContainers/PaymentScreen';
 import R from '@components/utils/R';
+import {
+  requestLocationPermission,
+  requestLocationPermissionIOS,
+} from '@components/utils/Validators';
 
 const AppStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createNativeStackNavigator();
   const ride = useSelector(state => state.ride);
+  console.log(ride, 'aaaaaaaaaaaaaaaaaaaaa');
+
+  const checkForLocation = () => {
+    console.log('RUYN-0----');
+    if (Platform.OS === 'ios') {
+      requestLocationIOS();
+    } else {
+      requestLocation();
+    }
+  };
+
+  const requestLocation = async () => {
+    let granted = await requestLocationPermission();
+  };
+
+  const requestLocationIOS = async () => {
+    let granted = await requestLocationPermissionIOS();
+  };
 
   const DrawerNavigator = () => {
     return (
       <NavigationContainer
+        onStateChange={checkForLocation}
         ref={navigationService.navigationRef}
         independent={true}>
         <Drawer.Navigator
